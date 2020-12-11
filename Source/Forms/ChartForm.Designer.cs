@@ -29,14 +29,13 @@ namespace mview
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChartForm));
             this.boxNameType = new System.Windows.Forms.ComboBox();
             this.listNames = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.checkSorted = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.chartControl1 = new mview.Source.Forms.ChartControl();
-            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // boxNameType
@@ -55,7 +54,7 @@ namespace mview
             "Other"});
             this.boxNameType.Location = new System.Drawing.Point(12, 508);
             this.boxNameType.Name = "boxNameType";
-            this.boxNameType.Size = new System.Drawing.Size(116, 21);
+            this.boxNameType.Size = new System.Drawing.Size(92, 21);
             this.boxNameType.TabIndex = 0;
             this.boxNameType.SelectedIndexChanged += new System.EventHandler(this.boxNameType_SelectedIndexChanged);
             // 
@@ -68,8 +67,9 @@ namespace mview
             this.listNames.Location = new System.Drawing.Point(12, 29);
             this.listNames.Name = "listNames";
             this.listNames.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listNames.Size = new System.Drawing.Size(116, 415);
+            this.listNames.Size = new System.Drawing.Size(92, 415);
             this.listNames.TabIndex = 1;
+            this.listNames.SelectedIndexChanged += new System.EventHandler(this.listNames_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -111,23 +111,12 @@ namespace mview
             this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.chartControl1, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(134, 29);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(110, 29);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(794, 521);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(828, 530);
             this.tableLayoutPanel1.TabIndex = 6;
-            // 
-            // chartControl1
-            // 
-            this.chartControl1.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chartControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chartControl1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.chartControl1.Location = new System.Drawing.Point(5, 5);
-            this.chartControl1.Name = "chartControl1";
-            this.chartControl1.Size = new System.Drawing.Size(784, 511);
-            this.chartControl1.TabIndex = 0;
             // 
             // ChartForm
             // 
@@ -141,9 +130,9 @@ namespace mview
             this.Controls.Add(this.listNames);
             this.Controls.Add(this.boxNameType);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ChartForm";
             this.Text = "Chart";
-            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -157,6 +146,5 @@ namespace mview
         private System.Windows.Forms.CheckBox checkSorted;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private Source.Forms.ChartControl chartControl1;
     }
 }

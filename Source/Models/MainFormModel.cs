@@ -22,6 +22,55 @@ namespace mview
             pm.OpenECLProject();
         }
 
+        public DateTime GetDateByStep(int step)
+        {
+            return pm.activeProject.SUMMARY.DATES[step];
+        }
+
+        public float GetParamAtIndex(int index, int step)
+        {
+            return pm.activeProject.SUMMARY.DATA[step][index];
+        }
+
+
+        public string[] GetKeywords(string name, NameOptions type)
+        {
+            var vector = pm.activeProject.VECTORS.FirstOrDefault(c => c.Name == name && c.Type == type);
+            return vector.Data.Select(c => c.keyword).ToArray();
+        }
+
+        public Vector GetDataVector(string name)
+        {
+            return pm.activeProject.VECTORS.FirstOrDefault(c => c.Name == name);
+        }
+
+        public List<OxyPlot.DataPoint> GetDataTime(int projectIndex, string name, string keyword)
+        {
+            var vector = pm.projectList[projectIndex].ecl.VECTORS.FirstOrDefault(c => c.Name == name);
+
+            List<OxyPlot.DataPoint> oxyData = new List<OxyPlot.DataPoint>();
+
+            if (vector != null)
+            {
+                var data = vector.Data.FirstOrDefault(c => c.keyword == keyword);
+
+                for (int it = 0; it < pm.projectList[projectIndex].ecl.SUMMARY.NTIME; ++it)
+                {
+                    double value = pm.projectList[projectIndex].ecl.SUMMARY.DATA[it][data.index];
+                    oxyData.Add(new OxyPlot.DataPoint(OxyPlot.Axes.DateTimeAxis.ToDouble(pm.projectList[projectIndex].ecl.SUMMARY.DATES[it]),value));
+                }
+            }
+            else // if not found, return zero vector
+            {
+                for (int it = 0; it < pm.projectList[projectIndex].ecl.SUMMARY.NTIME; ++it)
+                {
+                    oxyData.Add(new OxyPlot.DataPoint(OxyPlot.Axes.DateTimeAxis.ToDouble(pm.projectList[projectIndex].ecl.SUMMARY.DATES[it]), 0));
+                }
+            }
+            return oxyData;
+        }
+
+
         public List<string> GetProjectNames()
         {
             return
@@ -148,6 +197,11 @@ namespace mview
                 (from item in pm.activeProject.VECTORS
                  where item.Type == type
                  select item.Name).ToArray();
+        }
+
+        public int GetStepCount()
+        {
+            return pm.activeProject.SUMMARY.NTIME;
         }
     }
 }

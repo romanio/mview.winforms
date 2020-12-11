@@ -39,7 +39,7 @@ namespace mview
             chartForm.UpdateFormData();
         }
 
-        private void ButtonOpenNewModel_Click(object sender, EventArgs e)
+        private void buttonOpenNewModel_Click_1(object sender, EventArgs e)
         {
             model.OpenNewModel();
 

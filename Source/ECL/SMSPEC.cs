@@ -23,6 +23,7 @@ namespace mview.ECL
         public List<float[]> DATA = null; // Расчётные показатели
         public int TINDEX; // Индекс вектора TIME
         public int NTIME; // Количество временных шагов
+        public DateTime[] DATES = null;
 
         public event EventHandler<string[]> UpdateData;
 
@@ -158,9 +159,23 @@ namespace mview.ECL
                 }
             }
             br.CloseBinaryFile();
+
+            AfterSMRYRead();
+        }
+
+        void AfterSMRYRead()
+        {
             NTIME = DATA.Count;
             TINDEX = Array.IndexOf(KEYWORDS, "TIME");
+
+            DATES = new DateTime[NTIME];
+
+            for (int it = 0; it < NTIME; ++it)
+            {
+                DATES[it] = STARTDATE.AddDays(DATA[it][TINDEX]);
+            }
         }
+
 
         public void ReadSNNN(string[] filenames)
         {
@@ -187,8 +202,7 @@ namespace mview.ECL
                 br.CloseBinaryFile();
             }
 
-            NTIME = DATA.Count;
-            TINDEX = Array.IndexOf(KEYWORDS, "TIME");
+            AfterSMRYRead();
         }
     }
 }

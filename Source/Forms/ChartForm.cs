@@ -16,6 +16,7 @@ namespace mview
         //
         private readonly MainFormModel model = null;
         private bool suspendEvents = false;
+        private NameOptions namesType = NameOptions.Well;
 
         public ChartForm(MainFormModel model)
         {
@@ -25,7 +26,12 @@ namespace mview
 
             suspendEvents = true;
             boxNameType.SelectedIndex = 2;
+
+            tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill});
+
             suspendEvents = false;
+
+
         }
 
         public void UpdateFormData()
@@ -40,10 +46,10 @@ namespace mview
                 tmp_names.Add(item);
             }
 
+            listNames.SuspendLayout();
+            
             listNames.Items.Clear();
             listNames.Sorted = checkSorted.Checked;
-
-            var namesType = NameOptions.Well;
 
             switch (boxNameType.SelectedIndex)
             {
@@ -85,7 +91,10 @@ namespace mview
                 }
             }
 
+            listNames.ResumeLayout();
+
             suspendEvents = false;
+
         }
 
 
@@ -104,6 +113,21 @@ namespace mview
             if (suspendEvents) return;
 
             UpdateFormData();
+        }
+
+        private void listNames_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var names = new List<string>();
+        
+            foreach (object item in listNames.SelectedItems)
+            {
+                names.Add(item.ToString());
+            }
+
+            foreach (ChartControl item in tableLayoutPanel1.Controls)
+            {
+                item.UpdateNames(names, namesType);
+            }
         }
     }
 }
