@@ -24,6 +24,7 @@ namespace mview
         private List<string> selectedKeywords = null;
         private List<int> selectedProjects = null;
         private int[] selectedIndex = null;
+        private ChartSettings settings = null;
 
 
         public ChartControl(MainFormModel model)
@@ -44,8 +45,8 @@ namespace mview
                 Title = "(No wells yet)",
                 DefaultFont = "Segoe UI",
 
-                TitleFontSize = 12,
-                DefaultFontSize = 11
+                TitleFontSize = 13,
+                DefaultFontSize = 10,
             };
 
             plotModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis
@@ -53,24 +54,34 @@ namespace mview
                 Position = OxyPlot.Axes.AxisPosition.Bottom,
                 StringFormat = "dd.MM.yyyy",
                 MajorGridlineStyle = LineStyle.Dash,
-                MajorGridlineThickness = 2,
+                MajorGridlineThickness = 1,
             });
 
+      
             plotModel.Axes.Add(new OxyPlot.Axes.LinearAxis
             {
                 Position = OxyPlot.Axes.AxisPosition.Left,
                 MajorGridlineStyle = LineStyle.Dash,
-                MajorGridlineThickness = 2,
+                MajorGridlineThickness = 1,
             });
 
             plotView.Model = plotModel;
+
+            settings = new ChartSettings { GroupingMode = GroupingMode.Normal };
+        }
+
+        public void UpdateSettings(ChartSettings data)
+        {
+            settings = data;
+
+            UpdateChartAndTable();
         }
 
         public void UpdateNames(List<string> names, NameOptions type)
         {
             suspendEvents = true;
-
             selectedNames = names;
+            selectedKeywords = new List<string>();
 
             var tmp_names = new List<string>();
             foreach (string item in listKeywords.SelectedItems)
@@ -79,13 +90,14 @@ namespace mview
             }
 
             listKeywords.SuspendLayout();
-
+            
             listKeywords.Items.Clear();
             listKeywords.Items.AddRange(model.GetKeywords(names[0], type));
 
             // Востановим выделенные слова
 
             int index = -1;
+
             foreach (string item in tmp_names)
             {
                 index = listKeywords.Items.IndexOf(item);
@@ -93,9 +105,11 @@ namespace mview
                 if (index != -1)
                 {
                     listKeywords.SetSelected(index, true);
+                    selectedKeywords.Add(item);
                 }
             }
 
+  
             listKeywords.ResumeLayout();
 
             suspendEvents = false;
@@ -103,7 +117,6 @@ namespace mview
             // Индексы выбранных проектов
 
             selectedProjects = model.GetSelectedProjectIndex();
-
             UpdateChartAndTable();
 
         }
@@ -128,7 +141,8 @@ namespace mview
 
             gridData.ColumnCount = selectedNames.Count * selectedKeywords.Count + 1;
             gridData.Columns[0].HeaderText = "Date";
-            gridData.RowCount = model.GetStepCount();
+            gridData.RowCount = model.GetStepCount(selectedProjects[0]);
+
             gridData.VirtualMode = false;
 
             int index = 1;
@@ -183,23 +197,168 @@ namespace mview
                         fullData.Add(model.GetDataTime(projectIndex, selectedNames[it], selectedKeywords[iw]));
                     }
 
-                    for (int it = 0; it < selectedNames.Count; ++it)
+                    // Для разных режимов отображения, графики разные
+
+                    // Обычный режим, отображается все графики как отдельные линии
+
+                    if (settings.GroupingMode == GroupingMode.Normal)
                     {
+                        for (int it = 0; it < selectedNames.Count; ++it)
+                        {
+                            var series = new LineSeries
+                            {
+                                Title = selectedNames[it].ToString(),
+                                LineStyle = LineStyle.Solid,
+                                StrokeThickness = 1,
+                                MarkerType = MarkerType.Circle,
+                                MarkerStroke = OxyColors.Black,
+                                MarkerFill = OxyColors.Transparent,
+                                MarkerSize = 3,
+                                TrackerFormatString = "{0} \n{4:0.##} {3}\n{2}"
+                            };
+
+                            series.Points.AddRange(fullData[it]);
+
+                            plotModel.Series.Add(series);
+                        }
+                    }
+
+                    // Суммирование, отображается один график как сумма
+
+                    if (settings.GroupingMode == GroupingMode.Sum)
+                    {
+                        List<DataPoint> sumValue = new List<DataPoint>();
+
+                        for (int it = 0; it < model.GetStepCount(projectIndex); ++it)
+                        {
+                            double value = 0;
+
+                            for (int iq = 0; iq < fullData.Count; ++iq)
+                            {
+                                value += fullData[iq][it].Y;
+                            }
+
+                            sumValue.Add(new DataPoint(fullData[0][it].X, value));
+                        }
+
                         var series = new LineSeries
                         {
+                            Title = selectedKeywords[iw].ToString() + ".sum",
                             LineStyle = LineStyle.Solid,
                             StrokeThickness = 1,
                             MarkerType = MarkerType.Circle,
-                            MarkerSize = 3
+                            MarkerStroke = OxyColors.Black,
+                            MarkerFill = OxyColors.Transparent,
+                            MarkerSize = 3,
+                            TrackerFormatString = "{0} \n{4:0.##} {3}\n{2}"
                         };
 
-                        series.Points.AddRange(fullData[it]);
+                        series.Points.AddRange(sumValue);
+
+                        plotModel.Series.Add(series);
+
+                        }
+
+                    // Осреднение, отображается один график как среднее
+
+                    if (settings.GroupingMode == GroupingMode.Average)
+                    {
+                        List<DataPoint> avValue = new List<DataPoint>();
+
+                        for (int it = 0; it < model.GetStepCount(projectIndex); ++it)
+                        {
+                            double value = 0;
+                            double count = 0;
+
+                            for (int iq = 0; iq < fullData.Count; ++iq)
+                            {
+                                if (fullData[iq][it].Y != 0)
+                                {
+                                    value += fullData[iq][it].Y;
+                                    count++; 
+                                }
+                            }
+
+                            avValue.Add(new DataPoint(fullData[0][it].X, count > 0 ? value / count : 0 ));
+                        }
+
+                        var series = new LineSeries
+                        {
+                            Title = selectedKeywords[iw].ToString() + ".av",
+                            LineStyle = LineStyle.Solid,
+                            StrokeThickness = 1,
+                            MarkerType = MarkerType.Circle,
+                            MarkerStroke = OxyColors.Black,
+                            MarkerFill = OxyColors.Transparent,
+                            MarkerSize = 3,
+                            TrackerFormatString = "{0} \n{4:0.##} {3}\n{2}"
+                        };
+
+                        series.Points.AddRange(avValue);
+
+                        plotModel.Series.Add(series);
+                    }
+
+                    // Средневзвешенное по жидкости, отображается один график
+
+                    if (settings.GroupingMode == GroupingMode.AverageByLiquid)
+                    {
+                        // Собираем имя вектора жидкости
+                        StringBuilder liquidName = new StringBuilder();
+
+                        liquidName.Append(selectedKeywords[iw].Substring(0, 1));
+                        liquidName.Append("LPR");
+
+                        if (selectedKeywords[iw].EndsWith("H"))
+                            liquidName.Append("H");
+
+                        var oprData = new List<List<OxyPlot.DataPoint>>();
+
+                        for (int it = 0; it < selectedNames.Count; ++it)
+                        {
+                            oprData.Add(model.GetDataTime(projectIndex, selectedNames[it], liquidName.ToString()));
+                        }
+
+                        List<DataPoint> avValue = new List<DataPoint>();
+
+                        for (int it = 0; it < model.GetStepCount(projectIndex); ++it)
+                        {
+                            double value = 0;
+                            double sumLiq = 0;
+
+                            for (int iq = 0; iq < fullData.Count; ++iq)
+                            {
+                                if (fullData[iq][it].Y != 0)
+                                {
+                                    value += fullData[iq][it].Y * oprData[iq][it].Y;
+                                    sumLiq += oprData[iq][it].Y;
+                                }
+                            }
+
+                            avValue.Add(new DataPoint(fullData[0][it].X, sumLiq > 0 ? value / sumLiq : 0));
+                        }
+
+                        var series = new LineSeries
+                        {
+                            Title = selectedKeywords[iw].ToString() + ".avbyliq",
+                            LineStyle = LineStyle.Solid,
+                            StrokeThickness = 1,
+                            MarkerType = MarkerType.Circle,
+                            MarkerStroke = OxyColors.Black,
+                            MarkerFill = OxyColors.Transparent,
+                            MarkerSize = 3,
+                            TrackerFormatString = "{0} \n{4:0.##} {3}\n{2}"
+                        };
+
+                        series.Points.AddRange(avValue);
 
                         plotModel.Series.Add(series);
                     }
                 }
             }
 
+            plotModel.Axes[0].Reset();
+            plotModel.Axes[1].Reset();
             plotModel.InvalidatePlot(true);
 
         }
@@ -225,5 +384,19 @@ namespace mview
             else
                 e.Value = model.GetParamAtIndex(selectedIndex[e.ColumnIndex - 1], e.RowIndex);
         }
+    }
+
+
+    public enum GroupingMode
+    {
+        Normal,
+        Sum,
+        Average,
+        AverageByLiquid
+    }
+
+    public class ChartSettings
+    {
+        public GroupingMode GroupingMode;
     }
 }

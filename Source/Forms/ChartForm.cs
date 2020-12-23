@@ -25,13 +25,85 @@ namespace mview
             this.model = model;
 
             suspendEvents = true;
+            
             boxNameType.SelectedIndex = 2;
 
-            tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill});
-
             suspendEvents = false;
+        }
 
+        public void SetChartSettings(ChartSettings data)
+        {
+            foreach (ChartControl item in tableLayoutPanel1.Controls)
+            {
+                item.UpdateSettings(data);
+            }
+        }
 
+        public void SetChartsPosition(ChartsPosition position)
+        {
+            tableLayoutPanel1.Controls.Clear();
+            tableLayoutPanel1.RowStyles.Clear();
+            tableLayoutPanel1.ColumnStyles.Clear();
+
+            if (position == ChartsPosition.One)
+            {
+                tableLayoutPanel1.RowCount = 1;
+                tableLayoutPanel1.ColumnCount = 1;
+                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+                tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+                tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
+            }
+
+            if (position == ChartsPosition.OnePlusTwo)
+            {
+                tableLayoutPanel1.RowCount = 2;
+                tableLayoutPanel1.ColumnCount = 2;
+                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 60));
+                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 40));
+
+                tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+                tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+
+                tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
+                tableLayoutPanel1.SetColumnSpan(tableLayoutPanel1.Controls[0], 2);
+                tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
+                tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
+            }
+
+            if (position == ChartsPosition.OnePlusThree)
+            {
+                tableLayoutPanel1.RowCount = 3;
+                tableLayoutPanel1.ColumnCount = 2;
+                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33));
+                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33));
+                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 33));
+
+                tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60));
+                tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40));
+
+                tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
+                tableLayoutPanel1.SetRowSpan(tableLayoutPanel1.Controls[0], 3);
+                tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
+                tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
+                tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
+            }
+
+            if (position == ChartsPosition.Four)
+            {
+                tableLayoutPanel1.RowCount = 2;
+                tableLayoutPanel1.ColumnCount = 2;
+                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+                tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+                tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+
+                tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
+                tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
+                tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
+                tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
+            }
+
+            UpdateFormData();
         }
 
         public void UpdateFormData()
@@ -47,6 +119,7 @@ namespace mview
             }
 
             listNames.SuspendLayout();
+            listNames.BeginUpdate();
             
             listNames.Items.Clear();
             listNames.Sorted = checkSorted.Checked;
@@ -92,15 +165,10 @@ namespace mview
             }
 
             listNames.ResumeLayout();
+            listNames.EndUpdate();
 
             suspendEvents = false;
 
-        }
-
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-          
         }
 
         private void checkSorted_CheckedChanged(object sender, EventArgs e)
@@ -129,5 +197,13 @@ namespace mview
                 item.UpdateNames(names, namesType);
             }
         }
+    }
+
+    public enum ChartsPosition
+    {
+        One,
+        OnePlusTwo,
+        OnePlusThree,
+        Four
     }
 }

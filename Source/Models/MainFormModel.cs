@@ -57,7 +57,7 @@ namespace mview
                 for (int it = 0; it < pm.projectList[projectIndex].ecl.SUMMARY.NTIME; ++it)
                 {
                     double value = pm.projectList[projectIndex].ecl.SUMMARY.DATA[it][data.index];
-                    oxyData.Add(new OxyPlot.DataPoint(OxyPlot.Axes.DateTimeAxis.ToDouble(pm.projectList[projectIndex].ecl.SUMMARY.DATES[it]),value));
+                    oxyData.Add(new OxyPlot.DataPoint(OxyPlot.Axes.DateTimeAxis.ToDouble(pm.projectList[projectIndex].ecl.SUMMARY.DATES[it]), value));
                 }
             }
             else // if not found, return zero vector
@@ -90,6 +90,12 @@ namespace mview
 
         public void SetSelectedProjectIndex(List<int> selectedIndices)
         {
+            // Снять выделение
+
+            for (int it = 0; it < pm.projectList.Count; ++it)
+                pm.projectList[it].selected = false;
+
+
             for (int it = 0; it < selectedIndices.Count; ++it)
                 pm.projectList[selectedIndices[it]].selected = true;
 
@@ -199,9 +205,10 @@ namespace mview
                  select item.Name).ToArray();
         }
 
-        public int GetStepCount()
+        public int GetStepCount(int projectIndex)
         {
-            return pm.activeProject.SUMMARY.NTIME;
+            return pm.projectList[projectIndex].ecl.SUMMARY.NTIME;
         }
     }
+
 }

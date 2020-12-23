@@ -48,10 +48,10 @@ namespace mview
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listKeywords.FormattingEnabled = true;
             this.listKeywords.IntegralHeight = false;
-            this.listKeywords.Location = new System.Drawing.Point(597, 26);
+            this.listKeywords.Location = new System.Drawing.Point(623, 22);
             this.listKeywords.Name = "listKeywords";
             this.listKeywords.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listKeywords.Size = new System.Drawing.Size(92, 469);
+            this.listKeywords.Size = new System.Drawing.Size(77, 478);
             this.listKeywords.TabIndex = 1;
             this.listKeywords.SelectedIndexChanged += new System.EventHandler(this.listKeywords_SelectedIndexChanged);
             // 
@@ -59,7 +59,7 @@ namespace mview
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(594, 10);
+            this.label1.Location = new System.Drawing.Point(620, 6);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(54, 13);
             this.label1.TabIndex = 2;
@@ -74,7 +74,7 @@ namespace mview
             this.plotView.Location = new System.Drawing.Point(6, 6);
             this.plotView.Name = "plotView";
             this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotView.Size = new System.Drawing.Size(585, 498);
+            this.plotView.Size = new System.Drawing.Size(597, 498);
             this.plotView.TabIndex = 3;
             this.plotView.Text = "plotView";
             this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -83,24 +83,26 @@ namespace mview
             // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.ItemSize = new System.Drawing.Size(48, 18);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(703, 536);
+            this.tabControl1.Size = new System.Drawing.Size(617, 536);
+            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 4;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.listKeywords);
             this.tabPage1.Controls.Add(this.plotView);
-            this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(695, 510);
+            this.tabPage1.Size = new System.Drawing.Size(609, 510);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Chart";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -111,7 +113,7 @@ namespace mview
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(695, 510);
+            this.tabPage2.Size = new System.Drawing.Size(583, 510);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Data";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -131,7 +133,7 @@ namespace mview
             this.gridData.RowHeadersVisible = false;
             this.gridData.RowTemplate.Height = 18;
             this.gridData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.gridData.Size = new System.Drawing.Size(689, 504);
+            this.gridData.Size = new System.Drawing.Size(577, 504);
             this.gridData.TabIndex = 0;
             this.gridData.VirtualMode = true;
             this.gridData.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.gridData_CellValueNeeded);
@@ -141,16 +143,18 @@ namespace mview
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.Controls.Add(this.listKeywords);
             this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Name = "ChartControl";
             this.Size = new System.Drawing.Size(703, 536);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridData)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

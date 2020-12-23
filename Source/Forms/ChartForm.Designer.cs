@@ -54,7 +54,7 @@ namespace mview
             "Other"});
             this.boxNameType.Location = new System.Drawing.Point(12, 508);
             this.boxNameType.Name = "boxNameType";
-            this.boxNameType.Size = new System.Drawing.Size(92, 21);
+            this.boxNameType.Size = new System.Drawing.Size(103, 21);
             this.boxNameType.TabIndex = 0;
             this.boxNameType.SelectedIndexChanged += new System.EventHandler(this.boxNameType_SelectedIndexChanged);
             // 
@@ -67,7 +67,7 @@ namespace mview
             this.listNames.Location = new System.Drawing.Point(12, 29);
             this.listNames.Name = "listNames";
             this.listNames.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listNames.Size = new System.Drawing.Size(92, 415);
+            this.listNames.Size = new System.Drawing.Size(103, 415);
             this.listNames.TabIndex = 1;
             this.listNames.SelectedIndexChanged += new System.EventHandler(this.listNames_SelectedIndexChanged);
             // 
@@ -108,14 +108,13 @@ namespace mview
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(110, 29);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(121, 29);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(828, 530);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(817, 530);
             this.tableLayoutPanel1.TabIndex = 6;
             // 
             // ChartForm
