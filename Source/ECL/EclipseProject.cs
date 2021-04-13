@@ -13,24 +13,6 @@ using System.Globalization;
 
 namespace mview
 {
-    public enum NameOptions
-    {
-        Aquifer,
-        Block,
-        Completion,
-        Field,
-        Group,
-        LGBlock,
-        LGCompletion,
-        LGWell,
-        Network,
-        Region,
-        RegionFlows,
-        RegionComponent,
-        WellSegment,
-        Well,
-        Other
-    }
     public struct VectorData
     {
         public int index;
@@ -47,6 +29,13 @@ namespace mview
         public List<VectorData> Data = new List<VectorData>();
     }
 
+    public struct EclipseLoadingArg
+    {
+        public string file;
+        public string keyword;
+        public long percent;
+    }
+
     public class EclipseProject
     {
         public string FILENAME;
@@ -59,16 +48,14 @@ namespace mview
         public RSSPEC RESTART = null;
         public INSPEC INIT = null;
         public EGRID EGRID = new EGRID();
+        
+        public event EventHandler<EclipseLoadingArg> UpdateLoadingProgress;
+        string loadingFileName = null; 
 
-        private readonly LoadingForm loadingForm = new LoadingForm();
+        //private readonly LoadingForm loadingForm = new LoadingForm();
 
         public void OpenData(string filename)
         {
-            // Настройка таймера, если загрузка происходит дольше 3 секунд, то показываем окно
-
-            loadingForm.Show();
-            loadingForm.listBoxLog.Items.Clear();
-
             // Следует разобраться со структурой файлов в директории
 
             FILENAME = filename;
@@ -109,10 +96,8 @@ namespace mview
             if (FILES.ContainsKey("SMSPEC"))
             {
                 SUMMARY = new SMSPEC(FILES["SMSPEC"]);
-                SUMMARY.UpdateData += OnLoadingUpdateData;
-
-                loadingForm.listBoxLog.Items.Add("SMSPEC...");
-                Application.DoEvents();
+                loadingFileName = "SMSPEC";
+                
                 
                 ProceedSUMMARY();
 
@@ -129,35 +114,42 @@ namespace mview
 
             if (FILES.ContainsKey("RSSPEC"))
             {
-                loadingForm.listBoxLog.Items.Add("RSSPEC...");
-                Application.DoEvents();
+                loadingFileName = "RSSPEC";
+
+                //loadingForm.listBoxLog.Items.Add("RSSPEC...");
+                //Application.DoEvents();
 
                 RESTART = new RSSPEC(FILES["RSSPEC"]);
             }
 
             if (FILES.ContainsKey("INSPEC"))
             {
-                loadingForm.listBoxLog.Items.Add("INSPEC...");
-                Application.DoEvents();
+                loadingFileName = "INSPEC";
+
+                //loadingForm.listBoxLog.Items.Add("INSPEC...");
+                //Application.DoEvents();
 
                 INIT = new INSPEC(FILES["INSPEC"]);
             }
 
-            loadingForm.Hide();
+            //loadingForm.Hide();
         }
 
-        private void OnLoadingUpdateData(object sender, string[] e)
+        private void OnLoadingUpdateData(object sender, BinaryReaderArg e)
         {
-            loadingForm.lbProgressText.Text = e[0];
-            loadingForm.progressBar.Value = Convert.ToInt32(e[1]);
-            Application.DoEvents();
+            UpdateLoadingProgress?.Invoke(
+                null,
+                new EclipseLoadingArg {
+                    file = loadingFileName,
+                    keyword = e.keyword,
+                    percent = e.percent });
         }
 
         public void ReadEGRID()
         {
-            loadingForm.Show();
-            loadingForm.listBoxLog.Items.Add("EGRID...");
-            EGRID.UpdateData += OnLoadingUpdateData;
+            //loadingForm.Show();
+            //loadingForm.listBoxLog.Items.Add("EGRID...");
+            //EGRID.UpdateData += OnLoadingUpdateData;
 
             if (FILES.ContainsKey("EGRID"))
             {
@@ -173,8 +165,8 @@ namespace mview
                 }
             }
 
-            EGRID.UpdateData -= OnLoadingUpdateData;
-            loadingForm.Hide();
+            //EGRID.UpdateData -= OnLoadingUpdateData;
+            //loadingForm.Hide();
         }
 
         public void UpdateLumpingMethod(string name)

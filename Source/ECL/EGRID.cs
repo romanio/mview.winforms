@@ -87,7 +87,7 @@ namespace mview.ECL
         public float[] COORD = null;
         public BigArray<float> ZCORN = null;
 
-        public event EventHandler<string[]> UpdateData;
+        public event EventHandler<BinaryReaderArg> UpdateData;
         
         public void ReadEGRID(string filename)
         {
@@ -165,7 +165,7 @@ namespace mview.ECL
             br.CloseBinaryFile();
         }
 
-        private void OnBinaryReaderUpdateData(object sender, string[] e)
+        private void OnBinaryReaderUpdateData(object sender, BinaryReaderArg e)
         {
             UpdateData?.Invoke(sender, e);
         }

@@ -26,6 +26,7 @@ namespace mview
         public List<VirtualGroupItem> virtualGroup = null;
         public int activeProjectIndex = -1;
         public EclipseProject activeProject;
+        public event EventHandler<EclipseLoadingArg> UpdateLoadingProgress;
 
         public void OpenECLProject()
         {
@@ -34,17 +35,21 @@ namespace mview
             if (fd.ShowDialog() == DialogResult.OK)
             {
                 var item = new ProjectManagerItem();
+                item.ecl.UpdateLoadingProgress += EclOnUpdateLoadingProgress;
                 item.ecl.OpenData(fd.FileName);
                 item.name = item.ecl.ROOT;
                 item.selected = true;
 
                 projectList.Add(item);
 
-                // Set last project as active
-
-                activeProject = projectList.Last().ecl;
+                activeProject = projectList.Last().ecl;  // Set last project as active
                 activeProjectIndex = projectList.Count - 1;
             }
+        }
+
+        private void EclOnUpdateLoadingProgress(object sender, EclipseLoadingArg e)
+        {
+            UpdateLoadingProgress?.Invoke(sender, e);
         }
 
         public void DeleteActiveProject()

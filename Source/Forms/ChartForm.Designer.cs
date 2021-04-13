@@ -52,11 +52,10 @@ namespace mview
             "Aquifer",
             "Region",
             "Other"});
-            this.boxNameType.Location = new System.Drawing.Point(12, 508);
+            this.boxNameType.Location = new System.Drawing.Point(12, 349);
             this.boxNameType.Name = "boxNameType";
             this.boxNameType.Size = new System.Drawing.Size(103, 21);
             this.boxNameType.TabIndex = 0;
-            this.boxNameType.SelectedIndexChanged += new System.EventHandler(this.boxNameType_SelectedIndexChanged);
             // 
             // listNames
             // 
@@ -67,7 +66,7 @@ namespace mview
             this.listNames.Location = new System.Drawing.Point(12, 29);
             this.listNames.Name = "listNames";
             this.listNames.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listNames.Size = new System.Drawing.Size(103, 415);
+            this.listNames.Size = new System.Drawing.Size(103, 256);
             this.listNames.TabIndex = 1;
             this.listNames.SelectedIndexChanged += new System.EventHandler(this.listNames_SelectedIndexChanged);
             // 
@@ -75,7 +74,7 @@ namespace mview
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 492);
+            this.label1.Location = new System.Drawing.Point(12, 333);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(31, 13);
             this.label1.TabIndex = 2;
@@ -85,13 +84,12 @@ namespace mview
             // 
             this.checkSorted.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkSorted.AutoSize = true;
-            this.checkSorted.Location = new System.Drawing.Point(12, 450);
+            this.checkSorted.Location = new System.Drawing.Point(12, 291);
             this.checkSorted.Name = "checkSorted";
             this.checkSorted.Size = new System.Drawing.Size(92, 17);
             this.checkSorted.TabIndex = 3;
             this.checkSorted.Text = "Sorted names";
             this.checkSorted.UseVisualStyleBackColor = true;
-            this.checkSorted.CheckedChanged += new System.EventHandler(this.checkSorted_CheckedChanged);
             // 
             // label2
             // 
@@ -114,14 +112,14 @@ namespace mview
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(817, 530);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(492, 371);
             this.tableLayoutPanel1.TabIndex = 6;
             // 
             // ChartForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(940, 562);
+            this.ClientSize = new System.Drawing.Size(615, 403);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.checkSorted);

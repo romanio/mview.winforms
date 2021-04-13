@@ -7,75 +7,168 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WeifenLuo.WinFormsUI.Docking;
 
 namespace mview
 {
+    public enum NameOptions
+    {
+        Aquifer,
+        Block,
+        Completion,
+        Field,
+        Group,
+        LGBlock,
+        LGCompletion,
+        LGWell,
+        Network,
+        Region,
+        RegionFlows,
+        RegionComponent,
+        WellSegment,
+        Well,
+        Other
+    }
+
+    public enum ChartsPosition
+    {
+        One,
+        OnePlusTwo,
+        OnePlusThree,
+        Four
+    }
     public partial class MainForm : Form
     {
-        private readonly MainFormModel model = new MainFormModel();
+        readonly MainFormModel model = new MainFormModel();
+
+        readonly ChartFiltersForm chartFiltersForm = null;
         readonly ControlPanel controlPanel = null;
-        readonly ChartForm chartForm = null;
-        private bool suspendEvents = false;
+
+        bool suspendEvents = false;
+        NameOptions namesType = NameOptions.Well;
 
         public MainForm()
         {
             InitializeComponent();
 
-            dockPanel1.Theme = this.vS2015LightTheme1;
-            visualStudioToolStripExtender1.SetStyle(statusStrip1, VisualStudioToolStripExtender.VsVersion.Vs2003, this.vS2015LightTheme1);
-
             suspendEvents = true;
+
+            chartFiltersForm = new ChartFiltersForm();
+            chartFiltersForm.UpdateData += ChartFiltersFormOnUpdateData;
 
             controlPanel = new ControlPanel(model);
             controlPanel.UpdateData += ControlPanelOnUpdateData;
-            chartForm = new ChartForm(model);
-
-            controlPanel.Show(dockPanel1, DockState.DockLeft);
-            chartForm.Show(dockPanel1, DockState.Document);
-
 
             boxGroupMode.SelectedIndex = 0;
-            boxChartsPositions.SelectedIndex = 0;
+            boxChartsPositions.SelectedIndex = 1;
+            boxNameType.SelectedIndex = 2;
+
+            UpdateChartPositions();
 
             suspendEvents = false;
         }
 
         private void ControlPanelOnUpdateData(object sender, EventArgs e)
         {
-            // Изменение списка выбранных проектов, уведомляем зависимых
-
-            chartForm.UpdateFormData();
+            UpdateFormData();
         }
 
-        private void buttonOpenNewModel_Click_1(object sender, EventArgs e)
+        void ModelsToolStripMenuItemOnClick(object sender, EventArgs e)
         {
             model.OpenNewModel();
+            UpdateFormData();
+        }
 
-            controlPanel.UpdateFormData();
+        public void UpdateFormData()
+        {
+            suspendEvents = true;
+
+            var tmp_names = new List<string>();    // Сохраним список текущих выделенных имен
+            foreach (string item in listNames.SelectedItems)
+            {
+                tmp_names.Add(item);
+            }
+
+            listNames.SuspendLayout();
+            listNames.BeginUpdate();
+
+            listNames.Items.Clear();
+            listNames.Sorted = checkSorted.Checked;
+
+            switch (boxNameType.SelectedIndex)
+            {
+                case 0:
+                    namesType = NameOptions.Field;
+                    break;
+                case 1:
+                    namesType = NameOptions.Group;
+                    break;
+                case 2:
+                    namesType = NameOptions.Well;
+                    break;
+                case 3:
+                    namesType = NameOptions.Completion;
+                    break;
+                case 4:
+                    namesType = NameOptions.Aquifer;
+                    break;
+                case 5:
+                    namesType = NameOptions.Region;
+                    break;
+                case 6:
+                    namesType = NameOptions.Other;
+                    break;
+            }
+
+            if (model.GetSelectedProjectIndex().Count > 0)
+            {
+                listNames.Items.AddRange(model.GetNamesByType(namesType));
+                
+                foreach (string item in tmp_names)
+                {
+                    int index = listNames.Items.IndexOf(item); // Востановим выделенные слова
+
+                    if (index != -1)
+                    {
+                        listNames.SetSelected(index, true);
+                    }
+                }
+            }
+
+            listNames.ResumeLayout();
+            listNames.EndUpdate();
+
+            suspendEvents = false;
         }
 
         void UpdateChartPositions()
         {
-            ChartsPosition position = new ChartsPosition();
+            tableLayoutPanel1.Controls.Clear();
+            tableLayoutPanel1.RowStyles.Clear();
+            tableLayoutPanel1.ColumnStyles.Clear();
 
             switch (boxChartsPositions.SelectedIndex)
             {
                 case 0:
-                    position = ChartsPosition.One;
+                    tableLayoutPanel1.RowCount = 1;
+                    tableLayoutPanel1.ColumnCount = 1;
+                    tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+                    tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
                     break;
                 case 1:
-                    position = ChartsPosition.OnePlusTwo;
-                    break;
-                case 2:
-                    position = ChartsPosition.OnePlusThree;
-                    break;
-                case 3:
-                    position = ChartsPosition.Four;
+                    tableLayoutPanel1.RowCount = 2;
+                    tableLayoutPanel1.ColumnCount = 2;
+                    tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+                    tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+                    tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+                    tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+
+                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
+                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
+                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
+                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
                     break;
             }
-
-            chartForm.SetChartsPosition(position);
         }
 
         void UpdateChartSettings()
@@ -98,21 +191,72 @@ namespace mview
                     break;
             }
 
-            chartForm.SetChartSettings(data);
+            foreach (ChartControl item in tableLayoutPanel1.Controls)
+            {
+                item.UpdateSettings(data);
+            }
         }
 
-        private void boxGroupMode_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListNamesOnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            var names = new List<string>();
+
+            foreach (object item in listNames.SelectedItems)
+            {
+                names.Add(item.ToString());
+            }
+
+            foreach (ChartControl item in tableLayoutPanel1.Controls)
+            {
+                item.UpdateNames(names, namesType);
+            }
+        }
+        private void BoxGroupModeOnSelectedIndexChanged(object sender, EventArgs e)
         {
             if (suspendEvents) return;
 
             UpdateChartSettings();
         }
 
-        private void boxChartsPositions_SelectedIndexChanged(object sender, EventArgs e)
+        private void BoxChartsPositionsOnSelectedIndexChanged(object sender, EventArgs e)
         {
             if (suspendEvents) return;
 
             UpdateChartPositions();
+        }
+
+
+        private void ChartFiltersFormOnUpdateData(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        private void CheckSortedOnCheckedChanged(object sender, EventArgs e)
+        {
+            UpdateFormData();
+        }
+
+        private void BoxNameTypeOnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
+
+            UpdateFormData();
+        }
+
+        private void ButtonSeriesSettingsOnClick(object sender, EventArgs e)
+        {
+            // Передаем настройки фильтра
+
+            chartFiltersForm.SetFitersSettings(new ChartFilterSettings { });
+            chartFiltersForm.Show();
+            chartFiltersForm.Focus();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            controlPanel.UpdateFormData();
+            controlPanel.Show();
         }
     }
 }

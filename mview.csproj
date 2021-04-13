@@ -81,6 +81,12 @@
     <Compile Include="Source\Forms\ChartControl.Designer.cs">
       <DependentUpon>ChartControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Forms\ChartFiltersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Forms\ChartFiltersForm.Designer.cs">
+      <DependentUpon>ChartFiltersForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Forms\ChartForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -111,6 +117,9 @@
     <Compile Include="Source\ProjectManager.cs" />
     <EmbeddedResource Include="Source\Forms\ChartControl.resx">
       <DependentUpon>ChartControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Forms\ChartFiltersForm.resx">
+      <DependentUpon>ChartFiltersForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Forms\ChartForm.resx">
       <DependentUpon>ChartForm.cs</DependentUpon>
@@ -176,6 +185,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="icons\folder_add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_curve.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chart_line_edit.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

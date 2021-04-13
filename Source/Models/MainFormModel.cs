@@ -11,6 +11,7 @@ namespace mview
     public class MainFormModel
     {
         private readonly ProjectManager pm = new ProjectManager();
+        public event EventHandler<EclipseLoadingArg> UpdateLoadingProgress;
 
         public void UpdateActiveProject()
         {
@@ -19,7 +20,14 @@ namespace mview
 
         public void OpenNewModel()
         {
+            pm.UpdateLoadingProgress += PmOnUpdateLoadingProgress;
             pm.OpenECLProject();
+            
+        }
+
+        private void PmOnUpdateLoadingProgress(object sender, EclipseLoadingArg e)
+        {
+            UpdateLoadingProgress?.Invoke(sender, e);
         }
 
         public DateTime GetDateByStep(int step)
@@ -31,7 +39,6 @@ namespace mview
         {
             return pm.activeProject.SUMMARY.DATA[step][index];
         }
-
 
         public string[] GetKeywords(string name, NameOptions type)
         {

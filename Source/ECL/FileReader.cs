@@ -16,6 +16,12 @@ namespace mview
         public int count;
     }
 
+    public struct BinaryReaderArg
+    {
+        public string keyword;
+        public long percent;
+    }
+
     public class FileReader
     {
         FileStream fs = null;
@@ -26,7 +32,7 @@ namespace mview
         public long Position = 0;
 
         //
-        public event EventHandler<string[]> UpdateData;
+        public event EventHandler<BinaryReaderArg> UpdateData;
 
         public void OpenBinaryFile(string filename)
         {
@@ -60,7 +66,10 @@ namespace mview
             header.type = ReadString(4);
             ReadBytes(4);
 
-            UpdateData?.Invoke(null, new string[] { header.keyword, (100 * Position / Length).ToString() });
+            UpdateData?.Invoke(null, new BinaryReaderArg { keyword = header.keyword, percent = 100 * Position / Length });
+
+
+            System.Windows.Forms.Application.DoEvents();
         }
 
         public void SkipEclipseData()

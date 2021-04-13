@@ -17,18 +17,21 @@ namespace mview
         private readonly MainFormModel model = null;
         private bool suspendEvents = false;
         private NameOptions namesType = NameOptions.Well;
-
+        
         public ChartForm(MainFormModel model)
         {
             InitializeComponent();
 
             this.model = model;
 
-            suspendEvents = true;
-            
-            boxNameType.SelectedIndex = 2;
+        }
 
-            suspendEvents = false;
+        public void SetChartFilter(ChartFilterSettings data)
+        {
+            foreach (ChartControl item in tableLayoutPanel1.Controls)
+            {
+                item.UpdateFilters(data);
+            }
         }
 
         public void SetChartSettings(ChartSettings data)
@@ -171,18 +174,8 @@ namespace mview
 
         }
 
-        private void checkSorted_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateFormData();
-        }
 
-        private void boxNameType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (suspendEvents) return;
-
-            UpdateFormData();
-        }
-
+ 
         private void listNames_SelectedIndexChanged(object sender, EventArgs e)
         {
             var names = new List<string>();
@@ -199,11 +192,5 @@ namespace mview
         }
     }
 
-    public enum ChartsPosition
-    {
-        One,
-        OnePlusTwo,
-        OnePlusThree,
-        Four
-    }
+
 }

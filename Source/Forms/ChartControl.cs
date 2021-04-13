@@ -42,10 +42,9 @@ namespace mview
 
             plotModel = new PlotModel
             {
-                Title = "(No wells yet)",
+                Title = "(No wells)",
                 DefaultFont = "Segoe UI",
-
-                TitleFontSize = 13,
+                TitleFontSize = 10,
                 DefaultFontSize = 10,
             };
 
@@ -76,6 +75,12 @@ namespace mview
 
             UpdateChartAndTable();
         }
+
+        public void UpdateFilters(ChartFilterSettings data)
+        {
+            //
+        }
+
 
         public void UpdateNames(List<string> names, NameOptions type)
         {

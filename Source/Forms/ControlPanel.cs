@@ -7,15 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WeifenLuo.WinFormsUI.Docking;
 
 namespace mview
 {
-    public partial class ControlPanel : DockContent
+    public partial class ControlPanel : Form
     {
         private readonly MainFormModel model = null;
         public event EventHandler UpdateData;
         private bool suspendEvents = false;
+        string loadingFilename = null;
 
         public ControlPanel(MainFormModel model)
         {
@@ -58,7 +58,42 @@ namespace mview
 
             model.SetSelectedProjectIndex(indices);
 
-            UpdateData(sender, e);
+            //
+        }
+
+        private void ControlPanel_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Hide();
+            e.Cancel = true;
+        }
+
+        private void buttonSeriesSettings_Click(object sender, EventArgs e)
+        {
+            listBoxLog.Items.Clear();
+            
+            model.UpdateLoadingProgress += ModelOnUpdateLoadingProgress;
+            model.OpenNewModel();
+
+            lbProgressText.Text = "";
+            progressBar.Value = 0;
+            listBoxLog.Items.Add("OK");
+            loadingFilename = null;
+
+            UpdateFormData();
+        }
+
+        private void ModelOnUpdateLoadingProgress(object sender, EclipseLoadingArg e)
+        {
+
+            if (e.file != loadingFilename)
+            {
+                listBoxLog.Items.Add(e.file);
+                loadingFilename = e.file;
+            }
+
+            lbProgressText.Text = e.keyword;
+            progressBar.Value = (int)e.percent;
+
         }
     }
 }

@@ -25,7 +25,7 @@ namespace mview.ECL
         public int NTIME; // Количество временных шагов
         public DateTime[] DATES = null;
 
-        public event EventHandler<string[]> UpdateData;
+        public event EventHandler<BinaryReaderArg> UpdateLoadingData;
 
         public SMSPEC(string filename)
         {
@@ -132,14 +132,15 @@ namespace mview.ECL
             br.CloseBinaryFile();
         }
 
-        private void OnBinaryReaderUpdateData(object sender, string[] e)
+        private void OnBinaryReaderUpdateData(object sender, BinaryReaderArg e)
         {
-            UpdateData?.Invoke(sender, e);
+            UpdateLoadingData?.Invoke(sender, e);
         }
 
         public void ReadUNSMRY(string filename)
         {
             FileReader br = new FileReader();
+
             br.UpdateData += OnBinaryReaderUpdateData;
 
             br.OpenBinaryFile(filename);
