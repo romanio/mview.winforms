@@ -45,7 +45,7 @@ namespace mview
             UpdateData(null, null);
         }
 
-        private void listBoxProjectNames_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListBoxProjectNamesOnSelectedIndexChanged(object sender, EventArgs e)
         {
             if (suspendEvents) return;
 
@@ -58,7 +58,8 @@ namespace mview
 
             model.SetSelectedProjectIndex(indices);
 
-            //
+
+            UpdateData(null, null);
         }
 
         private void ControlPanel_FormClosing(object sender, FormClosingEventArgs e)
@@ -70,30 +71,51 @@ namespace mview
         private void buttonSeriesSettings_Click(object sender, EventArgs e)
         {
             listBoxLog.Items.Clear();
-            
             model.UpdateLoadingProgress += ModelOnUpdateLoadingProgress;
             model.OpenNewModel();
 
-            lbProgressText.Text = "";
-            progressBar.Value = 0;
-            listBoxLog.Items.Add("OK");
-            loadingFilename = null;
+            ResetProgressBar();
 
             UpdateFormData();
         }
 
-        private void ModelOnUpdateLoadingProgress(object sender, EclipseLoadingArg e)
+        private void ModelOnUpdateLoadingProgress(object sender, BinaryReaderArg e)
         {
-
-            if (e.file != loadingFilename)
+            if (e.filename != loadingFilename)
             {
-                listBoxLog.Items.Add(e.file);
-                loadingFilename = e.file;
+                listBoxLog.Items.Add(System.IO.Path.GetFileName(e.filename) + " (" + FormatBytes(e.length) + ")");
+                loadingFilename = e.filename;
+                listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
             }
 
-            lbProgressText.Text = e.keyword;
-            progressBar.Value = (int)e.percent;
+            progressBar.Value = (int)(100 * e.position / e.length);
 
+        }
+
+        void ResetProgressBar()
+        {
+            progressBar.Value = 100;
+            loadingFilename = null;
+        }
+
+        private static string FormatBytes(long bytes)
+        {
+            string[] Suffix = { "B", "KB", "MB", "GB", "TB" };
+            int i;
+            double dblSByte = bytes;
+            for (i = 0; i < Suffix.Length && bytes >= 1024; i++, bytes /= 1024)
+            {
+                dblSByte = bytes / 1024.0;
+            }
+
+            return String.Format("{0:0.##} {1}", dblSByte, Suffix[i]);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            model.DeleteSelectedProject();
+
+            UpdateFormData();
         }
     }
 }

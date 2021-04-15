@@ -18,8 +18,10 @@ namespace mview
 
     public struct BinaryReaderArg
     {
+        public string filename;
         public string keyword;
-        public long percent;
+        public long position;
+        public long length;
     }
 
     public class FileReader
@@ -27,7 +29,7 @@ namespace mview
         FileStream fs = null;
         BinaryReader br = null;
         public Header header;
-
+        public string filename = null;
         public long Length = 0;
         public long Position = 0;
 
@@ -38,6 +40,7 @@ namespace mview
         {
             fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             br = new BinaryReader(fs, System.Text.Encoding.GetEncoding(1251));
+            this.filename = filename;
             Length = fs.Length;
             Position = 0;
         }
@@ -66,7 +69,13 @@ namespace mview
             header.type = ReadString(4);
             ReadBytes(4);
 
-            UpdateData?.Invoke(null, new BinaryReaderArg { keyword = header.keyword, percent = 100 * Position / Length });
+            UpdateData?.Invoke(null, new BinaryReaderArg
+            {
+                filename = filename,
+                keyword = header.keyword,
+                position = Position,
+                length = Length
+            });
 
 
             System.Windows.Forms.Application.DoEvents();

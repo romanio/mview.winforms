@@ -172,7 +172,6 @@ namespace mview
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.Transparent;
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.buttonSeriesSettings);
             this.panel1.Controls.Add(this.boxChartsPositions);
             this.panel1.Controls.Add(this.label2);
@@ -182,6 +181,7 @@ namespace mview
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(730, 80);
             this.panel1.TabIndex = 6;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // buttonSeriesSettings
             // 
@@ -253,7 +253,7 @@ namespace mview
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(667, 603);
+            this.tabPage4.Size = new System.Drawing.Size(736, 632);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "2D Map";
             // 
@@ -261,7 +261,10 @@ namespace mview
             // 
             this.checkSorted.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkSorted.AutoSize = true;
-            this.checkSorted.Location = new System.Drawing.Point(13, 515);
+            this.checkSorted.FlatAppearance.BorderColor = System.Drawing.Color.LightSteelBlue;
+            this.checkSorted.FlatAppearance.BorderSize = 2;
+            this.checkSorted.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
+            this.checkSorted.Location = new System.Drawing.Point(14, 458);
             this.checkSorted.Name = "checkSorted";
             this.checkSorted.Size = new System.Drawing.Size(92, 17);
             this.checkSorted.TabIndex = 9;
@@ -285,10 +288,10 @@ namespace mview
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listNames.FormattingEnabled = true;
             this.listNames.IntegralHeight = false;
-            this.listNames.Location = new System.Drawing.Point(14, 88);
+            this.listNames.Location = new System.Drawing.Point(14, 60);
             this.listNames.Name = "listNames";
             this.listNames.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listNames.Size = new System.Drawing.Size(104, 383);
+            this.listNames.Size = new System.Drawing.Size(102, 383);
             this.listNames.TabIndex = 7;
             this.listNames.SelectedIndexChanged += new System.EventHandler(this.ListNamesOnSelectedIndexChanged);
             // 
@@ -314,9 +317,12 @@ namespace mview
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(14, 12);
+            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.LightSteelBlue;
+            this.button1.FlatAppearance.BorderSize = 2;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Location = new System.Drawing.Point(12, 12);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(104, 26);
+            this.button1.Size = new System.Drawing.Size(104, 29);
             this.button1.TabIndex = 12;
             this.button1.Text = "Projects";
             this.button1.UseVisualStyleBackColor = true;

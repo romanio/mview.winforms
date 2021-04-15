@@ -39,8 +39,7 @@ namespace mview
     public partial class MainForm : Form
     {
         readonly MainFormModel model = new MainFormModel();
-
-        readonly ChartFiltersForm chartFiltersForm = null;
+        readonly StylesPanel stylesPanel = null;
         readonly ControlPanel controlPanel = null;
 
         bool suspendEvents = false;
@@ -52,8 +51,9 @@ namespace mview
 
             suspendEvents = true;
 
-            chartFiltersForm = new ChartFiltersForm();
-            chartFiltersForm.UpdateData += ChartFiltersFormOnUpdateData;
+            stylesPanel = new StylesPanel();
+            //stylesPanel.Up
+          //  chartFiltersForm.UpdateData += ChartFiltersFormOnUpdateData;
 
             controlPanel = new ControlPanel(model);
             controlPanel.UpdateData += ControlPanelOnUpdateData;
@@ -246,17 +246,20 @@ namespace mview
 
         private void ButtonSeriesSettingsOnClick(object sender, EventArgs e)
         {
-            // Передаем настройки фильтра
-
-            chartFiltersForm.SetFitersSettings(new ChartFilterSettings { });
-            chartFiltersForm.Show();
-            chartFiltersForm.Focus();
+            stylesPanel.UpdateFormData(model.GetAllKeywords());
+            stylesPanel.Show();
+            stylesPanel.Focus();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             controlPanel.UpdateFormData();
             controlPanel.Show();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            ControlPaint.DrawBorder(e.Graphics, this.panel1.ClientRectangle, Color.LightSteelBlue, ButtonBorderStyle.Solid);
         }
     }
 }

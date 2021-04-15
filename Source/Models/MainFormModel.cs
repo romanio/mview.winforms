@@ -11,7 +11,8 @@ namespace mview
     public class MainFormModel
     {
         private readonly ProjectManager pm = new ProjectManager();
-        public event EventHandler<EclipseLoadingArg> UpdateLoadingProgress;
+
+        public event EventHandler<BinaryReaderArg> UpdateLoadingProgress;
 
         public void UpdateActiveProject()
         {
@@ -25,7 +26,7 @@ namespace mview
             
         }
 
-        private void PmOnUpdateLoadingProgress(object sender, EclipseLoadingArg e)
+        private void PmOnUpdateLoadingProgress(object sender, BinaryReaderArg e)
         {
             UpdateLoadingProgress?.Invoke(sender, e);
         }
@@ -112,6 +113,10 @@ namespace mview
                 pm.SetActiveProject(selectedIndices[0]);
         }
 
+        public void DeleteSelectedProject()
+        {
+            pm.DeleteActiveProject();
+        }
 
         public ProjectManager GetProjectManager()
         {
@@ -201,7 +206,7 @@ namespace mview
 
         public string[] GetAllKeywords()
         {
-            return pm.activeProject.SUMMARY.KEYWORDS.Distinct().ToArray();
+            return pm.activeProject?.SUMMARY.KEYWORDS.Distinct().ToArray();
         }
 
         public string[] GetNamesByType(NameOptions type)

@@ -26,7 +26,7 @@ namespace mview
         public List<VirtualGroupItem> virtualGroup = null;
         public int activeProjectIndex = -1;
         public EclipseProject activeProject;
-        public event EventHandler<EclipseLoadingArg> UpdateLoadingProgress;
+        public event EventHandler<BinaryReaderArg> UpdateLoadingProgress;
 
         public void OpenECLProject()
         {
@@ -47,7 +47,7 @@ namespace mview
             }
         }
 
-        private void EclOnUpdateLoadingProgress(object sender, EclipseLoadingArg e)
+        private void EclOnUpdateLoadingProgress(object sender, BinaryReaderArg e)
         {
             UpdateLoadingProgress?.Invoke(sender, e);
         }

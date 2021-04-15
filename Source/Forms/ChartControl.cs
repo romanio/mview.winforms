@@ -17,7 +17,7 @@ namespace mview
 {
     public partial class ChartControl : UserControl
     {
-        private PlotModel plotModel = null;
+        private readonly PlotModel plotModel = null;
         private readonly MainFormModel model = null;
         private bool suspendEvents = false;
         private List<string> selectedNames = null;
@@ -31,12 +31,9 @@ namespace mview
         {
             InitializeComponent();
 
-            //
             typeof(Control).InvokeMember("DoubleBuffered",
                 BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
                 null, gridData, new object[] { true });
-            //
-
 
             this.model = model;
 
@@ -64,6 +61,7 @@ namespace mview
                 MajorGridlineThickness = 1,
             });
 
+            plotModel.Legends.Add(new OxyPlot.Legends.Legend { LegendPosition = OxyPlot.Legends.LegendPosition.LeftTop });
             plotView.Model = plotModel;
 
             settings = new ChartSettings { GroupingMode = GroupingMode.Normal };
@@ -76,14 +74,10 @@ namespace mview
             UpdateChartAndTable();
         }
 
-        public void UpdateFilters(ChartFilterSettings data)
-        {
-            //
-        }
-
-
         public void UpdateNames(List<string> names, NameOptions type)
         {
+            if (names.Count == 0) return;
+
             suspendEvents = true;
             selectedNames = names;
             selectedKeywords = new List<string>();
@@ -101,11 +95,9 @@ namespace mview
 
             // Востановим выделенные слова
 
-            int index = -1;
-
             foreach (string item in tmp_names)
             {
-                index = listKeywords.Items.IndexOf(item);
+                int index = listKeywords.Items.IndexOf(item);
 
                 if (index != -1)
                 {
@@ -114,7 +106,6 @@ namespace mview
                 }
             }
 
-  
             listKeywords.ResumeLayout();
 
             suspendEvents = false;
@@ -178,7 +169,12 @@ namespace mview
                 StringBuilder axisYName = new StringBuilder();
 
                 for (int iw = 0; iw < selectedUnits.Count - 1; ++iw)
-                    axisYName.Append(selectedUnits[iw] + ", ");
+                {
+                    if (selectedUnits[iw] != "")
+                    {
+                        axisYName.Append(selectedUnits[iw] + ", ");
+                    }
+                }
 
                 axisYName.Append(selectedUnits.Last());
 
@@ -403,5 +399,6 @@ namespace mview
     public class ChartSettings
     {
         public GroupingMode GroupingMode;
+        public StyleSettings StyleSettings;
     }
 }

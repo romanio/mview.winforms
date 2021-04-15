@@ -29,13 +29,6 @@ namespace mview
         public List<VectorData> Data = new List<VectorData>();
     }
 
-    public struct EclipseLoadingArg
-    {
-        public string file;
-        public string keyword;
-        public long percent;
-    }
-
     public class EclipseProject
     {
         public string FILENAME;
@@ -49,10 +42,7 @@ namespace mview
         public INSPEC INIT = null;
         public EGRID EGRID = new EGRID();
         
-        public event EventHandler<EclipseLoadingArg> UpdateLoadingProgress;
-        string loadingFileName = null; 
-
-        //private readonly LoadingForm loadingForm = new LoadingForm();
+        public event EventHandler<BinaryReaderArg> UpdateLoadingProgress;
 
         public void OpenData(string filename)
         {
@@ -95,15 +85,15 @@ namespace mview
 
             if (FILES.ContainsKey("SMSPEC"))
             {
-                SUMMARY = new SMSPEC(FILES["SMSPEC"]);
-                loadingFileName = "SMSPEC";
-                
-                
+                SUMMARY = new SMSPEC();
+                SUMMARY.UpdateLoadingData += OnLoadingUpdateData;
+                SUMMARY.InitSMSPEC(FILES["SMSPEC"]);
+               
                 ProceedSUMMARY();
-
 
                 if (FILES.ContainsKey("UNSMRY"))
                 {
+
                     SUMMARY.ReadUNSMRY(FILES["UNSMRY"]);
                 }
                 else
@@ -114,20 +104,12 @@ namespace mview
 
             if (FILES.ContainsKey("RSSPEC"))
             {
-                loadingFileName = "RSSPEC";
-
-                //loadingForm.listBoxLog.Items.Add("RSSPEC...");
-                //Application.DoEvents();
 
                 RESTART = new RSSPEC(FILES["RSSPEC"]);
             }
 
             if (FILES.ContainsKey("INSPEC"))
             {
-                loadingFileName = "INSPEC";
-
-                //loadingForm.listBoxLog.Items.Add("INSPEC...");
-                //Application.DoEvents();
 
                 INIT = new INSPEC(FILES["INSPEC"]);
             }
@@ -135,14 +117,18 @@ namespace mview
             //loadingForm.Hide();
         }
 
+        
         private void OnLoadingUpdateData(object sender, BinaryReaderArg e)
         {
             UpdateLoadingProgress?.Invoke(
                 null,
-                new EclipseLoadingArg {
-                    file = loadingFileName,
+                new BinaryReaderArg
+                {
+                    filename = e.filename,
                     keyword = e.keyword,
-                    percent = e.percent });
+                    position = e.position,
+                    length = e.length
+                });
         }
 
         public void ReadEGRID()
@@ -332,7 +318,7 @@ namespace mview
 
                 if (SUMMARY.KEYWORDS[iw].StartsWith("C"))
                 {
-                    System.Diagnostics.Debug.WriteLine(SUMMARY.NDIVX + ";" + SUMMARY.NDIVY + ";" + SUMMARY.NDIVZ);
+                    //System.Diagnostics.Debug.WriteLine(SUMMARY.NDIVX + ";" + SUMMARY.NDIVY + ";" + SUMMARY.NDIVZ);
                     var index = SUMMARY.NUMS[iw] - 1;
                     var K = (int)(index / (SUMMARY.NDIVX * SUMMARY.NDIVY)) + 1;
                     var J = (int)(index - (K - 1) * SUMMARY.NDIVX * SUMMARY.NDIVY) / SUMMARY.NDIVX + 1;

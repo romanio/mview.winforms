@@ -27,9 +27,11 @@ namespace mview.ECL
 
         public event EventHandler<BinaryReaderArg> UpdateLoadingData;
 
-        public SMSPEC(string filename)
+        public void InitSMSPEC(string filename)
         {
             FileReader br = new FileReader();
+
+            br.UpdateData += OnBinaryReaderUpdateData;
 
             br.OpenBinaryFile(filename);
 
@@ -185,6 +187,9 @@ namespace mview.ECL
             for (int iw = 0; iw < filenames.Length; ++iw)
             {
                 FileReader br = new FileReader();
+
+                br.UpdateData += OnBinaryReaderUpdateData;
+
                 br.OpenBinaryFile(filenames[iw]);
 
                 if (br.Length == 0) break;
