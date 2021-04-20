@@ -44,6 +44,7 @@ namespace mview
             // 
             this.listKeywords.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.listKeywords.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.listKeywords.FormattingEnabled = true;
             this.listKeywords.IntegralHeight = false;
             this.listKeywords.Location = new System.Drawing.Point(425, 3);
@@ -60,6 +61,7 @@ namespace mview
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.plotView.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.plotView.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.plotView.Location = new System.Drawing.Point(0, 0);
             this.plotView.Margin = new System.Windows.Forms.Padding(0);
             this.plotView.Name = "plotView";

@@ -69,7 +69,11 @@ namespace mview
 
         public void UpdateSettings(ChartSettings data)
         {
-            settings = data;
+            settings.GroupingMode = data.GroupingMode;
+
+            if (data.StyleSettings != null)
+                settings.StyleSettings = data.StyleSettings;
+            
 
             UpdateChartAndTable();
         }
@@ -113,6 +117,7 @@ namespace mview
             // Индексы выбранных проектов
 
             selectedProjects = model.GetSelectedProjectIndex();
+            
             UpdateChartAndTable();
 
         }
@@ -185,11 +190,39 @@ namespace mview
 
             plotModel.Series.Clear();
 
-            foreach(int projectIndex in selectedProjects)
+            plotModel.Legends.Clear();
+            plotModel.Legends.Add(new OxyPlot.Legends.Legend { LegendPosition = settings.StyleSettings.LegendPosition });
+
+
+            plotModel.Axes[0].MajorGridlineStyle = settings.StyleSettings.axisXStyle;
+            plotModel.Axes[0].MajorGridlineThickness = settings.StyleSettings.axisXWidth;
+
+
+            if (settings.StyleSettings.axisXColor != OxyPlot.OxyColor.Parse("None"))
+            {
+
+                plotModel.Axes[0].MajorGridlineColor = OxyColor.FromRgb(
+                    settings.StyleSettings.axisXColor.R,
+                    settings.StyleSettings.axisXColor.G,
+                    settings.StyleSettings.axisXColor.B);
+            };
+
+            plotModel.Axes[1].MajorGridlineStyle = settings.StyleSettings.axisYStyle;
+            plotModel.Axes[1].MajorGridlineThickness = settings.StyleSettings.axisYWidth;
+
+            if (settings.StyleSettings.axisYColor != OxyPlot.OxyColor.Parse("None"))
+            {
+                plotModel.Axes[1].MajorGridlineColor = OxyColor.FromRgb(
+                    settings.StyleSettings.axisYColor.R,
+                    settings.StyleSettings.axisYColor.G,
+                    settings.StyleSettings.axisYColor.B);
+            }
+
+            foreach (int projectIndex in selectedProjects)
             {
                 for (int iw = 0; iw < selectedKeywords.Count; ++iw)
                 {
-                    // Для выбранного имени вектора, требутеся собрать данные по всем именам
+                    // Для выбранного имени вектора, требуется собрать данные по всем именам
 
                     var fullData = new List<List<OxyPlot.DataPoint>>();
 
@@ -206,17 +239,21 @@ namespace mview
                     {
                         for (int it = 0; it < selectedNames.Count; ++it)
                         {
+                            var tmpStyle = settings.StyleSettings.GetStyle(selectedKeywords[iw]);
+
                             var series = new LineSeries
                             {
-                                Title = selectedNames[it].ToString(),
-                                LineStyle = LineStyle.Solid,
-                                StrokeThickness = 1,
-                                MarkerType = MarkerType.Circle,
-                                MarkerStroke = OxyColors.Black,
-                                MarkerFill = OxyColors.Transparent,
-                                MarkerSize = 3,
+                                Title = selectedKeywords[iw].ToString(),
+                                LineStyle = tmpStyle?.lineStyle??LineStyle.Solid,
+                                StrokeThickness = tmpStyle?.lineWidth??1,
+                                MarkerType = tmpStyle?.markerType??MarkerType.Circle,
+                                MarkerSize = tmpStyle?.markerSize??3,
                                 TrackerFormatString = "{0} \n{4:0.##} {3}\n{2}"
                             };
+
+                            series.MarkerFill = tmpStyle?.markerFillColor ?? series.MarkerFill;
+                            series.Color = tmpStyle?.lineColor ?? series.Color;
+                            series.MarkerStroke = tmpStyle?.markerColor ?? series.MarkerStroke;
 
                             series.Points.AddRange(fullData[it]);
 
@@ -242,17 +279,22 @@ namespace mview
                             sumValue.Add(new DataPoint(fullData[0][it].X, value));
                         }
 
+                        var tmpStyle = settings.StyleSettings.GetStyle(selectedKeywords[iw]);
+
                         var series = new LineSeries
                         {
                             Title = selectedKeywords[iw].ToString() + ".sum",
-                            LineStyle = LineStyle.Solid,
-                            StrokeThickness = 1,
-                            MarkerType = MarkerType.Circle,
-                            MarkerStroke = OxyColors.Black,
-                            MarkerFill = OxyColors.Transparent,
-                            MarkerSize = 3,
+                            LineStyle = tmpStyle?.lineStyle ?? LineStyle.Solid,
+                            StrokeThickness = tmpStyle?.lineWidth ?? 1,
+                            MarkerType = tmpStyle?.markerType ?? MarkerType.Circle,
+
+                            MarkerSize = tmpStyle?.markerSize ?? 3,
                             TrackerFormatString = "{0} \n{4:0.##} {3}\n{2}"
                         };
+
+                        series.MarkerFill = tmpStyle?.markerFillColor ?? series.MarkerFill;
+                        series.Color = tmpStyle?.lineColor ?? series.Color;
+                        series.MarkerStroke = tmpStyle?.markerColor ?? series.MarkerStroke;
 
                         series.Points.AddRange(sumValue);
 
@@ -283,17 +325,21 @@ namespace mview
                             avValue.Add(new DataPoint(fullData[0][it].X, count > 0 ? value / count : 0 ));
                         }
 
+                        var tmpStyle = settings.StyleSettings.GetStyle(selectedKeywords[iw]);
+
                         var series = new LineSeries
                         {
                             Title = selectedKeywords[iw].ToString() + ".av",
-                            LineStyle = LineStyle.Solid,
-                            StrokeThickness = 1,
-                            MarkerType = MarkerType.Circle,
-                            MarkerStroke = OxyColors.Black,
-                            MarkerFill = OxyColors.Transparent,
-                            MarkerSize = 3,
+                            LineStyle = tmpStyle?.lineStyle ?? LineStyle.Solid,
+                            StrokeThickness = tmpStyle?.lineWidth ?? 1,
+                            MarkerType = tmpStyle?.markerType ?? MarkerType.Circle,
+                            MarkerSize = tmpStyle?.markerSize ?? 3,
                             TrackerFormatString = "{0} \n{4:0.##} {3}\n{2}"
                         };
+
+                        series.MarkerFill = tmpStyle?.markerFillColor ?? series.MarkerFill;
+                        series.Color = tmpStyle?.lineColor ?? series.Color;
+                        series.MarkerStroke = tmpStyle?.markerColor ?? series.MarkerStroke;
 
                         series.Points.AddRange(avValue);
 
@@ -339,17 +385,21 @@ namespace mview
                             avValue.Add(new DataPoint(fullData[0][it].X, sumLiq > 0 ? value / sumLiq : 0));
                         }
 
+                        var tmpStyle = settings.StyleSettings.GetStyle(selectedKeywords[iw]);
+
                         var series = new LineSeries
                         {
-                            Title = selectedKeywords[iw].ToString() + ".avbyliq",
-                            LineStyle = LineStyle.Solid,
-                            StrokeThickness = 1,
-                            MarkerType = MarkerType.Circle,
-                            MarkerStroke = OxyColors.Black,
-                            MarkerFill = OxyColors.Transparent,
-                            MarkerSize = 3,
+                            Title = selectedKeywords[iw].ToString() + ".avliq",
+                            LineStyle = tmpStyle?.lineStyle ?? LineStyle.Solid,
+                            StrokeThickness = tmpStyle?.lineWidth ?? 1,
+                            MarkerType = tmpStyle?.markerType ?? MarkerType.Circle,
+                            MarkerSize = tmpStyle?.markerSize ?? 3,
                             TrackerFormatString = "{0} \n{4:0.##} {3}\n{2}"
                         };
+
+                        series.MarkerFill = tmpStyle?.markerFillColor ?? series.MarkerFill;
+                        series.Color = tmpStyle?.lineColor ?? series.Color;
+                        series.MarkerStroke = tmpStyle?.markerColor ?? series.MarkerStroke;
 
                         series.Points.AddRange(avValue);
 

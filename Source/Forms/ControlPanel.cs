@@ -87,14 +87,10 @@ namespace mview
                 loadingFilename = e.filename;
                 listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
             }
-
-            progressBar.Value = (int)(100 * e.position / e.length);
-
         }
 
         void ResetProgressBar()
         {
-            progressBar.Value = 100;
             loadingFilename = null;
         }
 

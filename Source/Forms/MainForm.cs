@@ -52,8 +52,7 @@ namespace mview
             suspendEvents = true;
 
             stylesPanel = new StylesPanel();
-            //stylesPanel.Up
-          //  chartFiltersForm.UpdateData += ChartFiltersFormOnUpdateData;
+            stylesPanel.UpdateData += StylesPanelOnUpdateData;
 
             controlPanel = new ControlPanel(model);
             controlPanel.UpdateData += ControlPanelOnUpdateData;
@@ -65,6 +64,11 @@ namespace mview
             UpdateChartPositions();
 
             suspendEvents = false;
+        }
+
+        private void StylesPanelOnUpdateData(object sender, StyleSettings e)
+        {
+            UpdateChartSettings(e);
         }
 
         private void ControlPanelOnUpdateData(object sender, EventArgs e)
@@ -146,6 +150,7 @@ namespace mview
             tableLayoutPanel1.RowStyles.Clear();
             tableLayoutPanel1.ColumnStyles.Clear();
 
+            
             switch (boxChartsPositions.SelectedIndex)
             {
                 case 0:
@@ -169,9 +174,11 @@ namespace mview
                     tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
                     break;
             }
+
+            UpdateChartSettings(stylesPanel.GetStyleSettings());
         }
 
-        void UpdateChartSettings()
+        void UpdateChartSettings(StyleSettings style)
         {
             var data = new ChartSettings();
 
@@ -190,6 +197,8 @@ namespace mview
                     data.GroupingMode = GroupingMode.AverageByLiquid;
                     break;
             }
+
+            data.StyleSettings = style;
 
             foreach (ChartControl item in tableLayoutPanel1.Controls)
             {
@@ -215,7 +224,7 @@ namespace mview
         {
             if (suspendEvents) return;
 
-            UpdateChartSettings();
+            UpdateChartSettings(null);
         }
 
         private void BoxChartsPositionsOnSelectedIndexChanged(object sender, EventArgs e)

@@ -33,9 +33,7 @@ namespace mview
             this.listBoxProjectNames = new System.Windows.Forms.ListBox();
             this.buttonSeriesSettings = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.listBoxLog = new System.Windows.Forms.ListBox();
-            this.lbProgressText = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // listBoxProjectNames
@@ -57,7 +55,6 @@ namespace mview
             this.buttonSeriesSettings.FlatAppearance.BorderColor = System.Drawing.Color.LightSteelBlue;
             this.buttonSeriesSettings.FlatAppearance.BorderSize = 2;
             this.buttonSeriesSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonSeriesSettings.Image = global::mview.Properties.Resources.folder_add;
             this.buttonSeriesSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonSeriesSettings.Location = new System.Drawing.Point(354, 12);
             this.buttonSeriesSettings.Name = "buttonSeriesSettings";
@@ -73,9 +70,8 @@ namespace mview
             this.button1.FlatAppearance.BorderColor = System.Drawing.Color.LightSteelBlue;
             this.button1.FlatAppearance.BorderSize = 2;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.ForeColor = System.Drawing.Color.Red;
-            this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
             this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button1.Location = new System.Drawing.Point(354, 110);
             this.button1.Name = "button1";
@@ -85,15 +81,6 @@ namespace mview
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // progressBar
-            // 
-            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar.Location = new System.Drawing.Point(12, 165);
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(444, 24);
-            this.progressBar.TabIndex = 7;
-            // 
             // listBoxLog
             // 
             this.listBoxLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -101,42 +88,30 @@ namespace mview
             this.listBoxLog.FormattingEnabled = true;
             this.listBoxLog.Items.AddRange(new object[] {
             ",,,^.^,,,"});
-            this.listBoxLog.Location = new System.Drawing.Point(10, 208);
+            this.listBoxLog.Location = new System.Drawing.Point(12, 170);
             this.listBoxLog.Name = "listBoxLog";
-            this.listBoxLog.Size = new System.Drawing.Size(444, 147);
+            this.listBoxLog.Size = new System.Drawing.Size(444, 95);
             this.listBoxLog.TabIndex = 8;
-            // 
-            // lbProgressText
-            // 
-            this.lbProgressText.AutoSize = true;
-            this.lbProgressText.BackColor = System.Drawing.Color.Transparent;
-            this.lbProgressText.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lbProgressText.Location = new System.Drawing.Point(220, 170);
-            this.lbProgressText.Name = "lbProgressText";
-            this.lbProgressText.Size = new System.Drawing.Size(0, 13);
-            this.lbProgressText.TabIndex = 9;
             // 
             // ControlPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(468, 370);
-            this.Controls.Add(this.lbProgressText);
+            this.BackColor = System.Drawing.SystemColors.Window;
+            this.ClientSize = new System.Drawing.Size(468, 286);
             this.Controls.Add(this.listBoxLog);
-            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonSeriesSettings);
             this.Controls.Add(this.listBoxProjectNames);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "ControlPanel";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Project Panel";
+            this.Text = "Project";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ControlPanel_FormClosing);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -145,8 +120,6 @@ namespace mview
         private System.Windows.Forms.ListBox listBoxProjectNames;
         private System.Windows.Forms.Button buttonSeriesSettings;
         private System.Windows.Forms.Button button1;
-        public System.Windows.Forms.ProgressBar progressBar;
         public System.Windows.Forms.ListBox listBoxLog;
-        public System.Windows.Forms.Label lbProgressText;
     }
 }

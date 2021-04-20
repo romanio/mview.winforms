@@ -34,7 +34,6 @@ namespace mview
         public OxyColor axisXColor;
         public OxyColor axisYColor;
 
-
         public OxyPlot.Legends.LegendPosition LegendPosition = OxyPlot.Legends.LegendPosition.TopRight;
 
         public string axisX = "Time";
