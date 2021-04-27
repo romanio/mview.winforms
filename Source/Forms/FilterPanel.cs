@@ -10,14 +10,14 @@ using System.Windows.Forms;
 
 namespace mview
 {
-    public partial class ControlPanel : Form
+    public partial class FilterPanel : Form
     {
         private readonly MainFormModel model = null;
         public event EventHandler UpdateData;
         private bool suspendEvents = false;
         string loadingFilename = null;
 
-        public ControlPanel(MainFormModel model)
+        public FilterPanel(MainFormModel model)
         {
             InitializeComponent();
 
@@ -26,19 +26,19 @@ namespace mview
 
         public void UpdateFormData()
         {
-            listBoxProjectNames.Items.Clear();
-            listBoxProjectNames.Items.AddRange(model.GetProjectNames().ToArray<object>());
+            listGroups.Items.Clear();
+            listGroups.Items.AddRange(model.GetProjectNames().ToArray<object>());
 
-            listBoxProjectNames.SuspendLayout();
+            listGroups.SuspendLayout();
 
             suspendEvents = true;
 
             foreach (int index in model.GetSelectedProjectIndex())
             {
-                listBoxProjectNames.SelectedIndex = index;
+                listGroups.SelectedIndex = index;
             }
 
-            listBoxProjectNames.ResumeLayout();
+            listGroups.ResumeLayout();
             
             suspendEvents = false;
 
@@ -51,9 +51,9 @@ namespace mview
 
             var indices = new List<int>();
 
-            for (int it = 0; it < listBoxProjectNames.SelectedIndices.Count; ++it)
+            for (int it = 0; it < listGroups.SelectedIndices.Count; ++it)
             {
-               indices.Add(listBoxProjectNames.SelectedIndices[it]);
+               indices.Add(listGroups.SelectedIndices[it]);
             }
 
             model.SetSelectedProjectIndex(indices);
@@ -67,28 +67,6 @@ namespace mview
             Hide();
             e.Cancel = true;
         }
-
-        private void ButtonSeriesSettingsOnClick(object sender, EventArgs e)
-        {
-            listBoxLog.Items.Clear();
-            model.UpdateLoadingProgress += ModelOnUpdateLoadingProgress;
-            model.OpenNewModel();
-
-            ResetProgressBar();
-
-            UpdateFormData();
-        }
-
-        private void ModelOnUpdateLoadingProgress(object sender, BinaryReaderArg e)
-        {
-            if (e.filename != loadingFilename)
-            {
-                listBoxLog.Items.Add(System.IO.Path.GetFileName(e.filename) + " (" + FormatBytes(e.length) + ")");
-                loadingFilename = e.filename;
-                listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
-            }
-        }
-
         void ResetProgressBar()
         {
             loadingFilename = null;

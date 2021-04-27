@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
       <HintPath>dll\OpenTK.dll</HintPath>
@@ -75,11 +79,18 @@
     <Compile Include="Source\ECL\INSPEC.cs" />
     <Compile Include="Source\ECL\RSSPEC.cs" />
     <Compile Include="Source\ECL\SMSPEC.cs" />
+    <Compile Include="Source\ExcelWork.cs" />
     <Compile Include="Source\Forms\ChartControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Source\Forms\ChartControl.Designer.cs">
       <DependentUpon>ChartControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Forms\FilterPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Source\Forms\FilterPanel.Designer.cs">
+      <DependentUpon>FilterPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Forms\StyleSettings.cs" />
     <Compile Include="Source\Forms\StylesPanel.cs">
@@ -94,6 +105,12 @@
     <Compile Include="Source\Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Forms\TabCharts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\Forms\TabCharts.Designer.cs">
+      <DependentUpon>TabCharts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Models\MainFormModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -106,6 +123,9 @@
     <Compile Include="Source\ProjectManager.cs" />
     <EmbeddedResource Include="Source\Forms\ChartControl.resx">
       <DependentUpon>ChartControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Forms\FilterPanel.resx">
+      <DependentUpon>FilterPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Forms\StylesPanel.resx">
       <DependentUpon>StylesPanel.cs</DependentUpon>
@@ -125,6 +145,9 @@
     </Compile>
     <EmbeddedResource Include="Source\Forms\ControlPanel.resx">
       <DependentUpon>ControlPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Forms\TabCharts.resx">
+      <DependentUpon>TabCharts.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -171,12 +194,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="icons\folder_add.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\chart_curve.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\chart_line_edit.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

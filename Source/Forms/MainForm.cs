@@ -36,11 +36,14 @@ namespace mview
         OnePlusThree,
         Four
     }
+
     public partial class MainForm : Form
     {
         readonly MainFormModel model = new MainFormModel();
-        readonly StylesPanel stylesPanel = null;
         readonly ControlPanel controlPanel = null;
+        readonly FilterPanel filterPanel = null;
+
+        readonly List<ITabCommonForm> tabs = new List<ITabCommonForm>();
 
         bool suspendEvents = false;
         NameOptions namesType = NameOptions.Well;
@@ -51,24 +54,20 @@ namespace mview
 
             suspendEvents = true;
 
-            stylesPanel = new StylesPanel();
-            stylesPanel.UpdateData += StylesPanelOnUpdateData;
-
             controlPanel = new ControlPanel(model);
             controlPanel.UpdateData += ControlPanelOnUpdateData;
 
-            boxGroupMode.SelectedIndex = 0;
-            boxChartsPositions.SelectedIndex = 1;
-            boxNameType.SelectedIndex = 2;
+            filterPanel = new FilterPanel(model);
+            filterPanel.UpdateData += FilterPanelOnUpdateData;
 
-            UpdateChartPositions();
+            boxNameType.SelectedIndex = 2;
 
             suspendEvents = false;
         }
 
-        private void StylesPanelOnUpdateData(object sender, StyleSettings e)
+        private void FilterPanelOnUpdateData(object sender, EventArgs e)
         {
-            UpdateChartSettings(e);
+            //throw new NotImplementedException();
         }
 
         private void ControlPanelOnUpdateData(object sender, EventArgs e)
@@ -79,6 +78,7 @@ namespace mview
         void ModelsToolStripMenuItemOnClick(object sender, EventArgs e)
         {
             model.OpenNewModel();
+
             UpdateFormData();
         }
 
@@ -144,67 +144,7 @@ namespace mview
             suspendEvents = false;
         }
 
-        void UpdateChartPositions()
-        {
-            tableLayoutPanel1.Controls.Clear();
-            tableLayoutPanel1.RowStyles.Clear();
-            tableLayoutPanel1.ColumnStyles.Clear();
-
-            
-            switch (boxChartsPositions.SelectedIndex)
-            {
-                case 0:
-                    tableLayoutPanel1.RowCount = 1;
-                    tableLayoutPanel1.ColumnCount = 1;
-                    tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-                    tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
-                    break;
-                case 1:
-                    tableLayoutPanel1.RowCount = 2;
-                    tableLayoutPanel1.ColumnCount = 2;
-                    tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-                    tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-                    tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                    tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-
-                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
-                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
-                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
-                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
-                    break;
-            }
-
-            UpdateChartSettings(stylesPanel.GetStyleSettings());
-        }
-
-        void UpdateChartSettings(StyleSettings style)
-        {
-            var data = new ChartSettings();
-
-            switch (boxGroupMode.SelectedIndex)
-            {
-                case 0:
-                    data.GroupingMode = GroupingMode.Normal;
-                    break;
-                case 1:
-                    data.GroupingMode = GroupingMode.Sum;
-                    break;
-                case 2:
-                    data.GroupingMode = GroupingMode.Average;
-                    break;
-                case 3:
-                    data.GroupingMode = GroupingMode.AverageByLiquid;
-                    break;
-            }
-
-            data.StyleSettings = style;
-
-            foreach (ChartControl item in tableLayoutPanel1.Controls)
-            {
-                item.UpdateSettings(data);
-            }
-        }
+        
 
         private void ListNamesOnSelectedIndexChanged(object sender, EventArgs e)
         {
@@ -215,29 +155,18 @@ namespace mview
                 names.Add(item.ToString());
             }
 
-            foreach (ChartControl item in tableLayoutPanel1.Controls)
+            // Update Tabs
+
+            foreach (ITabCommonForm item in tabs)
             {
-                item.UpdateNames(names, namesType);
+                var data = new TabCommonData
+                {
+                    names = names,
+                    type = namesType
+                };
+
+                item.UpdateFormData(data);
             }
-        }
-        private void BoxGroupModeOnSelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (suspendEvents) return;
-
-            UpdateChartSettings(null);
-        }
-
-        private void BoxChartsPositionsOnSelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (suspendEvents) return;
-
-            UpdateChartPositions();
-        }
-
-
-        private void ChartFiltersFormOnUpdateData(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
 
@@ -253,12 +182,6 @@ namespace mview
             UpdateFormData();
         }
 
-        private void ButtonSeriesSettingsOnClick(object sender, EventArgs e)
-        {
-            stylesPanel.UpdateFormData(model.GetAllKeywords());
-            stylesPanel.Show();
-            stylesPanel.Focus();
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -266,9 +189,47 @@ namespace mview
             controlPanel.Show();
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
+
+
+        private void ButtonNewChartsOnClick(object sender, EventArgs e)
         {
-            ControlPaint.DrawBorder(e.Graphics, this.panel1.ClientRectangle, Color.LightSteelBlue, ButtonBorderStyle.Solid);
+            var tabCharts = new TabCharts(model)
+            {
+                Dock = DockStyle.Fill
+            };
+
+
+            var tabPage = new TabPage
+            {
+                Text = "Charts"
+            };
+
+            tabs.Add(tabCharts);
+            tabPage.Controls.Add(tabCharts);
+
+            tabControl2.TabPages.Add(tabPage);
         }
+
+        private void ButtonExportExcelOnClick(object sender, EventArgs e)
+        {
+            model.ExportToExcel();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            filterPanel.UpdateFormData();
+            filterPanel.Show();
+        }
+    }
+
+    public class TabCommonData
+    {
+        public List<string> names;
+        public NameOptions type;
+    }
+
+    public interface ITabCommonForm
+    {
+        void UpdateFormData(TabCommonData data);
     }
 }

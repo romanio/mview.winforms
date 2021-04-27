@@ -36,6 +36,7 @@ namespace mview
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.gridData = new System.Windows.Forms.DataGridView();
             this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridData)).BeginInit();
             this.SuspendLayout();
@@ -53,7 +54,7 @@ namespace mview
             this.listKeywords.Size = new System.Drawing.Size(76, 466);
             this.listKeywords.Sorted = true;
             this.listKeywords.TabIndex = 1;
-            this.listKeywords.SelectedIndexChanged += new System.EventHandler(this.listKeywords_SelectedIndexChanged);
+            this.listKeywords.SelectedIndexChanged += new System.EventHandler(this.ListKeywordsOnSelectedIndexChanged);
             // 
             // plotView
             // 
@@ -66,7 +67,7 @@ namespace mview
             this.plotView.Margin = new System.Windows.Forms.Padding(0);
             this.plotView.Name = "plotView";
             this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotView.Size = new System.Drawing.Size(422, 472);
+            this.plotView.Size = new System.Drawing.Size(408, 440);
             this.plotView.TabIndex = 3;
             this.plotView.Text = "plotView";
             this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -80,21 +81,23 @@ namespace mview
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.tabControl1.ItemSize = new System.Drawing.Size(48, 18);
-            this.tabControl1.Location = new System.Drawing.Point(223, 290);
+            this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(30, 170);
+            this.tabControl1.Size = new System.Drawing.Size(416, 466);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 4;
-            this.tabControl1.Visible = false;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.plotView);
+            this.tabPage1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(22, 144);
+            this.tabPage1.Size = new System.Drawing.Size(408, 440);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Chart";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -105,7 +108,7 @@ namespace mview
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(22, 144);
+            this.tabPage2.Size = new System.Drawing.Size(408, 440);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Data";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -125,7 +128,7 @@ namespace mview
             this.gridData.RowHeadersVisible = false;
             this.gridData.RowTemplate.Height = 18;
             this.gridData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.gridData.Size = new System.Drawing.Size(16, 138);
+            this.gridData.Size = new System.Drawing.Size(402, 434);
             this.gridData.TabIndex = 0;
             this.gridData.VirtualMode = true;
             this.gridData.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.gridData_CellValueNeeded);
@@ -135,13 +138,13 @@ namespace mview
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.Controls.Add(this.plotView);
-            this.Controls.Add(this.listKeywords);
             this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.listKeywords);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Name = "ChartControl";
             this.Size = new System.Drawing.Size(504, 472);
             this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridData)).EndInit();
             this.ResumeLayout(false);

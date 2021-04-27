@@ -136,6 +136,7 @@ namespace mview
                         tmpStyle.lineSmooth = Boolean.Parse(text.ReadLine());
                         tmpStyle.markerType = (MarkerType)Enum.Parse(typeof(MarkerType), text.ReadLine(), true);
                         tmpStyle.lineStyle = (LineStyle)Enum.Parse(typeof(LineStyle), text.ReadLine(), true);
+
                         listSeriesStyle.Add(tmpStyle);
                     }
 

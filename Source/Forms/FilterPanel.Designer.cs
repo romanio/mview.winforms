@@ -1,7 +1,7 @@
 ﻿
 namespace mview
 {
-    partial class StylesPanel
+    partial class FilterPanel
     {
         /// <summary>
         /// Required designer variable.
@@ -29,9 +29,13 @@ namespace mview
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StylesPanel));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FilterPanel));
+            this.listGroups = new System.Windows.Forms.ListBox();
+            this.buttonLoadGroups = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.listWells = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.listKeywords = new System.Windows.Forms.ListBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.boxLegendPosition = new System.Windows.Forms.ComboBox();
@@ -44,13 +48,14 @@ namespace mview
             this.numericAxisXWidth = new System.Windows.Forms.NumericUpDown();
             this.boxAxisYStyle = new System.Windows.Forms.ComboBox();
             this.boxAxisXStyle = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.buttonMarkerFillDefault = new System.Windows.Forms.Button();
             this.buttonMarkerBorderDefault = new System.Windows.Forms.Button();
@@ -68,11 +73,10 @@ namespace mview
             this.buttonLineColor = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.boxMarkerStyle = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
             this.boxLineStyle = new System.Windows.Forms.ComboBox();
-            this.colorDialog = new System.Windows.Forms.ColorDialog();
-            this.buttonSeriesSettings = new System.Windows.Forms.Button();
+            this.listKeywords = new System.Windows.Forms.ListBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericAxisYWidth)).BeginInit();
@@ -82,38 +86,87 @@ namespace mview
             ((System.ComponentModel.ISupportInitialize)(this.numericLineWidth)).BeginInit();
             this.SuspendLayout();
             // 
+            // listGroups
+            // 
+            this.listGroups.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listGroups.FormattingEnabled = true;
+            this.listGroups.IntegralHeight = false;
+            this.listGroups.Location = new System.Drawing.Point(134, 25);
+            this.listGroups.Name = "listGroups";
+            this.listGroups.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listGroups.Size = new System.Drawing.Size(115, 310);
+            this.listGroups.TabIndex = 0;
+            this.listGroups.SelectedIndexChanged += new System.EventHandler(this.ListBoxProjectNamesOnSelectedIndexChanged);
+            // 
+            // buttonLoadGroups
+            // 
+            this.buttonLoadGroups.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
+            this.buttonLoadGroups.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonLoadGroups.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonLoadGroups.Location = new System.Drawing.Point(12, 25);
+            this.buttonLoadGroups.Name = "buttonLoadGroups";
+            this.buttonLoadGroups.Size = new System.Drawing.Size(100, 30);
+            this.buttonLoadGroups.TabIndex = 5;
+            this.buttonLoadGroups.Text = "Load groups";
+            this.buttonLoadGroups.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.ForeColor = System.Drawing.Color.Red;
+            this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button1.Location = new System.Drawing.Point(12, 258);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(100, 30);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "Remove all";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // listWells
+            // 
+            this.listWells.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listWells.FormattingEnabled = true;
+            this.listWells.IntegralHeight = false;
+            this.listWells.Location = new System.Drawing.Point(275, 25);
+            this.listWells.Name = "listWells";
+            this.listWells.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listWells.Size = new System.Drawing.Size(115, 310);
+            this.listWells.TabIndex = 7;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(44, 20);
+            this.label1.Location = new System.Drawing.Point(131, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(36, 13);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "Axis X";
+            this.label1.Size = new System.Drawing.Size(60, 13);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Group List";
             // 
-            // listKeywords
+            // label2
             // 
-            this.listKeywords.FormattingEnabled = true;
-            this.listKeywords.IntegralHeight = false;
-            this.listKeywords.Location = new System.Drawing.Point(15, 17);
-            this.listKeywords.Name = "listKeywords";
-            this.listKeywords.Size = new System.Drawing.Size(92, 361);
-            this.listKeywords.Sorted = true;
-            this.listKeywords.TabIndex = 0;
-            this.listKeywords.SelectedIndexChanged += new System.EventHandler(this.ListKeywordsOnSelectedIndexChanged);
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(272, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Wells";
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.ItemSize = new System.Drawing.Size(82, 18);
-            this.tabControl1.Location = new System.Drawing.Point(12, 12);
+            this.tabControl1.Location = new System.Drawing.Point(31, 46);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(359, 423);
+            this.tabControl1.Size = new System.Drawing.Size(359, 300);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.tabControl1.TabIndex = 1;
+            this.tabControl1.TabIndex = 10;
             // 
             // tabPage1
             // 
@@ -127,18 +180,18 @@ namespace mview
             this.tabPage1.Controls.Add(this.numericAxisXWidth);
             this.tabPage1.Controls.Add(this.boxAxisYStyle);
             this.tabPage1.Controls.Add(this.boxAxisXStyle);
-            this.tabPage1.Controls.Add(this.label2);
+            this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.label13);
             this.tabPage1.Controls.Add(this.label16);
             this.tabPage1.Controls.Add(this.label17);
             this.tabPage1.Controls.Add(this.label15);
             this.tabPage1.Controls.Add(this.label14);
             this.tabPage1.Controls.Add(this.label12);
-            this.tabPage1.Controls.Add(this.label1);
+            this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(351, 397);
+            this.tabPage1.Size = new System.Drawing.Size(351, 274);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Charts";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -171,7 +224,6 @@ namespace mview
             this.buttonAxisYColorDefault.TabIndex = 33;
             this.buttonAxisYColorDefault.Text = "D";
             this.buttonAxisYColorDefault.UseVisualStyleBackColor = true;
-            this.buttonAxisYColorDefault.Click += new System.EventHandler(this.ButtonAxisYColorDefaultOnClick);
             // 
             // buttonAxisYColor
             // 
@@ -182,7 +234,6 @@ namespace mview
             this.buttonAxisYColor.TabIndex = 32;
             this.buttonAxisYColor.Text = "(default)";
             this.buttonAxisYColor.UseVisualStyleBackColor = true;
-            this.buttonAxisYColor.Click += new System.EventHandler(this.ButtonAxisYColorOnClick);
             // 
             // buttonAxisXColorDefault
             // 
@@ -193,7 +244,6 @@ namespace mview
             this.buttonAxisXColorDefault.TabIndex = 31;
             this.buttonAxisXColorDefault.Text = "D";
             this.buttonAxisXColorDefault.UseVisualStyleBackColor = true;
-            this.buttonAxisXColorDefault.Click += new System.EventHandler(this.ButtonAxisXColorDefaultOnClick);
             // 
             // buttonAxisXColor
             // 
@@ -204,7 +254,6 @@ namespace mview
             this.buttonAxisXColor.TabIndex = 30;
             this.buttonAxisXColor.Text = "(default)";
             this.buttonAxisXColor.UseVisualStyleBackColor = true;
-            this.buttonAxisXColor.Click += new System.EventHandler(this.ButtonAxisXColorOnClick);
             // 
             // numericAxisYWidth
             // 
@@ -260,14 +309,14 @@ namespace mview
             this.boxAxisXStyle.Size = new System.Drawing.Size(106, 21);
             this.boxAxisXStyle.TabIndex = 23;
             // 
-            // label2
+            // label3
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(44, 252);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(81, 13);
-            this.label2.TabIndex = 22;
-            this.label2.Text = "GridLine Color";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(44, 252);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(81, 13);
+            this.label3.TabIndex = 22;
+            this.label3.Text = "GridLine Color";
             // 
             // label13
             // 
@@ -324,6 +373,16 @@ namespace mview
             this.label12.TabIndex = 15;
             this.label12.Text = "GridLine Style";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label4.Location = new System.Drawing.Point(44, 20);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(36, 13);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "Axis X";
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.buttonMarkerFillDefault);
@@ -342,14 +401,14 @@ namespace mview
             this.tabPage2.Controls.Add(this.buttonLineColor);
             this.tabPage2.Controls.Add(this.label5);
             this.tabPage2.Controls.Add(this.boxMarkerStyle);
-            this.tabPage2.Controls.Add(this.label4);
-            this.tabPage2.Controls.Add(this.label3);
+            this.tabPage2.Controls.Add(this.label11);
+            this.tabPage2.Controls.Add(this.label19);
             this.tabPage2.Controls.Add(this.boxLineStyle);
             this.tabPage2.Controls.Add(this.listKeywords);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(351, 413);
+            this.tabPage2.Size = new System.Drawing.Size(351, 397);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Series";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -363,7 +422,6 @@ namespace mview
             this.buttonMarkerFillDefault.TabIndex = 31;
             this.buttonMarkerFillDefault.Text = "D";
             this.buttonMarkerFillDefault.UseVisualStyleBackColor = true;
-            this.buttonMarkerFillDefault.Click += new System.EventHandler(this.ButtonMarkerFillDefaultOnClick);
             // 
             // buttonMarkerBorderDefault
             // 
@@ -374,7 +432,6 @@ namespace mview
             this.buttonMarkerBorderDefault.TabIndex = 30;
             this.buttonMarkerBorderDefault.Text = "D";
             this.buttonMarkerBorderDefault.UseVisualStyleBackColor = true;
-            this.buttonMarkerBorderDefault.Click += new System.EventHandler(this.ButtonMarkerBorderDefaultOnClick);
             // 
             // buttonLineColorDefault
             // 
@@ -385,7 +442,6 @@ namespace mview
             this.buttonLineColorDefault.TabIndex = 29;
             this.buttonLineColorDefault.Text = "D";
             this.buttonLineColorDefault.UseVisualStyleBackColor = true;
-            this.buttonLineColorDefault.Click += new System.EventHandler(this.ButtonLineColorDefaultOnClick);
             // 
             // label10
             // 
@@ -468,7 +524,6 @@ namespace mview
             this.buttonMarkerFill.TabIndex = 21;
             this.buttonMarkerFill.Text = "(default)";
             this.buttonMarkerFill.UseVisualStyleBackColor = true;
-            this.buttonMarkerFill.Click += new System.EventHandler(this.ButtonMarkerFillOnClick);
             // 
             // label7
             // 
@@ -487,7 +542,6 @@ namespace mview
             this.buttonMarkerBorderColor.TabIndex = 19;
             this.buttonMarkerBorderColor.Text = "(default)";
             this.buttonMarkerBorderColor.UseVisualStyleBackColor = true;
-            this.buttonMarkerBorderColor.Click += new System.EventHandler(this.ButtonMarkerBorderColorOnClick);
             // 
             // label6
             // 
@@ -507,7 +561,6 @@ namespace mview
             this.buttonLineColor.TabIndex = 17;
             this.buttonLineColor.Text = "(default)";
             this.buttonLineColor.UseVisualStyleBackColor = true;
-            this.buttonLineColor.Click += new System.EventHandler(this.ButtonLineColorOnClick);
             // 
             // label5
             // 
@@ -528,23 +581,23 @@ namespace mview
             this.boxMarkerStyle.Size = new System.Drawing.Size(106, 21);
             this.boxMarkerStyle.TabIndex = 15;
             // 
-            // label4
+            // label11
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(126, 169);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(69, 13);
-            this.label4.TabIndex = 14;
-            this.label4.Text = "Marker style";
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(126, 169);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(69, 13);
+            this.label11.TabIndex = 14;
+            this.label11.Text = "Marker style";
             // 
-            // label3
+            // label19
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(126, 31);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(54, 13);
-            this.label3.TabIndex = 13;
-            this.label3.Text = "Line style";
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(126, 31);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(54, 13);
+            this.label19.TabIndex = 13;
+            this.label19.Text = "Line style";
             // 
             // boxLineStyle
             // 
@@ -556,42 +609,37 @@ namespace mview
             this.boxLineStyle.Size = new System.Drawing.Size(106, 21);
             this.boxLineStyle.TabIndex = 12;
             // 
-            // colorDialog
+            // listKeywords
             // 
-            this.colorDialog.AnyColor = true;
+            this.listKeywords.FormattingEnabled = true;
+            this.listKeywords.IntegralHeight = false;
+            this.listKeywords.Location = new System.Drawing.Point(15, 17);
+            this.listKeywords.Name = "listKeywords";
+            this.listKeywords.Size = new System.Drawing.Size(92, 361);
+            this.listKeywords.Sorted = true;
+            this.listKeywords.TabIndex = 0;
             // 
-            // buttonSeriesSettings
-            // 
-            this.buttonSeriesSettings.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
-            this.buttonSeriesSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonSeriesSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonSeriesSettings.Location = new System.Drawing.Point(260, 457);
-            this.buttonSeriesSettings.Name = "buttonSeriesSettings";
-            this.buttonSeriesSettings.Size = new System.Drawing.Size(107, 30);
-            this.buttonSeriesSettings.TabIndex = 29;
-            this.buttonSeriesSettings.Text = "Apply Style";
-            this.buttonSeriesSettings.UseVisualStyleBackColor = true;
-            this.buttonSeriesSettings.Click += new System.EventHandler(this.ButtonSeriesSettingsOnClick);
-            // 
-            // StylesPanel
+            // FilterPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(382, 499);
-            this.Controls.Add(this.buttonSeriesSettings);
+            this.ClientSize = new System.Drawing.Size(415, 412);
             this.Controls.Add(this.tabControl1);
-            this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.listWells);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonLoadGroups);
+            this.Controls.Add(this.listGroups);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "StylesPanel";
-            this.ShowInTaskbar = false;
+            this.Name = "FilterPanel";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Styles";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ChartFiltersForm_FormClosing);
+            this.Text = "Filter";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ControlPanel_FormClosing);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -602,53 +650,58 @@ namespace mview
             ((System.ComponentModel.ISupportInitialize)(this.numericMarkerSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericLineWidth)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
+        private System.Windows.Forms.ListBox listGroups;
+        private System.Windows.Forms.Button buttonLoadGroups;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ListBox listWells;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ListBox listKeywords;
+        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox boxLineStyle;
-        private System.Windows.Forms.ComboBox boxMarkerStyle;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button buttonLineColor;
-        private System.Windows.Forms.ColorDialog colorDialog;
-        private System.Windows.Forms.Button buttonMarkerBorderColor;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button buttonMarkerFill;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.NumericUpDown numericLineWidth;
-        private System.Windows.Forms.NumericUpDown numericMarkerSize;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.CheckBox checkSmooth;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Button buttonLineColorDefault;
-        private System.Windows.Forms.Button buttonMarkerFillDefault;
-        private System.Windows.Forms.Button buttonMarkerBorderDefault;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.ComboBox boxAxisXStyle;
-        private System.Windows.Forms.ComboBox boxAxisYStyle;
-        private System.Windows.Forms.NumericUpDown numericAxisYWidth;
-        private System.Windows.Forms.NumericUpDown numericAxisXWidth;
+        private System.Windows.Forms.ComboBox boxLegendPosition;
+        private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Button buttonAxisYColorDefault;
         private System.Windows.Forms.Button buttonAxisYColor;
         private System.Windows.Forms.Button buttonAxisXColorDefault;
         private System.Windows.Forms.Button buttonAxisXColor;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.ComboBox boxLegendPosition;
-        private System.Windows.Forms.Button buttonSeriesSettings;
+        private System.Windows.Forms.NumericUpDown numericAxisYWidth;
+        private System.Windows.Forms.NumericUpDown numericAxisXWidth;
+        private System.Windows.Forms.ComboBox boxAxisYStyle;
+        private System.Windows.Forms.ComboBox boxAxisXStyle;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Button buttonMarkerFillDefault;
+        private System.Windows.Forms.Button buttonMarkerBorderDefault;
+        private System.Windows.Forms.Button buttonLineColorDefault;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.CheckBox checkSmooth;
+        private System.Windows.Forms.NumericUpDown numericMarkerSize;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.NumericUpDown numericLineWidth;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button buttonMarkerFill;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button buttonMarkerBorderColor;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button buttonLineColor;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox boxMarkerStyle;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.ComboBox boxLineStyle;
+        private System.Windows.Forms.ListBox listKeywords;
     }
 }

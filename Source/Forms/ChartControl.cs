@@ -78,6 +78,11 @@ namespace mview
             UpdateChartAndTable();
         }
 
+        public void SwitchGraphTable()
+        {
+
+        }
+
         public void UpdateNames(List<string> names, NameOptions type)
         {
             if (names.Count == 0) return;
@@ -239,22 +244,8 @@ namespace mview
                     {
                         for (int it = 0; it < selectedNames.Count; ++it)
                         {
-                            var tmpStyle = settings.StyleSettings.GetStyle(selectedKeywords[iw]);
-
-                            var series = new LineSeries
-                            {
-                                Title = selectedKeywords[iw].ToString(),
-                                LineStyle = tmpStyle?.lineStyle??LineStyle.Solid,
-                                StrokeThickness = tmpStyle?.lineWidth??1,
-                                MarkerType = tmpStyle?.markerType??MarkerType.Circle,
-                                MarkerSize = tmpStyle?.markerSize??3,
-                                TrackerFormatString = "{0} \n{4:0.##} {3}\n{2}"
-                            };
-
-                            series.MarkerFill = tmpStyle?.markerFillColor ?? series.MarkerFill;
-                            series.Color = tmpStyle?.lineColor ?? series.Color;
-                            series.MarkerStroke = tmpStyle?.markerColor ?? series.MarkerStroke;
-
+                            var series = LineSeriesStyle(selectedKeywords[iw]);
+                            series.Title = selectedKeywords[iw].ToString();
                             series.Points.AddRange(fullData[it]);
 
                             plotModel.Series.Add(series);
@@ -279,23 +270,8 @@ namespace mview
                             sumValue.Add(new DataPoint(fullData[0][it].X, value));
                         }
 
-                        var tmpStyle = settings.StyleSettings.GetStyle(selectedKeywords[iw]);
-
-                        var series = new LineSeries
-                        {
-                            Title = selectedKeywords[iw].ToString() + ".sum",
-                            LineStyle = tmpStyle?.lineStyle ?? LineStyle.Solid,
-                            StrokeThickness = tmpStyle?.lineWidth ?? 1,
-                            MarkerType = tmpStyle?.markerType ?? MarkerType.Circle,
-
-                            MarkerSize = tmpStyle?.markerSize ?? 3,
-                            TrackerFormatString = "{0} \n{4:0.##} {3}\n{2}"
-                        };
-
-                        series.MarkerFill = tmpStyle?.markerFillColor ?? series.MarkerFill;
-                        series.Color = tmpStyle?.lineColor ?? series.Color;
-                        series.MarkerStroke = tmpStyle?.markerColor ?? series.MarkerStroke;
-
+                        var series = LineSeriesStyle(selectedKeywords[iw]);
+                        series.Title = selectedKeywords[iw].ToString() + ".sum";
                         series.Points.AddRange(sumValue);
 
                         plotModel.Series.Add(series);
@@ -325,22 +301,8 @@ namespace mview
                             avValue.Add(new DataPoint(fullData[0][it].X, count > 0 ? value / count : 0 ));
                         }
 
-                        var tmpStyle = settings.StyleSettings.GetStyle(selectedKeywords[iw]);
-
-                        var series = new LineSeries
-                        {
-                            Title = selectedKeywords[iw].ToString() + ".av",
-                            LineStyle = tmpStyle?.lineStyle ?? LineStyle.Solid,
-                            StrokeThickness = tmpStyle?.lineWidth ?? 1,
-                            MarkerType = tmpStyle?.markerType ?? MarkerType.Circle,
-                            MarkerSize = tmpStyle?.markerSize ?? 3,
-                            TrackerFormatString = "{0} \n{4:0.##} {3}\n{2}"
-                        };
-
-                        series.MarkerFill = tmpStyle?.markerFillColor ?? series.MarkerFill;
-                        series.Color = tmpStyle?.lineColor ?? series.Color;
-                        series.MarkerStroke = tmpStyle?.markerColor ?? series.MarkerStroke;
-
+                        var series = LineSeriesStyle(selectedKeywords[iw]);
+                        series.Title = selectedKeywords[iw].ToString() + ".av";
                         series.Points.AddRange(avValue);
 
                         plotModel.Series.Add(series);
@@ -385,21 +347,8 @@ namespace mview
                             avValue.Add(new DataPoint(fullData[0][it].X, sumLiq > 0 ? value / sumLiq : 0));
                         }
 
-                        var tmpStyle = settings.StyleSettings.GetStyle(selectedKeywords[iw]);
-
-                        var series = new LineSeries
-                        {
-                            Title = selectedKeywords[iw].ToString() + ".avliq",
-                            LineStyle = tmpStyle?.lineStyle ?? LineStyle.Solid,
-                            StrokeThickness = tmpStyle?.lineWidth ?? 1,
-                            MarkerType = tmpStyle?.markerType ?? MarkerType.Circle,
-                            MarkerSize = tmpStyle?.markerSize ?? 3,
-                            TrackerFormatString = "{0} \n{4:0.##} {3}\n{2}"
-                        };
-
-                        series.MarkerFill = tmpStyle?.markerFillColor ?? series.MarkerFill;
-                        series.Color = tmpStyle?.lineColor ?? series.Color;
-                        series.MarkerStroke = tmpStyle?.markerColor ?? series.MarkerStroke;
+                        var series = LineSeriesStyle(selectedKeywords[iw]);
+                        series.Title = selectedKeywords[iw].ToString() + ".avliq";
 
                         series.Points.AddRange(avValue);
 
@@ -414,7 +363,43 @@ namespace mview
 
         }
 
-        private void listKeywords_SelectedIndexChanged(object sender, EventArgs e)
+        LineSeries LineSeriesStyle(string style)
+        {
+            LineSeries series = new LineSeries
+            {
+                TrackerFormatString = "{0} \n{4:0.##} {3}\n{2}"
+            };
+
+            var tmpStyle = settings.StyleSettings.GetStyle(style);
+            
+            if (tmpStyle != null)
+            {
+                series.LineStyle = tmpStyle.lineStyle;
+                series.StrokeThickness = tmpStyle.lineWidth;
+                series.MarkerType = tmpStyle.markerType;
+                series.MarkerSize = tmpStyle.markerSize;
+
+
+                if (tmpStyle.markerFillColor != OxyPlot.OxyColor.Parse("None"))
+                {
+                    series.MarkerFill = tmpStyle.markerFillColor;
+                }
+
+                if (tmpStyle.lineColor != OxyPlot.OxyColor.Parse("None"))
+                {
+                    series.Color = tmpStyle.lineColor;
+                }
+
+                if (tmpStyle.markerColor != OxyPlot.OxyColor.Parse("None"))
+                {
+                    series.MarkerStroke = tmpStyle.markerColor;
+                }
+            }
+
+            return series;
+        }
+
+        private void ListKeywordsOnSelectedIndexChanged(object sender, EventArgs e)
         {
             if (suspendEvents) return;
 
