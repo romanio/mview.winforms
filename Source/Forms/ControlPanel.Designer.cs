@@ -53,6 +53,7 @@ namespace mview
             // 
             this.buttonSeriesSettings.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
             this.buttonSeriesSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSeriesSettings.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonSeriesSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonSeriesSettings.Location = new System.Drawing.Point(12, 12);
             this.buttonSeriesSettings.Name = "buttonSeriesSettings";

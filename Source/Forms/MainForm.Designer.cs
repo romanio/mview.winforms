@@ -42,7 +42,7 @@ namespace mview
             this.listNames = new System.Windows.Forms.ListBox();
             this.boxNameType = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.buttonWellFilter = new System.Windows.Forms.Button();
             this.tabControl2.SuspendLayout();
             this.tabPageControl.SuspendLayout();
             this.SuspendLayout();
@@ -88,7 +88,8 @@ namespace mview
             // 
             this.buttonExportExcel.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
             this.buttonExportExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExportExcel.Location = new System.Drawing.Point(155, 318);
+            this.buttonExportExcel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
+            this.buttonExportExcel.Location = new System.Drawing.Point(168, 157);
             this.buttonExportExcel.Name = "buttonExportExcel";
             this.buttonExportExcel.Size = new System.Drawing.Size(104, 29);
             this.buttonExportExcel.TabIndex = 16;
@@ -110,18 +111,21 @@ namespace mview
             // 
             this.button3.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
             this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.Location = new System.Drawing.Point(155, 95);
+            this.button3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
+            this.button3.Location = new System.Drawing.Point(168, 95);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(104, 29);
             this.button3.TabIndex = 14;
             this.button3.Text = "Cross-plots";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // buttonNewCharts
             // 
             this.buttonNewCharts.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
             this.buttonNewCharts.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonNewCharts.Location = new System.Drawing.Point(155, 35);
+            this.buttonNewCharts.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
+            this.buttonNewCharts.Location = new System.Drawing.Point(168, 35);
             this.buttonNewCharts.Name = "buttonNewCharts";
             this.buttonNewCharts.Size = new System.Drawing.Size(104, 29);
             this.buttonNewCharts.TabIndex = 13;
@@ -193,6 +197,7 @@ namespace mview
             // 
             this.button1.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.Location = new System.Drawing.Point(12, 12);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(104, 29);
@@ -201,18 +206,19 @@ namespace mview
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
+            // buttonWellFilter
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Location = new System.Drawing.Point(14, 559);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(104, 29);
-            this.button2.TabIndex = 14;
-            this.button2.Text = "Well Filter";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.buttonWellFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonWellFilter.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
+            this.buttonWellFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonWellFilter.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonWellFilter.Location = new System.Drawing.Point(14, 559);
+            this.buttonWellFilter.Name = "buttonWellFilter";
+            this.buttonWellFilter.Size = new System.Drawing.Size(104, 29);
+            this.buttonWellFilter.TabIndex = 14;
+            this.buttonWellFilter.Text = "Well Filter";
+            this.buttonWellFilter.UseVisualStyleBackColor = true;
+            this.buttonWellFilter.Click += new System.EventHandler(this.button2_Click);
             // 
             // MainForm
             // 
@@ -220,7 +226,7 @@ namespace mview
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(888, 695);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.buttonWellFilter);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.checkSorted);
@@ -254,7 +260,7 @@ namespace mview
         private System.Windows.Forms.Button buttonNewCharts;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button buttonWellFilter;
         private System.Windows.Forms.Button buttonExportExcel;
     }
 }

@@ -31,7 +31,9 @@ namespace mview.ECL
         {
             FileReader br = new FileReader();
 
-            br.UpdateData += OnBinaryReaderUpdateData;
+            UpdateLoadingData?.Invoke(null, new BinaryReaderArg { filename = filename });
+
+            //br.UpdateData += OnBinaryReaderUpdateData;
 
             br.OpenBinaryFile(filename);
 
@@ -143,7 +145,7 @@ namespace mview.ECL
         {
             FileReader br = new FileReader();
 
-            br.UpdateData += OnBinaryReaderUpdateData;
+            UpdateLoadingData?.Invoke(null, new BinaryReaderArg { filename = filename });
 
             br.OpenBinaryFile(filename);
             if (br.Length > 0)
@@ -188,7 +190,7 @@ namespace mview.ECL
             {
                 FileReader br = new FileReader();
 
-                br.UpdateData += OnBinaryReaderUpdateData;
+                UpdateLoadingData?.Invoke(null, new BinaryReaderArg { filename = filenames[iw] });
 
                 br.OpenBinaryFile(filenames[iw]);
 

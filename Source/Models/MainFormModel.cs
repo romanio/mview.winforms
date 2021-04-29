@@ -116,31 +116,6 @@ namespace mview
             pm.DeleteActiveProject();
         }
 
-        public ProjectManager GetProjectManager()
-        {
-            return pm;
-        }
-
-        public string[] GetNamesFromVGroup(string selectedPad)
-        {
-            var wells = (from item in pm.virtualGroup
-                         where item.pad == selectedPad
-                         select item.wellname).ToArray();
-
-            return wells.ToArray();
-        }
-
-        public string[] GetVirtualGroups()
-        {
-            if (pm.virtualGroup != null)
-            {
-                var pads = (from item in pm.virtualGroup
-                            select item.pad).Distinct().ToArray();
-                return pads;
-            }
-            return null;
-        }
-
         public string GetActiveProjectName()
         {
             return pm.projectList[pm.activeProjectIndex].name;
@@ -163,6 +138,11 @@ namespace mview
                 (from item in pm.activeProject.VECTORS
                  where item.Type == type
                  select item.Name).ToArray();
+        }
+
+        public int GetStepCount()
+        {
+            return pm.activeProject.SUMMARY.NTIME;
         }
 
         public int GetStepCount(int projectIndex)

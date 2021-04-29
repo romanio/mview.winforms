@@ -24,7 +24,7 @@ namespace mview
         private List<string> selectedKeywords = null;
         private List<int> selectedProjects = null;
         private int[] selectedIndex = null;
-        private ChartSettings settings = null;
+        private readonly ChartSettings settings = null;
 
 
         public ChartControl(MainFormModel model)
@@ -76,11 +76,6 @@ namespace mview
             
 
             UpdateChartAndTable();
-        }
-
-        public void SwitchGraphTable()
-        {
-
         }
 
         public void UpdateNames(List<string> names, NameOptions type)
@@ -416,7 +411,7 @@ namespace mview
         private void gridData_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
         {
             if (e.ColumnIndex == 0)
-                e.Value = model.GetDateByStep(e.RowIndex).ToString(); //.ToShortDateString();
+                e.Value = model.GetDateByStep(e.RowIndex).ToString();
             else
                 e.Value = model.GetParamAtIndex(selectedIndex[e.ColumnIndex - 1], e.RowIndex);
         }

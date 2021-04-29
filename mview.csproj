@@ -105,12 +105,20 @@
     <Compile Include="Source\Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Forms\TabCrossplots.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\Forms\TabCrossplots.Designer.cs">
+      <DependentUpon>TabCrossplots.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Forms\TabCharts.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Source\Forms\TabCharts.Designer.cs">
       <DependentUpon>TabCharts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Forms\WellFilterSettings.cs" />
+    <Compile Include="Source\ITabObserver.cs" />
     <Compile Include="Source\Models\MainFormModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -145,6 +153,9 @@
     </Compile>
     <EmbeddedResource Include="Source\Forms\ControlPanel.resx">
       <DependentUpon>ControlPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Forms\TabCrossplots.resx">
+      <DependentUpon>TabCrossplots.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Forms\TabCharts.resx">
       <DependentUpon>TabCharts.cs</DependentUpon>

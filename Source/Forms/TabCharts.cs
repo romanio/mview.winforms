@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace mview
 {
-    public partial class TabCharts : UserControl, ITabCommonForm
+    public partial class TabCharts : UserControl, ITabObserver
     {
         bool suspendEvents = false;
         MainFormModel model = null;
@@ -36,14 +36,19 @@ namespace mview
             suspendEvents = false;
         }
 
-        public void UpdateFormData(TabCommonData data)
+        public void UpdateSelectedWells(TabSelectedWellsData data)
         {
             // Update Tabs
 
             foreach (ChartControl item in tableLayoutPanel1.Controls)
             {
-                item.UpdateNames(data.names, data.type);
+                item.UpdateNames(data.selectedNames, data.type);
             }
+        }
+
+        public void UpdateSelectedProjects()
+        {
+            // None
         }
 
 
@@ -141,5 +146,7 @@ namespace mview
         {
             ControlPaint.DrawBorder(e.Graphics, this.panel1.ClientRectangle, Color.LightSteelBlue, ButtonBorderStyle.Solid);
         }
+
+
     }
 }

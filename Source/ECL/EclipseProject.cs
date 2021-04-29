@@ -114,9 +114,7 @@ namespace mview
                 INIT = new INSPEC(FILES["INSPEC"]);
             }
 
-            //loadingForm.Hide();
         }
-
         
         private void OnLoadingUpdateData(object sender, BinaryReaderArg e)
         {
@@ -133,9 +131,6 @@ namespace mview
 
         public void ReadEGRID()
         {
-            //loadingForm.Show();
-            //loadingForm.listBoxLog.Items.Add("EGRID...");
-            //EGRID.UpdateData += OnLoadingUpdateData;
 
             if (FILES.ContainsKey("EGRID"))
             {

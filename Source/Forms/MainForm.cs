@@ -42,11 +42,11 @@ namespace mview
         readonly MainFormModel model = new MainFormModel();
         readonly ControlPanel controlPanel = null;
         readonly FilterPanel filterPanel = null;
+        
+        readonly List<ITabObserver> tabObservers = new List<ITabObserver>();
 
-        readonly List<ITabCommonForm> tabs = new List<ITabCommonForm>();
-
-        bool suspendEvents = false;
         NameOptions namesType = NameOptions.Well;
+        bool suspendEvents = false;
 
         public MainForm()
         {
@@ -57,7 +57,7 @@ namespace mview
             controlPanel = new ControlPanel(model);
             controlPanel.UpdateData += ControlPanelOnUpdateData;
 
-            filterPanel = new FilterPanel(model);
+            filterPanel = new FilterPanel();
             filterPanel.UpdateData += FilterPanelOnUpdateData;
 
             boxNameType.SelectedIndex = 2;
@@ -67,29 +67,35 @@ namespace mview
 
         private void FilterPanelOnUpdateData(object sender, EventArgs e)
         {
-            //throw new NotImplementedException();
+            if (filterPanel.GetFilteredWellnames().Length == 0)
+            {
+                buttonWellFilter.ForeColor = System.Drawing.SystemColors.ControlText;
+            }
+            else
+            {
+                buttonWellFilter.ForeColor = System.Drawing.Color.Red;
+            }
+                    
+            UpdateFormData();
         }
 
         private void ControlPanelOnUpdateData(object sender, EventArgs e)
         {
-            UpdateFormData();
-        }
-
-        void ModelsToolStripMenuItemOnClick(object sender, EventArgs e)
-        {
-            model.OpenNewModel();
+            EventUpdateSelectedProject();
 
             UpdateFormData();
+
+            EventUpdateSelectedWells();
         }
 
         public void UpdateFormData()
         {
             suspendEvents = true;
 
-            var tmp_names = new List<string>();    // Сохраним список текущих выделенных имен
+            var tmpNames = new List<string>();    // Сохраним список текущих выделенных имен
             foreach (string item in listNames.SelectedItems)
             {
-                tmp_names.Add(item);
+                tmpNames.Add(item);
             }
 
             listNames.SuspendLayout();
@@ -125,9 +131,36 @@ namespace mview
 
             if (model.GetSelectedProjectIndex().Count > 0)
             {
-                listNames.Items.AddRange(model.GetNamesByType(namesType));
-                
-                foreach (string item in tmp_names)
+                if (namesType == NameOptions.Well)
+                {
+                    var filteredWellnames = filterPanel.GetFilteredWellnames();
+                    var allWellnames = model.GetNamesByType(namesType);
+
+                    if (filteredWellnames.Length == 0)
+                    {
+                        listNames.Items.AddRange(allWellnames);
+                    }
+                    else
+                    {
+                        var wellnames = new List<string>();
+
+                        foreach (string wellname in filteredWellnames)
+                        {
+                            if (Array.IndexOf(allWellnames, wellname) != -1)
+                            {
+                                wellnames.Add(wellname);
+                            }
+                        }
+
+                        listNames.Items.AddRange(wellnames.ToArray());
+                    }
+                }
+                else
+                {
+                    listNames.Items.AddRange(model.GetNamesByType(namesType));
+                }
+
+                foreach (string item in tmpNames)
                 {
                     int index = listNames.Items.IndexOf(item); // Востановим выделенные слова
 
@@ -144,31 +177,50 @@ namespace mview
             suspendEvents = false;
         }
 
-        
-
         private void ListNamesOnSelectedIndexChanged(object sender, EventArgs e)
         {
+            EventUpdateSelectedWells();
+        }
+
+        void EventUpdateSelectedProject()
+        {
+            // Update Tabs
+
+            foreach (ITabObserver item in tabObservers)
+            {
+                item.UpdateSelectedProjects();
+            }
+        }
+
+        void EventUpdateSelectedWells()
+        {
+            var selectedNames = new List<string>();
             var names = new List<string>();
 
             foreach (object item in listNames.SelectedItems)
+            {
+                selectedNames.Add(item.ToString());
+            }
+
+            foreach (object item in listNames.Items)
             {
                 names.Add(item.ToString());
             }
 
             // Update Tabs
 
-            foreach (ITabCommonForm item in tabs)
+            foreach (ITabObserver item in tabObservers)
             {
-                var data = new TabCommonData
+                var data = new TabSelectedWellsData
                 {
-                    names = names,
-                    type = namesType
+                    selectedNames = selectedNames,
+                    type = namesType,
+                    names = names
                 };
 
-                item.UpdateFormData(data);
+                item.UpdateSelectedWells(data);
             }
         }
-
 
         private void CheckSortedOnCheckedChanged(object sender, EventArgs e)
         {
@@ -187,9 +239,8 @@ namespace mview
         {
             controlPanel.UpdateFormData();
             controlPanel.Show();
+
         }
-
-
 
         private void ButtonNewChartsOnClick(object sender, EventArgs e)
         {
@@ -204,7 +255,7 @@ namespace mview
                 Text = "Charts"
             };
 
-            tabs.Add(tabCharts);
+            tabObservers.Add(tabCharts);
             tabPage.Controls.Add(tabCharts);
 
             tabControl2.TabPages.Add(tabPage);
@@ -220,16 +271,26 @@ namespace mview
             filterPanel.UpdateFormData();
             filterPanel.Show();
         }
-    }
 
-    public class TabCommonData
-    {
-        public List<string> names;
-        public NameOptions type;
-    }
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var tabCrossplot = new TabCrossplots(model)
+            {
+                Dock = DockStyle.Fill
+            };
 
-    public interface ITabCommonForm
-    {
-        void UpdateFormData(TabCommonData data);
+
+            var tabPage = new TabPage
+            {
+                Text = "Crossplots"
+            };
+
+            tabObservers.Add(tabCrossplot);
+            tabPage.Controls.Add(tabCrossplot);
+
+            tabCrossplot.UpdateSelectedProjects();
+
+            tabControl2.TabPages.Add(tabPage);
+        }
     }
 }

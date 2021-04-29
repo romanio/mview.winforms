@@ -7,89 +7,80 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace mview
 {
     public partial class FilterPanel : Form
     {
-        private readonly MainFormModel model = null;
         public event EventHandler UpdateData;
+        private readonly WellFilterSettings wellFilterSettings = new WellFilterSettings();
         private bool suspendEvents = false;
-        string loadingFilename = null;
 
-        public FilterPanel(MainFormModel model)
+        public FilterPanel()
         {
             InitializeComponent();
-
-            this.model = model;
         }
 
         public void UpdateFormData()
         {
-            listGroups.Items.Clear();
-            listGroups.Items.AddRange(model.GetProjectNames().ToArray<object>());
-
-            listGroups.SuspendLayout();
-
             suspendEvents = true;
 
-            foreach (int index in model.GetSelectedProjectIndex())
-            {
-                listGroups.SelectedIndex = index;
-            }
-
-            listGroups.ResumeLayout();
-            
             suspendEvents = false;
-
-            UpdateData(null, null);
         }
 
-        private void ListBoxProjectNamesOnSelectedIndexChanged(object sender, EventArgs e)
+        public string[] GetFilteredWellnames()
+        {
+            List<string> wellnames = new List<string>();
+
+            foreach (string pad in listGroups.SelectedItems)
+            {
+                var wells = wellFilterSettings.GetNamesFromVGroup(pad);
+                wellnames.AddRange(wells);
+            }
+
+            return wellnames.ToArray();
+        }
+
+        private void ListGroupsOnSelectedIndexChanged(object sender, EventArgs e)
         {
             if (suspendEvents) return;
 
-            var indices = new List<int>();
+            listWells.Items.Clear();
 
-            for (int it = 0; it < listGroups.SelectedIndices.Count; ++it)
+            foreach (string pad in listGroups.SelectedItems)
             {
-               indices.Add(listGroups.SelectedIndices[it]);
+                var wells = wellFilterSettings.GetNamesFromVGroup(pad);
+                listWells.Items.AddRange(wells);
             }
 
-            model.SetSelectedProjectIndex(indices);
-
-
-            UpdateData(null, null);
+            UpdateData?.Invoke(null, null);
         }
 
-        private void ControlPanel_FormClosing(object sender, FormClosingEventArgs e)
+        private void ControlPanelOnFormClosing(object sender, FormClosingEventArgs e)
         {
             Hide();
             e.Cancel = true;
         }
-        void ResetProgressBar()
+
+        private void ButtonLoadGroupsOnClick(object sender, EventArgs e)
         {
-            loadingFilename = null;
+            wellFilterSettings.LoadFromFile();
+
+            listGroups.Items.Clear();
+            listGroups.Items.AddRange(wellFilterSettings.GetVirtualGroups());
+            
         }
 
-        private static string FormatBytes(long bytes)
+        private void ButtonSeriesSettingsOnClick(object sender, EventArgs e)
         {
-            string[] Suffix = { "B", "KB", "MB", "GB", "TB" };
-            int i;
-            double dblSByte = bytes;
-            for (i = 0; i < Suffix.Length && bytes >= 1024; i++, bytes /= 1024)
-            {
-                dblSByte = bytes / 1024.0;
-            }
 
-            return String.Format("{0:0.##} {1}", dblSByte, Suffix[i]);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            model.DeleteSelectedProject();
-
-            UpdateFormData();
+            listGroups.SelectedItem = null;
+            UpdateData?.Invoke(null, null);
         }
     }
 }

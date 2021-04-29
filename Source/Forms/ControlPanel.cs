@@ -15,7 +15,6 @@ namespace mview
         private readonly MainFormModel model = null;
         public event EventHandler UpdateData;
         private bool suspendEvents = false;
-        string loadingFilename = null;
 
         public ControlPanel(MainFormModel model)
         {
@@ -41,8 +40,6 @@ namespace mview
             listBoxProjectNames.ResumeLayout();
             
             suspendEvents = false;
-
-            UpdateData(null, null);
         }
 
         private void ListBoxProjectNamesOnSelectedIndexChanged(object sender, EventArgs e)
@@ -71,27 +68,19 @@ namespace mview
         private void ButtonSeriesSettingsOnClick(object sender, EventArgs e)
         {
             listBoxLog.Items.Clear();
+
             model.UpdateLoadingProgress += ModelOnUpdateLoadingProgress;
             model.OpenNewModel();
 
-            ResetProgressBar();
-
             UpdateFormData();
+
+            UpdateData(null, null);
         }
 
         private void ModelOnUpdateLoadingProgress(object sender, BinaryReaderArg e)
         {
-            if (e.filename != loadingFilename)
-            {
-                listBoxLog.Items.Add(System.IO.Path.GetFileName(e.filename) + " (" + FormatBytes(e.length) + ")");
-                loadingFilename = e.filename;
-                listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
-            }
-        }
-
-        void ResetProgressBar()
-        {
-            loadingFilename = null;
+            listBoxLog.Items.Add(System.IO.Path.GetFileName(e.filename));
+            listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
         }
 
         private static string FormatBytes(long bytes)

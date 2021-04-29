@@ -14,18 +14,12 @@ namespace mview
         public bool selected = false;
     }
 
-    public class VirtualGroupItem
-    {
-        public string wellname;
-        public string pad;
-    }
-
     public class ProjectManager
     {
         public List<ProjectManagerItem> projectList = new List<ProjectManagerItem>();
-        public List<VirtualGroupItem> virtualGroup = null;
         public int activeProjectIndex = -1;
         public EclipseProject activeProject;
+
         public event EventHandler<BinaryReaderArg> UpdateLoadingProgress;
 
         public void OpenECLProject()

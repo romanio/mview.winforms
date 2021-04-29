@@ -51,7 +51,7 @@ namespace mview
             this.listKeywords.Location = new System.Drawing.Point(425, 3);
             this.listKeywords.Name = "listKeywords";
             this.listKeywords.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listKeywords.Size = new System.Drawing.Size(76, 466);
+            this.listKeywords.Size = new System.Drawing.Size(76, 462);
             this.listKeywords.Sorted = true;
             this.listKeywords.TabIndex = 1;
             this.listKeywords.SelectedIndexChanged += new System.EventHandler(this.ListKeywordsOnSelectedIndexChanged);
