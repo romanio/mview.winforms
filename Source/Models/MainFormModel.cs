@@ -9,6 +9,7 @@ namespace mview
     public class MainFormModel
     {
         private readonly ProjectManager pm = new ProjectManager();
+        private readonly UserAnnotations userAnnotations = new UserAnnotations();
 
         public event EventHandler<BinaryReaderArg> UpdateLoadingProgress;
 
@@ -23,6 +24,18 @@ namespace mview
             pm.OpenECLProject();
             
         }
+
+        public void OpenUserAnnotation()
+        {
+            userAnnotations.LoadUserFunctions();
+
+        }
+
+        public List<AnnotationItem> GetAnnotation(string wellname)
+        {
+            return userAnnotations.GetAnnotation(wellname);
+        }
+
 
         private void PmOnUpdateLoadingProgress(object sender, BinaryReaderArg e)
         {
@@ -48,6 +61,12 @@ namespace mview
         public Vector GetDataVector(string name)
         {
             return pm.activeProject.VECTORS.FirstOrDefault(c => c.Name == name);
+        }
+
+        public List<OxyPlot.DataPoint> GetDataTime(string name, string keyword)
+        {
+            int projectIndex = pm.activeProjectIndex;
+            return GetDataTime(projectIndex, name, keyword);
         }
 
         public List<OxyPlot.DataPoint> GetDataTime(int projectIndex, string name, string keyword)

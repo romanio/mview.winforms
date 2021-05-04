@@ -77,7 +77,7 @@ namespace mview
             this.buttonLoadGroups.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonLoadGroups.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonLoadGroups.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonLoadGroups.Location = new System.Drawing.Point(18, 28);
+            this.buttonLoadGroups.Location = new System.Drawing.Point(18, 19);
             this.buttonLoadGroups.Name = "buttonLoadGroups";
             this.buttonLoadGroups.Size = new System.Drawing.Size(100, 30);
             this.buttonLoadGroups.TabIndex = 5;

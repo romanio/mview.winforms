@@ -36,6 +36,7 @@ namespace mview
             this.label1 = new System.Windows.Forms.Label();
             this.boxGroupMode = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.checkShowAnno = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,6 +45,7 @@ namespace mview
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.checkShowAnno);
             this.panel1.Controls.Add(this.buttonSeriesSettings);
             this.panel1.Controls.Add(this.boxChartsPositions);
             this.panel1.Controls.Add(this.label2);
@@ -134,6 +136,17 @@ namespace mview
             this.tableLayoutPanel1.Size = new System.Drawing.Size(791, 537);
             this.tableLayoutPanel1.TabIndex = 8;
             // 
+            // checkShowAnno
+            // 
+            this.checkShowAnno.AutoSize = true;
+            this.checkShowAnno.Location = new System.Drawing.Point(529, 17);
+            this.checkShowAnno.Name = "checkShowAnno";
+            this.checkShowAnno.Size = new System.Drawing.Size(121, 17);
+            this.checkShowAnno.TabIndex = 5;
+            this.checkShowAnno.Text = "Show annotations";
+            this.checkShowAnno.UseVisualStyleBackColor = true;
+            this.checkShowAnno.CheckedChanged += new System.EventHandler(this.CheckShowAnnoOnCheckedChanged);
+            // 
             // TabCharts
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -159,5 +172,6 @@ namespace mview
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox boxGroupMode;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.CheckBox checkShowAnno;
     }
 }

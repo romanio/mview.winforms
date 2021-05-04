@@ -82,7 +82,7 @@ namespace mview
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.tabControl1.ItemSize = new System.Drawing.Size(48, 18);
+            this.tabControl1.ItemSize = new System.Drawing.Size(52, 18);
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;

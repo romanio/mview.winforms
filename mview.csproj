@@ -62,15 +62,6 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=3.0.6.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>packages\DockPanelSuite.3.0.6\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
-    </Reference>
-    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2013, Version=3.0.6.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>packages\DockPanelSuite.ThemeVS2013.3.0.6\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2013.dll</HintPath>
-    </Reference>
-    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=3.0.6.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>packages\DockPanelSuite.ThemeVS2015.3.0.6\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\ECL\EclipseProject.cs" />
@@ -105,6 +96,12 @@
     <Compile Include="Source\Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Forms\TabWaterPlot.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\Forms\TabWaterPlot.Designer.cs">
+      <DependentUpon>TabWaterPlot.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Forms\TabCrossplots.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -129,6 +126,7 @@
       <DependentUpon>ControlPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\ProjectManager.cs" />
+    <Compile Include="Source\UserAnnotations.cs" />
     <EmbeddedResource Include="Source\Forms\ChartControl.resx">
       <DependentUpon>ChartControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -160,7 +158,9 @@
     <EmbeddedResource Include="Source\Forms\TabCharts.resx">
       <DependentUpon>TabCharts.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <EmbeddedResource Include="Source\Forms\TabWaterPlot.resx">
+      <DependentUpon>TabWaterPlot.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -172,7 +172,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="Source\App.config" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">

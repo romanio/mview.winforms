@@ -13,7 +13,7 @@ namespace mview
     public partial class TabCharts : UserControl, ITabObserver
     {
         bool suspendEvents = false;
-        MainFormModel model = null;
+        readonly MainFormModel model = null;
         readonly StylesPanel stylesPanel = null;
 
         public TabCharts(MainFormModel model)
@@ -91,8 +91,6 @@ namespace mview
             UpdateChartSettings(stylesPanel.GetStyleSettings());
         }
 
-
-
         void UpdateChartSettings(StyleSettings style)
         {
             var data = new ChartSettings();
@@ -112,6 +110,8 @@ namespace mview
                     data.GroupingMode = GroupingMode.AverageByLiquid;
                     break;
             }
+
+            data.ShowAnnotations = checkShowAnno.Checked;
 
             data.StyleSettings = style;
 
@@ -147,6 +147,9 @@ namespace mview
             ControlPaint.DrawBorder(e.Graphics, this.panel1.ClientRectangle, Color.LightSteelBlue, ButtonBorderStyle.Solid);
         }
 
-
+        private void CheckShowAnnoOnCheckedChanged(object sender, EventArgs e)
+        {
+            UpdateChartSettings(null);
+        }
     }
 }

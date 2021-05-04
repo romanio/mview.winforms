@@ -77,6 +77,9 @@ namespace mview
             }
                     
             UpdateFormData();
+
+
+            EventUpdateSelectedWells();
         }
 
         private void ControlPanelOnUpdateData(object sender, EventArgs e)
@@ -258,6 +261,9 @@ namespace mview
             tabObservers.Add(tabCharts);
             tabPage.Controls.Add(tabCharts);
 
+            EventUpdateSelectedWells();
+
+
             tabControl2.TabPages.Add(tabPage);
         }
 
@@ -289,8 +295,37 @@ namespace mview
             tabPage.Controls.Add(tabCrossplot);
 
             tabCrossplot.UpdateSelectedProjects();
+            EventUpdateSelectedWells();
 
             tabControl2.TabPages.Add(tabPage);
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            var tabWaterPlot = new TabWaterPlot(model)
+            {
+                Dock = DockStyle.Fill
+            };
+
+
+            var tabPage = new TabPage
+            {
+                Text = "Water Plot"
+            };
+
+            tabObservers.Add(tabWaterPlot);
+            tabPage.Controls.Add(tabWaterPlot);
+
+            tabWaterPlot.UpdateSelectedProjects();
+            EventUpdateSelectedWells();
+
+            tabControl2.TabPages.Add(tabPage);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+                model.OpenUserAnnotation();
         }
     }
 }

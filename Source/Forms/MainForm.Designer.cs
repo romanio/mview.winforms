@@ -33,6 +33,7 @@ namespace mview
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPageControl = new System.Windows.Forms.TabPage();
+            this.button2 = new System.Windows.Forms.Button();
             this.buttonExportExcel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
@@ -43,6 +44,8 @@ namespace mview
             this.boxNameType = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.buttonWellFilter = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.tabControl2.SuspendLayout();
             this.tabPageControl.SuspendLayout();
             this.SuspendLayout();
@@ -73,6 +76,9 @@ namespace mview
             // tabPageControl
             // 
             this.tabPageControl.BackColor = System.Drawing.SystemColors.Window;
+            this.tabPageControl.Controls.Add(this.label2);
+            this.tabPageControl.Controls.Add(this.button4);
+            this.tabPageControl.Controls.Add(this.button2);
             this.tabPageControl.Controls.Add(this.buttonExportExcel);
             this.tabPageControl.Controls.Add(this.label1);
             this.tabPageControl.Controls.Add(this.button3);
@@ -83,6 +89,19 @@ namespace mview
             this.tabPageControl.Size = new System.Drawing.Size(736, 632);
             this.tabPageControl.TabIndex = 1;
             this.tabPageControl.Text = "Main";
+            // 
+            // button2
+            // 
+            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
+            this.button2.Location = new System.Drawing.Point(299, 95);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(104, 29);
+            this.button2.TabIndex = 17;
+            this.button2.Text = "Water Plot";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click_1);
             // 
             // buttonExportExcel
             // 
@@ -220,6 +239,30 @@ namespace mview
             this.buttonWellFilter.UseVisualStyleBackColor = true;
             this.buttonWellFilter.Click += new System.EventHandler(this.button2_Click);
             // 
+            // button4
+            // 
+            this.button4.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button4.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
+            this.button4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button4.Location = new System.Drawing.Point(172, 360);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(100, 30);
+            this.button4.TabIndex = 18;
+            this.button4.Text = "Annotations";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(29, 300);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(95, 13);
+            this.label2.TabIndex = 19;
+            this.label2.Text = "History Matching";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -262,6 +305,9 @@ namespace mview
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonWellFilter;
         private System.Windows.Forms.Button buttonExportExcel;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Label label2;
     }
 }
 

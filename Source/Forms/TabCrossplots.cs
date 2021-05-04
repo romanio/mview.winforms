@@ -16,8 +16,8 @@ namespace mview
 {
     enum TypeCondition
     {
-        Relative,
-        Absolute
+        Relative = 1,
+        Absolute = 2
     }
 
     public partial class TabCrossplots : UserControl, ITabObserver
@@ -26,12 +26,12 @@ namespace mview
         readonly MainFormModel model = null;
         readonly PlotModel plotModel = null;
         readonly PlotModel plotHisto = null;
+        readonly PlotModel plotHistoTotal = null;
 
-        TypeCondition ActiveCondition = TypeCondition.Relative;
-        double firstCondition = 10;
-        double secondCondition = 20;
+        TypeCondition activeCondition = TypeCondition.Relative;
 
-
+        double[] firstCondition = new double[2] { 10, 10000};
+        double[] secondCondition = new double[2] { 20, 50000 };
 
         readonly List<Vector> selectedVectors = new List<Vector>();
 
@@ -48,11 +48,15 @@ namespace mview
             plotHisto = new PlotModel
             {
                 DefaultFont = "Segoe UI",
+
                 TitleFontSize = 10,
                 DefaultFontSize = 10,
             };
 
-            var categoryAxes = new OxyPlot.Axes.CategoryAxis { Position = AxisPosition.Left, AxisTitleDistance = 8 };
+            var categoryAxes = new OxyPlot.Axes.CategoryAxis {
+                Position = AxisPosition.Left,
+                TitleFont = "Segoe UI Semilight",
+                AxisTitleDistance = 8 };
 
             categoryAxes.Title = "Relative Deviation";
             categoryAxes.Labels.Add("<10%");
@@ -64,11 +68,40 @@ namespace mview
             plotHisto.Axes.Add(new OxyPlot.Axes.LinearAxis
             {
                 Position = OxyPlot.Axes.AxisPosition.Bottom,
-                AxisTitleDistance = 8,
+                TitleFont = "Segoe UI Semilight",
                 Title = "Well Count"
             });
 
             plotView1.Model = plotHisto;
+
+            plotHistoTotal = new PlotModel
+            {
+                DefaultFont = "Segoe UI",
+                TitleFontSize = 10,
+                DefaultFontSize = 10,
+            };
+
+            var categoryAxes2 = new OxyPlot.Axes.CategoryAxis {
+                Position = AxisPosition.Left,
+                TitleFont = "Segoe UI Semilight",
+                AxisTitleDistance = 8 };
+
+            categoryAxes2.Title = "Relative Deviation";
+            categoryAxes2.Labels.Add("<10%");
+            categoryAxes2.Labels.Add("10-20%");
+            categoryAxes2.Labels.Add(">20%");
+
+            plotHistoTotal.Axes.Add(categoryAxes2);
+
+            plotHistoTotal.Axes.Add(new OxyPlot.Axes.LinearAxis
+            {
+                Position = OxyPlot.Axes.AxisPosition.Bottom,
+                TitleFont = "Segoe UI Semilight",
+                Title = "Sum Hist Value"
+            });
+
+            plotView2.Model = plotHistoTotal;
+            
 
             plotModel = new PlotModel
             {
@@ -81,7 +114,8 @@ namespace mview
             plotModel.Axes.Add(new LinearAxis
             {
                 Position = AxisPosition.Bottom,
-                Title = "Simualted",
+                TitleFont = "Segoe UI Semilight",
+                Title = "Simulated",
                 MajorGridlineStyle = LineStyle.Dash,
                 MajorGridlineThickness = 1,
             });
@@ -90,6 +124,7 @@ namespace mview
             plotModel.Axes.Add(new LinearAxis
             {
                 Position = AxisPosition.Left,
+                TitleFont = "Segoe UI Semilight",
                 Title = "Historical",
                 MajorGridlineStyle = LineStyle.Dash,
                 MajorGridlineThickness = 1,
@@ -98,6 +133,7 @@ namespace mview
             plotView.Model = plotModel;
 
             boxKeywords.SelectedIndex = 0;
+            boxCriteriaType.SelectedIndex = 0;
             //
         }
 
@@ -154,6 +190,7 @@ namespace mview
             plotModel.Series.Clear();
             plotModel.Annotations.Clear();
             plotHisto.Series.Clear();
+            plotHistoTotal.Series.Clear();
 
             plotModel.Title = boxKeywords.Text.ToUpper();
 
@@ -180,6 +217,10 @@ namespace mview
             int less10 = 0;
             int sum = 0;
 
+            double sumOver20 = 0;
+            double sumOver10 = 0;
+            double sumLess10 = 0;
+
             foreach (Vector well in selectedVectors)
             {
                 var simIndex = well.Data.FirstOrDefault(c => c.keyword == keyword).index;
@@ -203,18 +244,46 @@ namespace mview
 
                     // Критерии
 
-                    if (ActiveCondition == TypeCondition.Relative)
+                    if (activeCondition == TypeCondition.Relative)
                     {
-                        if (Math.Abs(relValue) <= firstCondition) less10++;
-                        if ((Math.Abs(relValue) > firstCondition) && (Math.Abs(relValue) <= secondCondition)) over10++;
-                        if (Math.Abs(relValue) > secondCondition) over20++;
+                        if (Math.Abs(relValue) <= firstCondition[0])
+                        {
+                            sumLess10 += histValue;
+                            less10++;
+                        }
+
+                        if ((Math.Abs(relValue) > firstCondition[0]) && (Math.Abs(relValue) <= secondCondition[0]))
+                        {
+                            sumOver10 += histValue;
+                            over10++;
+                        }
+
+                        if (Math.Abs(relValue) > secondCondition[0])
+                        {
+                            sumOver20 += histValue;
+                            over20++;
+                        }
                     }
 
-                    if (ActiveCondition == TypeCondition.Absolute)
+                    if (activeCondition == TypeCondition.Absolute)
                     {
-                        if (Math.Abs(absValue) <= firstCondition) less10++;
-                        if ((Math.Abs(absValue) > firstCondition) && (Math.Abs(absValue) <= secondCondition)) over10++;
-                        if (Math.Abs(absValue) > secondCondition) over20++;
+                        if (Math.Abs(absValue) <= firstCondition[1])
+                        {
+                            sumLess10 += histValue;
+                            less10++;
+                        }
+
+                        if ((Math.Abs(absValue) > firstCondition[1]) && (Math.Abs(absValue) <= secondCondition[1]))
+                        {
+                            sumOver10 += histValue;
+                            over10++;
+                        }
+
+                        if (Math.Abs(absValue) > secondCondition[1])
+                        {
+                            sumOver20 += histValue;
+                            over20++;
+                        }
                     }
                     //
                     sum = less10 + over10 + over20;
@@ -281,46 +350,50 @@ namespace mview
                     MarkerType = MarkerType.None,
                 });
 
-                if (ActiveCondition == TypeCondition.Relative)
+                if (activeCondition == TypeCondition.Relative)
                 {
                     ((LineSeries)plotModel.Series[2]).Points.Add(new DataPoint(0, 0));
-                    ((LineSeries)plotModel.Series[2]).Points.Add(new DataPoint(maxValue, (100 + firstCondition) * 0.01 * maxValue));
+                    ((LineSeries)plotModel.Series[2]).Points.Add(new DataPoint(maxValue, (100 + firstCondition[0]) * 0.01 * maxValue));
 
                     ((LineSeries)plotModel.Series[3]).Points.Add(new DataPoint(0, 0));
-                    ((LineSeries)plotModel.Series[3]).Points.Add(new DataPoint(maxValue, (100 - firstCondition) * 0.01 * maxValue));
+                    ((LineSeries)plotModel.Series[3]).Points.Add(new DataPoint(maxValue, (100 - firstCondition[0]) * 0.01 * maxValue));
 
                     ((LineSeries)plotModel.Series[4]).Points.Add(new DataPoint(0, 0));
-                    ((LineSeries)plotModel.Series[4]).Points.Add(new DataPoint(maxValue, (100 + secondCondition) * 0.01 * maxValue));
+                    ((LineSeries)plotModel.Series[4]).Points.Add(new DataPoint(maxValue, (100 + secondCondition[0]) * 0.01 * maxValue));
 
                     ((LineSeries)plotModel.Series[5]).Points.Add(new DataPoint(0, 0));
-                    ((LineSeries)plotModel.Series[5]).Points.Add(new DataPoint(maxValue, (100 - secondCondition) * 0.01 * maxValue));
+                    ((LineSeries)plotModel.Series[5]).Points.Add(new DataPoint(maxValue, (100 - secondCondition[0]) * 0.01 * maxValue));
 
                     plotHisto.Axes[0].Title = "Relative Deviation";
-                    
-                    ((CategoryAxis)plotHisto.Axes[0]).ItemsSource = new[] { "<" + firstCondition + "%", firstCondition + "-" + secondCondition + " %", ">" + secondCondition + "%" };
+                    plotHistoTotal.Axes[0].Title = "Relative Deviation";
+
+                    ((CategoryAxis)plotHisto.Axes[0]).ItemsSource = new[] { "<" + firstCondition[0] + "%", firstCondition[0] + "-" + secondCondition[0] + " %", ">" + secondCondition[0] + "%" };
+                    ((CategoryAxis)plotHistoTotal.Axes[0]).ItemsSource = new[] { "<" + firstCondition[0] + "%", firstCondition[0] + "-" + secondCondition[0] + " %", ">" + secondCondition[0] + "%" };
                 }
 
-                if (ActiveCondition == TypeCondition.Absolute)
+                if (activeCondition == TypeCondition.Absolute)
                 {
-                    ((LineSeries)plotModel.Series[2]).Points.Add(new DataPoint(0, firstCondition));
-                    ((LineSeries)plotModel.Series[2]).Points.Add(new DataPoint(maxValue, maxValue + firstCondition));
+                    ((LineSeries)plotModel.Series[2]).Points.Add(new DataPoint(0, firstCondition[1]));
+                    ((LineSeries)plotModel.Series[2]).Points.Add(new DataPoint(maxValue, maxValue + firstCondition[1]));
 
-                    ((LineSeries)plotModel.Series[3]).Points.Add(new DataPoint(0, -firstCondition));
-                    ((LineSeries)plotModel.Series[3]).Points.Add(new DataPoint(maxValue, maxValue - firstCondition));
+                    ((LineSeries)plotModel.Series[3]).Points.Add(new DataPoint(0, -firstCondition[1]));
+                    ((LineSeries)plotModel.Series[3]).Points.Add(new DataPoint(maxValue, maxValue - firstCondition[1]));
 
-                    ((LineSeries)plotModel.Series[4]).Points.Add(new DataPoint(0, secondCondition));
-                    ((LineSeries)plotModel.Series[4]).Points.Add(new DataPoint(maxValue, maxValue + secondCondition));
+                    ((LineSeries)plotModel.Series[4]).Points.Add(new DataPoint(0, secondCondition[1]));
+                    ((LineSeries)plotModel.Series[4]).Points.Add(new DataPoint(maxValue, maxValue + secondCondition[1]));
 
-                    ((LineSeries)plotModel.Series[5]).Points.Add(new DataPoint(0, -secondCondition));
-                    ((LineSeries)plotModel.Series[5]).Points.Add(new DataPoint(maxValue, maxValue - secondCondition));
+                    ((LineSeries)plotModel.Series[5]).Points.Add(new DataPoint(0, -secondCondition[1]));
+                    ((LineSeries)plotModel.Series[5]).Points.Add(new DataPoint(maxValue, maxValue - secondCondition[1]));
 
                     plotHisto.Axes[0].Title = "Absolute Deviation";
-                    ((CategoryAxis)plotHisto.Axes[0]).ItemsSource = new[] { "<" + firstCondition, firstCondition + "-" + secondCondition, ">" + secondCondition };
+                    plotHistoTotal.Axes[0].Title = "Absolute Deviation";
+                    ((CategoryAxis)plotHisto.Axes[0]).ItemsSource = new[] { "<" + firstCondition[1], firstCondition[1] + "-" + secondCondition[1], ">" + secondCondition[1] };
+                    ((CategoryAxis)plotHistoTotal.Axes[0]).ItemsSource = new[] { "<" + firstCondition[1], firstCondition[1] + "-" + secondCondition[1], ">" + secondCondition[1] };
                 }
 
                 plotHisto.Series.Add(new OxyPlot.Series.BarSeries
                 {
-                    BaseValue = 1,
+                    BaseValue = 0,
                     FillColor = OxyColor.FromArgb(255, 255, 120, 0),
                     LabelPlacement = LabelPlacement.Middle,
                     LabelFormatString = "{0}"
@@ -331,10 +404,23 @@ namespace mview
                 ((BarSeries)plotHisto.Series[0]).Items.Add(new BarItem { Value = over20 });
 
 
+                plotHistoTotal.Series.Add(new OxyPlot.Series.BarSeries
+                {
+                    BaseValue = 0,
+                    FillColor = OxyColor.FromArgb(255, 255, 120, 0),
+                    LabelPlacement = LabelPlacement.Middle,
+                    LabelFormatString = "{0:.00}"
+                });
+
+                ((BarSeries)plotHistoTotal.Series[0]).Items.Add(new BarItem { Value = sumLess10 });
+                ((BarSeries)plotHistoTotal.Series[0]).Items.Add(new BarItem { Value = sumOver10 });
+                ((BarSeries)plotHistoTotal.Series[0]).Items.Add(new BarItem { Value = sumOver20 });
+
+
             }
             plotModel.InvalidatePlot(true);
             plotHisto.InvalidatePlot(true);
-
+            plotHistoTotal.InvalidatePlot(true);
         }
 
         private void BoxKeywordsOnSelectedIndexChanged(object sender, EventArgs e)
@@ -356,6 +442,81 @@ namespace mview
             ControlPaint.DrawBorder(e.Graphics, this.panel1.ClientRectangle, Color.LightSteelBlue, ButtonBorderStyle.Solid);
         }
 
+        private void TextFirstConditionOnValidating(object sender, CancelEventArgs e)
+        {
+            double value;
 
+            if (Double.TryParse(textFirstCondition.Text, out value))
+            {
+                if (activeCondition == TypeCondition.Relative)
+                {
+                    firstCondition[0] = value;
+                }
+                else
+                {
+                    firstCondition[1] = value;
+                }
+         
+                textFirstCondition.ForeColor = Color.Black;
+                UpdateChart();
+            }
+            else
+            {
+                textFirstCondition.ForeColor = Color.Red;
+            }
+
+        }
+
+        private void TextSecondConditionOnValidating(object sender, CancelEventArgs e)
+        {
+            double value;
+
+            if (Double.TryParse(textSecondCondition.Text, out value))
+            {
+                if (activeCondition == TypeCondition.Relative)
+                {
+                    secondCondition[0] = value;
+                }
+                else
+                {
+                    secondCondition[1] = value;
+                }
+
+                textSecondCondition.ForeColor = Color.Black;
+
+                UpdateChart();
+            }
+            else
+            {
+                textSecondCondition.ForeColor = Color.Red;
+            }
+
+        }
+
+        private void BoxCriteriaTypeOnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (boxCriteriaType.SelectedIndex == 0)
+            {
+                activeCondition = TypeCondition.Relative;
+                textFirstCondition.Text = firstCondition[0].ToString();
+                textSecondCondition.Text = secondCondition[0].ToString();
+
+                textFirstCondition.ForeColor = Color.Black;
+            }
+
+            if (boxCriteriaType.SelectedIndex == 1)
+            {
+                activeCondition = TypeCondition.Absolute;
+                textFirstCondition.Text = firstCondition[1].ToString();
+                textSecondCondition.Text = secondCondition[1].ToString();
+
+                
+            }
+
+            textFirstCondition.ForeColor = Color.Black;
+            textSecondCondition.ForeColor = Color.Black;
+
+            UpdateChart();
+        }
     }
 }

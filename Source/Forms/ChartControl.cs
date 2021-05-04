@@ -74,6 +74,7 @@ namespace mview
             if (data.StyleSettings != null)
                 settings.StyleSettings = data.StyleSettings;
             
+            settings.ShowAnnotations = data.ShowAnnotations;
 
             UpdateChartAndTable();
         }
@@ -352,6 +353,42 @@ namespace mview
                 }
             }
 
+            plotModel.Annotations.Clear();
+
+            if (settings.ShowAnnotations)
+            {
+                if (plotModel.Series.Count > 0)
+                {
+
+                    for (int it = 0; it < selectedNames.Count; ++it)
+                    {
+                        var tmpAnnotations = model.GetAnnotation(selectedNames[it]);
+
+                        if (tmpAnnotations != null)
+                        {
+                            foreach (AnnotationItem item in tmpAnnotations)
+                            {
+                                var date = OxyPlot.Axes.DateTimeAxis.ToDouble(item.time);
+                                var res = ((LineSeries)plotModel.Series[0]).Points.FirstOrDefault(c => c.X == date);
+
+
+                                plotModel.Annotations.Add(new OxyPlot.Annotations.TextAnnotation
+                                {
+                                    StrokeThickness = 0,
+                                    TextPosition = new DataPoint(date, res.Y),
+                                    Font = "Segoe UI Semibold",
+                                    TextRotation = -70,
+                                    TextHorizontalAlignment = OxyPlot.HorizontalAlignment.Left,
+                                    Text = item.text
+                                });
+                            }
+
+                        }
+                    }
+                }
+            }
+
+
             plotModel.Axes[0].Reset();
             plotModel.Axes[1].Reset();
             plotModel.InvalidatePlot(true);
@@ -430,5 +467,6 @@ namespace mview
     {
         public GroupingMode GroupingMode;
         public StyleSettings StyleSettings;
+        public bool ShowAnnotations;
     }
 }
