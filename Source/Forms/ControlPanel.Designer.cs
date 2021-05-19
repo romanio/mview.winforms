@@ -44,7 +44,6 @@ namespace mview
             this.listBoxProjectNames.IntegralHeight = false;
             this.listBoxProjectNames.Location = new System.Drawing.Point(134, 12);
             this.listBoxProjectNames.Name = "listBoxProjectNames";
-            this.listBoxProjectNames.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBoxProjectNames.Size = new System.Drawing.Size(269, 128);
             this.listBoxProjectNames.TabIndex = 0;
             this.listBoxProjectNames.SelectedIndexChanged += new System.EventHandler(this.ListBoxProjectNamesOnSelectedIndexChanged);

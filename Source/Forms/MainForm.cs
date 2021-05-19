@@ -39,7 +39,7 @@ namespace mview
 
     public partial class MainForm : Form
     {
-        readonly MainFormModel model = new MainFormModel();
+        readonly ChartModel model = new ChartModel();
         readonly ControlPanel controlPanel = null;
         readonly FilterPanel filterPanel = null;
         
@@ -132,7 +132,7 @@ namespace mview
                     break;
             }
 
-            if (model.GetSelectedProjectIndex().Count > 0)
+            if (model.GetSelectedProjectIndex() > -1)
             {
                 if (namesType == NameOptions.Well)
                 {
@@ -242,7 +242,7 @@ namespace mview
         {
             controlPanel.UpdateFormData();
             controlPanel.Show();
-
+            controlPanel.Focus();
         }
 
         private void ButtonNewChartsOnClick(object sender, EventArgs e)
@@ -326,6 +326,28 @@ namespace mview
         {
 
                 model.OpenUserAnnotation();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            var tabMap2D = new TabMap2D(model)
+            {
+                Dock = DockStyle.Fill
+            };
+
+
+            var tabPage = new TabPage
+            {
+                Text = "2D View"
+            };
+
+            tabObservers.Add(tabMap2D);
+            tabPage.Controls.Add(tabMap2D);
+
+            tabMap2D.UpdateSelectedProjects();
+            EventUpdateSelectedWells();
+
+            tabControl2.TabPages.Add(tabPage);
         }
     }
 }

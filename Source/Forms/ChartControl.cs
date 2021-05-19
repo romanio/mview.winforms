@@ -18,16 +18,16 @@ namespace mview
     public partial class ChartControl : UserControl
     {
         private readonly PlotModel plotModel = null;
-        private readonly MainFormModel model = null;
+        private readonly ChartModel model = null;
         private bool suspendEvents = false;
         private List<string> selectedNames = null;
         private List<string> selectedKeywords = null;
-        private List<int> selectedProjects = null;
+        //private List<int> selectedProjects = null;
         private int[] selectedIndex = null;
         private readonly ChartSettings settings = null;
 
 
-        public ChartControl(MainFormModel model)
+        public ChartControl(ChartModel model)
         {
             InitializeComponent();
 
@@ -117,7 +117,7 @@ namespace mview
 
             // Индексы выбранных проектов
 
-            selectedProjects = model.GetSelectedProjectIndex();
+            //selectedProjects = model.GetSelectedProjectIndex();
             
             UpdateChartAndTable();
 
@@ -143,7 +143,7 @@ namespace mview
 
             gridData.ColumnCount = selectedNames.Count * selectedKeywords.Count + 1;
             gridData.Columns[0].HeaderText = "Date";
-            gridData.RowCount = model.GetStepCount(selectedProjects[0]);
+            gridData.RowCount = model.GetStepCount();
 
             gridData.VirtualMode = false;
 
@@ -155,12 +155,15 @@ namespace mview
             {
                 var vector = model.GetDataVector(selectedNames[it]);
 
-                for (int iw = 0; iw < selectedKeywords.Count; ++iw)
+                if (vector != null)
                 {
-                    var data = vector.Data.FirstOrDefault(c => c.keyword == listKeywords.SelectedItems[iw].ToString());
-                    selectedIndex[index - 1] = data.index;
-                    selectedUnits.Add(data.unit);
-                    gridData.Columns[index++].HeaderText = vector.Name + "\n" + data.keyword + "\n" + data.unit;
+                    for (int iw = 0; iw < selectedKeywords.Count; ++iw)
+                    {
+                        var data = vector.Data.FirstOrDefault(c => c.keyword == listKeywords.SelectedItems[iw].ToString());
+                        selectedIndex[index - 1] = data.index;
+                        selectedUnits.Add(data.unit);
+                        gridData.Columns[index++].HeaderText = vector.Name + "\n" + data.keyword + "\n" + data.unit;
+                    }
                 }
             }
 
@@ -219,20 +222,16 @@ namespace mview
                     settings.StyleSettings.axisYColor.B);
             }
 
-            foreach (int projectIndex in selectedProjects)
-            {
+            //foreach (int projectIndex in selectedProjects)
+            //{
                 for (int iw = 0; iw < selectedKeywords.Count; ++iw)
                 {
-                    // Для выбранного имени вектора, требуется собрать данные по всем именам
-
                     var fullData = new List<List<OxyPlot.DataPoint>>();
 
                     for (int it = 0; it < selectedNames.Count; ++it)
                     {
-                        fullData.Add(model.GetDataTime(projectIndex, selectedNames[it], selectedKeywords[iw]));
+                        fullData.Add(model.GetDataTime(selectedNames[it], selectedKeywords[iw]));
                     }
-
-                    // Для разных режимов отображения, графики разные
 
                     // Обычный режим, отображается все графики как отдельные линии
 
@@ -254,7 +253,7 @@ namespace mview
                     {
                         List<DataPoint> sumValue = new List<DataPoint>();
 
-                        for (int it = 0; it < model.GetStepCount(projectIndex); ++it)
+                        for (int it = 0; it < model.GetStepCount(); ++it)
                         {
                             double value = 0;
 
@@ -280,7 +279,7 @@ namespace mview
                     {
                         List<DataPoint> avValue = new List<DataPoint>();
 
-                        for (int it = 0; it < model.GetStepCount(projectIndex); ++it)
+                        for (int it = 0; it < model.GetStepCount(); ++it)
                         {
                             double value = 0;
                             double count = 0;
@@ -321,12 +320,12 @@ namespace mview
 
                         for (int it = 0; it < selectedNames.Count; ++it)
                         {
-                            oprData.Add(model.GetDataTime(projectIndex, selectedNames[it], liquidName.ToString()));
+                            oprData.Add(model.GetDataTime(selectedNames[it], liquidName.ToString()));
                         }
 
                         List<DataPoint> avValue = new List<DataPoint>();
 
-                        for (int it = 0; it < model.GetStepCount(projectIndex); ++it)
+                        for (int it = 0; it < model.GetStepCount(); ++it)
                         {
                             double value = 0;
                             double sumLiq = 0;
@@ -351,7 +350,8 @@ namespace mview
                         plotModel.Series.Add(series);
                     }
                 }
-            }
+        // }
+
 
             plotModel.Annotations.Clear();
 
@@ -388,11 +388,9 @@ namespace mview
                 }
             }
 
-
             plotModel.Axes[0].Reset();
             plotModel.Axes[1].Reset();
             plotModel.InvalidatePlot(true);
-
         }
 
         LineSeries LineSeriesStyle(string style)

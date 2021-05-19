@@ -12,11 +12,11 @@ namespace mview
 {
     public partial class ControlPanel : Form
     {
-        private readonly MainFormModel model = null;
+        private readonly ChartModel model = null;
         public event EventHandler UpdateData;
         private bool suspendEvents = false;
 
-        public ControlPanel(MainFormModel model)
+        public ControlPanel(ChartModel model)
         {
             InitializeComponent();
 
@@ -32,10 +32,7 @@ namespace mview
 
             suspendEvents = true;
 
-            foreach (int index in model.GetSelectedProjectIndex())
-            {
-                listBoxProjectNames.SelectedIndex = index;
-            }
+            listBoxProjectNames.SelectedIndex = model.GetSelectedProjectIndex();
 
             listBoxProjectNames.ResumeLayout();
             
@@ -46,15 +43,7 @@ namespace mview
         {
             if (suspendEvents) return;
 
-            var indices = new List<int>();
-
-            for (int it = 0; it < listBoxProjectNames.SelectedIndices.Count; ++it)
-            {
-               indices.Add(listBoxProjectNames.SelectedIndices[it]);
-            }
-
-            model.SetSelectedProjectIndex(indices);
-
+            model.SetSelectedProject(listBoxProjectNames.SelectedIndex);
 
             UpdateData(null, null);
         }

@@ -8,10 +8,11 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>mview</RootNamespace>
     <AssemblyName>mview</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -39,11 +40,11 @@
     </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenTK">
-      <HintPath>dll\OpenTK.dll</HintPath>
+    <Reference Include="OpenTK, Version=3.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>packages\OpenTK.3.1.0\lib\net20\OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK.GLControl">
-      <HintPath>dll\OpenTK.GLControl.dll</HintPath>
+    <Reference Include="OpenTK.GLControl, Version=3.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>packages\OpenTK.GLControl.3.1.0\lib\net20\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="OxyPlot">
       <HintPath>dll\OxyPlot.dll</HintPath>
@@ -96,27 +97,33 @@
     <Compile Include="Source\Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Source\Forms\TabWaterPlot.cs">
+    <Compile Include="Source\Forms\Tabs\TabMap2D.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Source\Forms\TabWaterPlot.Designer.cs">
+    <Compile Include="Source\Forms\Tabs\TabMap2D.Designer.cs">
+      <DependentUpon>TabMap2D.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Forms\Tabs\TabWaterPlot.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\Forms\Tabs\TabWaterPlot.Designer.cs">
       <DependentUpon>TabWaterPlot.cs</DependentUpon>
     </Compile>
-    <Compile Include="Source\Forms\TabCrossplots.cs">
+    <Compile Include="Source\Forms\Tabs\TabCrossplots.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Source\Forms\TabCrossplots.Designer.cs">
+    <Compile Include="Source\Forms\Tabs\TabCrossplots.Designer.cs">
       <DependentUpon>TabCrossplots.cs</DependentUpon>
     </Compile>
-    <Compile Include="Source\Forms\TabCharts.cs">
+    <Compile Include="Source\Forms\Tabs\TabCharts.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Source\Forms\TabCharts.Designer.cs">
+    <Compile Include="Source\Forms\Tabs\TabCharts.Designer.cs">
       <DependentUpon>TabCharts.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Forms\WellFilterSettings.cs" />
     <Compile Include="Source\ITabObserver.cs" />
-    <Compile Include="Source\Models\MainFormModel.cs" />
+    <Compile Include="Source\Models\ChartModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\Forms\ControlPanel.cs">
@@ -152,15 +159,21 @@
     <EmbeddedResource Include="Source\Forms\ControlPanel.resx">
       <DependentUpon>ControlPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Source\Forms\TabCrossplots.resx">
+    <EmbeddedResource Include="Source\Forms\Tabs\TabMap2D.resx">
+      <DependentUpon>TabMap2D.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Forms\Tabs\TabCrossplots.resx">
       <DependentUpon>TabCrossplots.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Source\Forms\TabCharts.resx">
+    <EmbeddedResource Include="Source\Forms\Tabs\TabCharts.resx">
       <DependentUpon>TabCharts.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Source\Forms\TabWaterPlot.resx">
+    <EmbeddedResource Include="Source\Forms\Tabs\TabWaterPlot.resx">
       <DependentUpon>TabWaterPlot.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="OpenTK.dll.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

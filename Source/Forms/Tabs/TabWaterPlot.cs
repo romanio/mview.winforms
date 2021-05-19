@@ -17,11 +17,11 @@ namespace mview
     public partial class TabWaterPlot : UserControl, ITabObserver
     {
         bool suspendEvents = false;
-        readonly MainFormModel model = null;
+        readonly ChartModel model = null;
         readonly PlotModel plotModel = null;
         readonly List<Vector> selectedVectors = new List<Vector>();
 
-        public TabWaterPlot(MainFormModel model)
+        public TabWaterPlot(ChartModel model)
         {
             InitializeComponent();
 
@@ -115,7 +115,8 @@ namespace mview
                 MarkerType = MarkerType.Circle,
                 MarkerStroke = OxyColors.Black,
                 MarkerSize = 3,
-                Title = "Simulated"
+                Title = "Simulated",
+                TrackerFormatString = "{0} \n{4:0.##} {3}\n{2}"
             });
 
 
@@ -125,7 +126,8 @@ namespace mview
                 MarkerType = MarkerType.Circle,
                 MarkerStroke = OxyColors.Black,
                 MarkerSize = 3,
-                Title = "History"
+                Title = "History",
+                TrackerFormatString = "{0} \n{4:0.##} {3}\n{2}"
             });
 
             int timeStep = model.GetStepCount();

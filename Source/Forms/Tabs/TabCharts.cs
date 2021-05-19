@@ -13,10 +13,10 @@ namespace mview
     public partial class TabCharts : UserControl, ITabObserver
     {
         bool suspendEvents = false;
-        readonly MainFormModel model = null;
+        readonly ChartModel model = null;
         readonly StylesPanel stylesPanel = null;
 
-        public TabCharts(MainFormModel model)
+        public TabCharts(ChartModel model)
         {
             InitializeComponent();
 

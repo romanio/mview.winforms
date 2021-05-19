@@ -23,7 +23,7 @@ namespace mview
     public partial class TabCrossplots : UserControl, ITabObserver
     {
         bool suspendEvents = false;
-        readonly MainFormModel model = null;
+        readonly ChartModel model = null;
         readonly PlotModel plotModel = null;
         readonly PlotModel plotHisto = null;
         readonly PlotModel plotHistoTotal = null;
@@ -35,7 +35,7 @@ namespace mview
 
         readonly List<Vector> selectedVectors = new List<Vector>();
 
-        public TabCrossplots(MainFormModel model)
+        public TabCrossplots(ChartModel model)
         {
             InitializeComponent();
 

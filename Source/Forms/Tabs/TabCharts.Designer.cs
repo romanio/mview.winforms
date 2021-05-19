@@ -30,13 +30,13 @@ namespace mview
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.checkShowAnno = new System.Windows.Forms.CheckBox();
             this.buttonSeriesSettings = new System.Windows.Forms.Button();
             this.boxChartsPositions = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.boxGroupMode = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.checkShowAnno = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,10 +57,22 @@ namespace mview
             this.panel1.TabIndex = 7;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
+            // checkShowAnno
+            // 
+            this.checkShowAnno.AutoSize = true;
+            this.checkShowAnno.Location = new System.Drawing.Point(529, 17);
+            this.checkShowAnno.Name = "checkShowAnno";
+            this.checkShowAnno.Size = new System.Drawing.Size(121, 17);
+            this.checkShowAnno.TabIndex = 5;
+            this.checkShowAnno.Text = "Show annotations";
+            this.checkShowAnno.UseVisualStyleBackColor = true;
+            this.checkShowAnno.CheckedChanged += new System.EventHandler(this.CheckShowAnnoOnCheckedChanged);
+            // 
             // buttonSeriesSettings
             // 
             this.buttonSeriesSettings.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
             this.buttonSeriesSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSeriesSettings.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonSeriesSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonSeriesSettings.Location = new System.Drawing.Point(8, 10);
             this.buttonSeriesSettings.Name = "buttonSeriesSettings";
@@ -135,17 +147,6 @@ namespace mview
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(791, 537);
             this.tableLayoutPanel1.TabIndex = 8;
-            // 
-            // checkShowAnno
-            // 
-            this.checkShowAnno.AutoSize = true;
-            this.checkShowAnno.Location = new System.Drawing.Point(529, 17);
-            this.checkShowAnno.Name = "checkShowAnno";
-            this.checkShowAnno.Size = new System.Drawing.Size(121, 17);
-            this.checkShowAnno.TabIndex = 5;
-            this.checkShowAnno.Text = "Show annotations";
-            this.checkShowAnno.UseVisualStyleBackColor = true;
-            this.checkShowAnno.CheckedChanged += new System.EventHandler(this.CheckShowAnnoOnCheckedChanged);
             // 
             // TabCharts
             // 
