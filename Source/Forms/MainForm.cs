@@ -29,17 +29,9 @@ namespace mview
         Other
     }
 
-    public enum ChartsPosition
-    {
-        One,
-        OnePlusTwo,
-        OnePlusThree,
-        Four
-    }
-
     public partial class MainForm : Form
     {
-        readonly ChartModel model = new ChartModel();
+        readonly ProjectManager pm = new ProjectManager();
         readonly ControlPanel controlPanel = null;
         readonly FilterPanel filterPanel = null;
         
@@ -54,7 +46,7 @@ namespace mview
 
             suspendEvents = true;
 
-            controlPanel = new ControlPanel(model);
+            controlPanel = new ControlPanel(pm);
             controlPanel.UpdateData += ControlPanelOnUpdateData;
 
             filterPanel = new FilterPanel();
@@ -77,7 +69,6 @@ namespace mview
             }
                     
             UpdateFormData();
-
 
             EventUpdateSelectedWells();
         }
@@ -132,12 +123,12 @@ namespace mview
                     break;
             }
 
-            if (model.GetSelectedProjectIndex() > -1)
+            if (pm.SelectedIndex > -1)
             {
                 if (namesType == NameOptions.Well)
                 {
                     var filteredWellnames = filterPanel.GetFilteredWellnames();
-                    var allWellnames = model.GetNamesByType(namesType);
+                    var allWellnames = GetNamesByType(namesType);
 
                     if (filteredWellnames.Length == 0)
                     {
@@ -160,7 +151,7 @@ namespace mview
                 }
                 else
                 {
-                    listNames.Items.AddRange(model.GetNamesByType(namesType));
+                    listNames.Items.AddRange(GetNamesByType(namesType));
                 }
 
                 foreach (string item in tmpNames)
@@ -180,6 +171,11 @@ namespace mview
             suspendEvents = false;
         }
 
+        string[] GetNamesByType(NameOptions type)
+        {
+            return pm.ECL.VECTORS.Where(c => c.Type == type).Select(c => c.Name).ToArray();
+        }
+
         private void ListNamesOnSelectedIndexChanged(object sender, EventArgs e)
         {
             EventUpdateSelectedWells();
@@ -191,7 +187,7 @@ namespace mview
 
             foreach (ITabObserver item in tabObservers)
             {
-                item.UpdateSelectedProjects();
+                item.UpdateSelectedProjects(pm.ECL);
             }
         }
 
@@ -247,11 +243,10 @@ namespace mview
 
         private void ButtonNewChartsOnClick(object sender, EventArgs e)
         {
-            var tabCharts = new TabCharts(model)
+            var tabCharts = new TabCharts(pm.ECL)
             {
                 Dock = DockStyle.Fill
             };
-
 
             var tabPage = new TabPage
             {
@@ -267,10 +262,12 @@ namespace mview
             tabControl2.TabPages.Add(tabPage);
         }
 
+        
         private void ButtonExportExcelOnClick(object sender, EventArgs e)
         {
-            model.ExportToExcel();
+        //    model.ExportToExcel();
         }
+        
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -280,7 +277,7 @@ namespace mview
 
         private void button3_Click(object sender, EventArgs e)
         {
-            var tabCrossplot = new TabCrossplots(model)
+            var tabCrossplot = new TabCrossplots(pm.ECL)
             {
                 Dock = DockStyle.Fill
             };
@@ -302,7 +299,7 @@ namespace mview
 
         private void button2_Click_1(object sender, EventArgs e)
         {
-            var tabWaterPlot = new TabWaterPlot(model)
+            var tabWaterPlot = new TabWaterPlot(pm.ECL)
             {
                 Dock = DockStyle.Fill
             };
@@ -322,15 +319,16 @@ namespace mview
             tabControl2.TabPages.Add(tabPage);
         }
 
+        
         private void button4_Click(object sender, EventArgs e)
         {
-
-                model.OpenUserAnnotation();
+        //        model.OpenUserAnnotation();
         }
+       
 
         private void button5_Click(object sender, EventArgs e)
         {
-            var tabMap2D = new TabMap2D(model)
+            var tab2DView = new Tab2DView(pm.ECL)
             {
                 Dock = DockStyle.Fill
             };
@@ -341,10 +339,10 @@ namespace mview
                 Text = "2D View"
             };
 
-            tabObservers.Add(tabMap2D);
-            tabPage.Controls.Add(tabMap2D);
+            tabObservers.Add(tab2DView);
+            tabPage.Controls.Add(tab2DView);
 
-            tabMap2D.UpdateSelectedProjects();
+            tab2DView.UpdateSelectedProjects();
             EventUpdateSelectedWells();
 
             tabControl2.TabPages.Add(tabPage);

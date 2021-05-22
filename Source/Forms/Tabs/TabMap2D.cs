@@ -22,13 +22,13 @@ namespace mview
 
         GLControl glControl = null;
 
-        public TabMap2D(ChartModel model)
+        public TabMap2D(EclipseProject ecl)
         {
             System.Diagnostics.Debug.WriteLine("Initizalize");
 
             InitializeComponent();
 
-            this.model = model;
+            model = new ChartModel(ecl);
 
             Application.DoEvents();
 
@@ -316,7 +316,12 @@ namespace mview
             GL.DeleteTexture(texture);
         }
 
-       float[] points = {
+        public void UpdateSelectedProjects(EclipseProject ecl)
+        {
+            throw new NotImplementedException();
+        }
+
+        float[] points = {
             // front
             -1.0f, -1.0f,  1.0f, 0.9f, 1, 0, 0,
              1.0f, -1.0f,  1.0f, 0.9f, 0, 1, 0,

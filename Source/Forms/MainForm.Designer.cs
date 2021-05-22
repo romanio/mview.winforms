@@ -50,6 +50,10 @@ namespace mview
             this.boxNameType = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.buttonWellFilter = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.button9 = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
             this.tabControl2.SuspendLayout();
             this.tabPageControl.SuspendLayout();
             this.SuspendLayout();
@@ -80,6 +84,10 @@ namespace mview
             // tabPageControl
             // 
             this.tabPageControl.BackColor = System.Drawing.SystemColors.Window;
+            this.tabPageControl.Controls.Add(this.label6);
+            this.tabPageControl.Controls.Add(this.button9);
+            this.tabPageControl.Controls.Add(this.label5);
+            this.tabPageControl.Controls.Add(this.label3);
             this.tabPageControl.Controls.Add(this.button8);
             this.tabPageControl.Controls.Add(this.button7);
             this.tabPageControl.Controls.Add(this.button6);
@@ -117,7 +125,7 @@ namespace mview
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button7.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
             this.button7.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button7.Location = new System.Drawing.Point(290, 465);
+            this.button7.Location = new System.Drawing.Point(299, 465);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(100, 30);
             this.button7.TabIndex = 22;
@@ -323,6 +331,49 @@ namespace mview
             this.buttonWellFilter.UseVisualStyleBackColor = true;
             this.buttonWellFilter.Click += new System.EventHandler(this.button2_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label3.Location = new System.Drawing.Point(29, 43);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(105, 13);
+            this.label3.TabIndex = 24;
+            this.label3.Text = "Common functions";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(296, 300);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(62, 13);
+            this.label5.TabIndex = 25;
+            this.label5.Text = "Path : None";
+            // 
+            // button9
+            // 
+            this.button9.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
+            this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button9.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
+            this.button9.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button9.Location = new System.Drawing.Point(172, 341);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(100, 30);
+            this.button9.TabIndex = 26;
+            this.button9.Text = "Well Groups";
+            this.button9.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.Location = new System.Drawing.Point(296, 350);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(62, 13);
+            this.label6.TabIndex = 27;
+            this.label6.Text = "Path : None";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -372,6 +423,10 @@ namespace mview
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button button9;
     }
 }
 

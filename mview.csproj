@@ -97,6 +97,12 @@
     <Compile Include="Source\Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Forms\Tabs\Tab2DView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\Forms\Tabs\Tab2DView.Designer.cs">
+      <DependentUpon>Tab2DView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Forms\Tabs\TabMap2D.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -123,6 +129,8 @@
     </Compile>
     <Compile Include="Source\Forms\WellFilterSettings.cs" />
     <Compile Include="Source\ITabObserver.cs" />
+    <Compile Include="Source\Models\BitmapRender.cs" />
+    <Compile Include="Source\Models\Camera2D.cs" />
     <Compile Include="Source\Models\ChartModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -132,6 +140,10 @@
     <Compile Include="Source\Forms\ControlPanel.Designer.cs">
       <DependentUpon>ControlPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Models\Colorizer.cs" />
+    <Compile Include="Source\Models\Engine2D.cs" />
+    <Compile Include="Source\Models\Grid2D.cs" />
+    <Compile Include="Source\Models\MapModel.cs" />
     <Compile Include="Source\ProjectManager.cs" />
     <Compile Include="Source\UserAnnotations.cs" />
     <EmbeddedResource Include="Source\Forms\ChartControl.resx">
@@ -158,6 +170,9 @@
     </Compile>
     <EmbeddedResource Include="Source\Forms\ControlPanel.resx">
       <DependentUpon>ControlPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Forms\Tabs\Tab2DView.resx">
+      <DependentUpon>Tab2DView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Forms\Tabs\TabMap2D.resx">
       <DependentUpon>TabMap2D.cs</DependentUpon>

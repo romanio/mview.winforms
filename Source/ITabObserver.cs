@@ -9,13 +9,13 @@ namespace mview
     public interface ITabObserver
     {
         void UpdateSelectedWells(TabSelectedWellsData data);
-        void UpdateSelectedProjects();
+        void UpdateSelectedProjects(EclipseProject ecl);
     }
 
     public class TabSelectedWellsData
     {
         public List<string> selectedNames;
-        public NameOptions type;
         public List<string> names;
+        public NameOptions type;
     }
 }

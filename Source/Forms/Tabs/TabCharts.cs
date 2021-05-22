@@ -10,17 +10,25 @@ using System.Windows.Forms;
 
 namespace mview
 {
+    public enum ChartsPosition
+    {
+        One,
+        OnePlusTwo,
+        OnePlusThree,
+        Four
+    }
+
     public partial class TabCharts : UserControl, ITabObserver
     {
-        bool suspendEvents = false;
-        readonly ChartModel model = null;
+        readonly bool suspendEvents = false;
+        private ChartModel model = null;
         readonly StylesPanel stylesPanel = null;
 
-        public TabCharts(ChartModel model)
+        public TabCharts(EclipseProject ecl)
         {
             InitializeComponent();
 
-            this.model = model;
+            this.model = new ChartModel(ecl);
 
             stylesPanel = new StylesPanel();
             stylesPanel.UpdateData += StylesPanelOnUpdateData;
@@ -45,12 +53,6 @@ namespace mview
                 item.UpdateNames(data.selectedNames, data.type);
             }
         }
-
-        public void UpdateSelectedProjects()
-        {
-            // None
-        }
-
 
         private void StylesPanelOnUpdateData(object sender, StyleSettings e)
         {
@@ -150,6 +152,11 @@ namespace mview
         private void CheckShowAnnoOnCheckedChanged(object sender, EventArgs e)
         {
             UpdateChartSettings(null);
+        }
+
+        public void UpdateSelectedProjects(EclipseProject ecl)
+        {
+            model.UpdateECL(ecl);
         }
     }
 }

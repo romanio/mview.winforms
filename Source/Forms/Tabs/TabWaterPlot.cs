@@ -21,11 +21,11 @@ namespace mview
         readonly PlotModel plotModel = null;
         readonly List<Vector> selectedVectors = new List<Vector>();
 
-        public TabWaterPlot(ChartModel model)
+        public TabWaterPlot(EclipseProject ecl)
         {
             InitializeComponent();
 
-            this.model = model;
+            model = new ChartModel(ecl);
 
             
             plotModel = new PlotModel
@@ -73,13 +73,9 @@ namespace mview
 
             List<string> dates = new List<string>();
 
-            if (model.GetProjectNames().Count > 0) // Only first selected project
+            for (int iw = 0; iw < model.GetStepCount(); ++iw)
             {
-                for (int iw = 0; iw < model.GetStepCount(); ++iw)
-                {
-                    dates.Add(model.GetDateByStep(iw).ToString());
-                }
-
+                dates.Add(model.GetDateByStep(iw).ToString());
             }
             
             suspendEvents = false;
@@ -209,6 +205,11 @@ namespace mview
         private void checkShowAnno_CheckedChanged(object sender, EventArgs e)
         {
             UpdateChart();
+        }
+
+        public void UpdateSelectedProjects(EclipseProject ecl)
+        {
+            model.UpdateECL(ecl);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace mview
 
         readonly List<Vector> selectedVectors = new List<Vector>();
 
-        public TabCrossplots(ChartModel model)
+        public TabCrossplots(EclipseProject ecl)
         {
             InitializeComponent();
 
@@ -43,7 +43,7 @@ namespace mview
                 System.Reflection.BindingFlags.SetProperty | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic,
                 null, gridData, new object[] { true });
 
-            this.model = model;
+            model = new ChartModel(ecl);
 
             plotHisto = new PlotModel
             {
@@ -145,13 +145,9 @@ namespace mview
 
             List<string> dates = new List<string>();
 
-            if (model.GetProjectNames().Count > 0) // Only first selected project
+            for (int iw = 0; iw < model.GetStepCount(); ++iw)
             {
-                for (int iw = 0; iw < model.GetStepCount(); ++iw)
-                {
-                    dates.Add(model.GetDateByStep(iw).ToString());
-                }
-
+                dates.Add(model.GetDateByStep(iw).ToString());
             }
 
             boxRestartDates.Items.Clear();
@@ -517,6 +513,11 @@ namespace mview
             textSecondCondition.ForeColor = Color.Black;
 
             UpdateChart();
+        }
+
+        public void UpdateSelectedProjects(EclipseProject ecl)
+        {
+            model.UpdateECL(ecl);
         }
     }
 }

@@ -60,7 +60,7 @@ namespace mview
             this.buttonSeriesSettings.TabIndex = 5;
             this.buttonSeriesSettings.Text = "Open";
             this.buttonSeriesSettings.UseVisualStyleBackColor = true;
-            this.buttonSeriesSettings.Click += new System.EventHandler(this.ButtonSeriesSettingsOnClick);
+            this.buttonSeriesSettings.Click += new System.EventHandler(this.ButtonOpenOnClick);
             // 
             // button1
             // 
@@ -75,7 +75,7 @@ namespace mview
             this.button1.TabIndex = 6;
             this.button1.Text = "Delete";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.ButtonDeleteOnClick);
             // 
             // listBoxLog
             // 
@@ -108,7 +108,7 @@ namespace mview
             this.Name = "ControlPanel";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Project";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ControlPanel_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ControlPanelOnFormClosing);
             this.ResumeLayout(false);
 
         }
