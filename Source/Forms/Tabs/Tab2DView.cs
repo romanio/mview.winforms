@@ -1,26 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using OpenTK;
 using OpenTK.Graphics;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace mview
 {
     public partial class Tab2DView : UserControl, ITabObserver
     {
         bool suspendEvents = false;
-        bool glContextInit = false;
 
         readonly MapModel model = null;
-
-        GLControl glControl = null;
+        readonly GLControl glControl = null;
 
         public Tab2DView(EclipseProject ecl)
         {
@@ -30,47 +21,45 @@ namespace mview
             
             suspendEvents = true;
 
-            boxGroupMode.SelectedIndex = 0;
-            boxChartsPositions.SelectedIndex = 1;
+            GraphicsMode grx = new GraphicsMode(new ColorFormat(8, 8, 8, 8), 24, 8, 4);
+            glControl = new GLControl(grx, 1, 5, GraphicsContextFlags.Default);
 
+            glControl.Paint += GLControlOnPaint;
+            glControl.Load += GLControlOnLoad;
+            glControl.Resize += GLControlOnResize;
 
-            glControl = new GLControl(new GraphicsMode(new ColorFormat(8, 8, 8, 0), 24, 8, 4), 1, 5, GraphicsContextFlags.Default);
-            glControl.Paint += GLControl_Paint;
-            glControl.Load += GLControl_Load;
-            glControl.Resize += GLControl_Resize;
+            glControl.MouseClick += GlControlOnMouseClick;
+            glControl.MouseMove += GLControlOnMouseMove;
+            glControl.MouseWheel += GlControlOnMouseWheel;
+
             glControl.Dock = DockStyle.Fill;
 
             panelOpenGL.Controls.Add(glControl);
 
-
-
             suspendEvents = false;
        }
 
+        private void GlControlOnMouseWheel(object sender, MouseEventArgs e)
+        {
+            model.MouseWheel(e);
+            GLControlOnPaint(null, null);
+        }
+
+        private void GLControlOnMouseMove(object sender, MouseEventArgs e)
+        {
+            model.MouseMove(e);
+            GLControlOnPaint(null, null);
+        }
+
+        private void GlControlOnMouseClick(object sender, MouseEventArgs e)
+        {
+            model.MouseClick(e);
+            GLControlOnPaint(null, null);
+        }
 
         public void UpdateSelectedWells(TabSelectedWellsData data)
         {
             // None
-        }
-
-        public void UpdateSelectedProjects()
-        {
-            // None
-        }
-
-
-        private void BoxGroupModeOnSelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (suspendEvents) return;
-
-            //
-        }
-
-        private void BoxChartsPositionsOnSelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (suspendEvents) return;
-
-            //
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -78,43 +67,132 @@ namespace mview
             ControlPaint.DrawBorder(e.Graphics, this.panel1.ClientRectangle, Color.LightSteelBlue, ButtonBorderStyle.Solid);
         }
 
-        private void CheckShowAnnoOnCheckedChanged(object sender, EventArgs e)
+        private void GLControlOnLoad(object sender, EventArgs e)
         {
-            //
-            
+            model.OnLoad();
         }
 
-        private void GLControl_Load(object sender, EventArgs e)
+        private void GLControlOnPaint(object sender, PaintEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Load");
-
-            GL.Enable(EnableCap.CullFace);
-            GL.Enable(EnableCap.Multisample);
-                    }
-
-        private void GLControl_Paint(object sender, PaintEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("Paint");
-
-            if (glContextInit == false) return;
-
- 
+            model.OnPaint();
+            glControl.SwapBuffers();
         }
 
-        Matrix4 projection;
-        Matrix4 modelview;
-        Matrix4 mvp;
-
-        private void GLControl_Resize(object sender, EventArgs e)
+        private void GLControlOnResize(object sender, EventArgs e)
         {
-            if (glContextInit == false) return;
-
-            GLControl_Paint(null, null);
+            model.OnResize(glControl.Width, glControl.Height);
+            glControl.SwapBuffers();
         }
 
         public void UpdateSelectedProjects(EclipseProject ecl)
         {
             throw new NotImplementedException();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            model.ReadGrid();
+
+            UpdateFormData();
+
+            GLControlOnPaint(null, null);
+        }
+            
+        void UpdateFormData()
+        {
+            suspendEvents = true;
+
+            // Имена свойств из INIT файла
+
+            treeProperties.Nodes[0].Nodes.Clear();
+            treeProperties.Nodes[1].Nodes.Clear();
+
+            var statics = model.GetStaticProperties();
+            var dynamics = model.GetDynamicProperties();
+
+            treeProperties.BeginUpdate();
+
+            foreach (string item in statics)
+            {
+                treeProperties.Nodes[0].Nodes.Add(item);
+            }
+
+            foreach (string item in dynamics)
+            {
+                treeProperties.Nodes[1].Nodes.Add(item);
+            }
+
+            treeProperties.EndUpdate();
+
+            // Список из всех доступных рестартов
+
+            boxRestartDates.Items.Clear();
+
+            boxRestartDates.BeginUpdate();
+            boxRestartDates.Items.AddRange(model.GetRestartDates());
+
+            if (boxRestartDates.Items.Count > 0)
+                boxRestartDates.SelectedIndex = boxRestartDates.Items.Count - 1;
+
+            boxRestartDates.EndUpdate();
+
+            // Размерность по X, Y, Z
+
+            boxSlideX.Items.Clear();
+            boxSlideX.BeginUpdate();
+
+            for (int it = 0; it < model.GetNX(); ++it)
+                boxSlideX.Items.Add((it + 1).ToString());
+
+            boxSlideX.SelectedIndex = 0;
+            boxSlideX.EndUpdate();
+
+            //
+
+            boxSlideY.Items.Clear();
+            boxSlideY.BeginUpdate();
+
+            for (int it = 0; it < model.GetNY(); ++it)
+                boxSlideY.Items.Add((it + 1).ToString());
+
+            boxSlideY.SelectedIndex = 0;
+            boxSlideY.EndUpdate();
+
+            //
+
+            boxSlideZ.Items.Clear();
+            boxSlideZ.BeginUpdate();
+
+            for (int it = 0; it < model.GetNZ(); ++it)
+                boxSlideZ.Items.Add((it + 1).ToString());
+
+            boxSlideZ.SelectedIndex = 0;
+            boxSlideZ.EndUpdate();
+
+            //
+            suspendEvents = false;
+        }
+
+        private void TabSideControlOnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabSideControl.SelectedIndex == 0)
+            {
+                model.SetPosition(ViewMode.X);
+                GLControlOnPaint(null, null);
+            }
+
+            if (tabSideControl.SelectedIndex == 1)
+            {
+                model.SetPosition(ViewMode.Y);
+                GLControlOnPaint(null, null);
+            }
+
+            if (tabSideControl.SelectedIndex == 2)
+            {
+                model.SetPosition(ViewMode.Z);
+                GLControlOnPaint(null, null);
+            }
+
         }
     }
 }

@@ -163,6 +163,8 @@ namespace mview
                         listNames.SetSelected(index, true);
                     }
                 }
+
+                label5.Text = pm.ECL.userAnnotations.filename;
             }
 
             listNames.ResumeLayout();
@@ -265,7 +267,8 @@ namespace mview
         
         private void ButtonExportExcelOnClick(object sender, EventArgs e)
         {
-        //    model.ExportToExcel();
+            ExcelWork excel = new ExcelWork();
+            excel.ExportToExcel(pm.ECL);
         }
         
 
@@ -291,7 +294,7 @@ namespace mview
             tabObservers.Add(tabCrossplot);
             tabPage.Controls.Add(tabCrossplot);
 
-            tabCrossplot.UpdateSelectedProjects();
+            tabCrossplot.UpdateSelectedProjects(); // NTR
             EventUpdateSelectedWells();
 
             tabControl2.TabPages.Add(tabPage);
@@ -313,7 +316,7 @@ namespace mview
             tabObservers.Add(tabWaterPlot);
             tabPage.Controls.Add(tabWaterPlot);
 
-            tabWaterPlot.UpdateSelectedProjects();
+            tabWaterPlot.UpdateSelectedProjects(); // NTR
             EventUpdateSelectedWells();
 
             tabControl2.TabPages.Add(tabPage);
@@ -322,7 +325,8 @@ namespace mview
         
         private void button4_Click(object sender, EventArgs e)
         {
-        //        model.OpenUserAnnotation();
+            pm.ECL.userAnnotations.LoadUserFunctions();
+            label5.Text = pm.ECL.userAnnotations.filename;
         }
        
 
@@ -342,10 +346,15 @@ namespace mview
             tabObservers.Add(tab2DView);
             tabPage.Controls.Add(tab2DView);
 
-            tab2DView.UpdateSelectedProjects();
             EventUpdateSelectedWells();
 
             tabControl2.TabPages.Add(tabPage);
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            filterPanel.LoadVirtualGroups();
+            label6.Text = filterPanel.GetFilename();
         }
     }
 }

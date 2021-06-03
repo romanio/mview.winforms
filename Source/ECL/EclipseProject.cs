@@ -41,7 +41,9 @@ namespace mview
         public RSSPEC RESTART = null;
         public INSPEC INIT = null;
         public EGRID EGRID = new EGRID();
-        
+
+        public UserAnnotations userAnnotations = new UserAnnotations();
+
         public event EventHandler<BinaryReaderArg> UpdateLoadingProgress;
 
         public void OpenData(string filename)

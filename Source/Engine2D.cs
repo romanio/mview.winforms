@@ -27,6 +27,7 @@ namespace mview
     public class CoordConverter
     {
         private readonly Engine2D engine = null;
+
         public ViewMode currentViewMode = ViewMode.X;
 
         public CoordConverter(Engine2D engine)
@@ -39,6 +40,7 @@ namespace mview
             float X = 0;
             float Y = 0;
 
+            /*
             if (currentViewMode == ViewMode.X)
             {
                 X = (XC - engine.grid.YMINCOORD - 0.5f * (engine.grid.YMAXCOORD - engine.grid.YMINCOORD) + engine.camera.shift_x + engine.camera.shift_end_x - engine.camera.shift_start_x) * engine.camera.scale + 0.5f * engine.width;
@@ -57,6 +59,7 @@ namespace mview
                 Y = (YC - engine.grid.YMINCOORD - 0.5f * (engine.grid.YMAXCOORD - engine.grid.YMINCOORD) - engine.camera.shift_y + engine.camera.shift_end_y - engine.camera.shift_start_y) * engine.camera.scale + 0.5f * engine.height;
             };
 
+            */
 
             return new PointF(X, Y);
         }
@@ -64,8 +67,8 @@ namespace mview
 
     public class Engine2D
     {
-        public Grid2D grid = new Grid2D();
-        public Camera2D camera = new Camera2D();
+        private readonly Camera2D camera = new Camera2D();
+        private Grid2D grid;
 
         public ViewPosition ViewPositionX = new ViewPosition();
         public ViewPosition ViewPositionY = new ViewPosition();
@@ -77,14 +80,42 @@ namespace mview
 
         BitmapRender render;
 
-        int vboID;
-        int eboID;
+        public void SetPosition(ViewMode Position)
+        {
+            SavePosition();
+
+            if (Position == ViewMode.X)
+            {
+                CurrentViewMode = ViewMode.X;
+                camera.CurrentViewMode = ViewMode.X;
+                grid.CurrentViewMode = ViewMode.X;
+
+                RestorePosition();
+            }
+
+            if (Position == ViewMode.Y)
+            {
+                CurrentViewMode = ViewMode.Y;
+                camera.CurrentViewMode = ViewMode.Y;
+                grid.CurrentViewMode = ViewMode.Y;
+
+                RestorePosition();
+            }
+
+            if (Position == ViewMode.Z)
+            {
+                CurrentViewMode = ViewMode.Z;
+                camera.CurrentViewMode = ViewMode.Z;
+                grid.CurrentViewMode = ViewMode.Z;
+
+                RestorePosition();
+            }
+
+            grid.RefreshGrid();
+        }
 
         public void SavePosition()
         {
-            System.Diagnostics.Debug.WriteLine("Engine2D [SavePosition]");
-
-
             if (CurrentViewMode == ViewMode.X)
             {
                 ViewPositionX.scale = camera.scale;
@@ -172,41 +203,84 @@ namespace mview
 
         public void OnLoad()
         {
-            System.Diagnostics.Debug.WriteLine("Engine [OnLoad]");
-            //   GL.Enable(EnableCap.PolygonSmooth);
+            GL.GetError();
+
+            System.Diagnostics.Debug.WriteLine("OpenGL Version " + GL.GetString(StringName.Version));
+
             GL.Enable(EnableCap.DepthTest);
+
+            System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
+
             GL.Enable(EnableCap.PolygonOffsetFill);
+
+            System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
+
             GL.ClearColor(Color.White);
+
+            System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
+
             GL.EnableClientState(ArrayCap.VertexArray);
+
+            System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
+
             GL.EnableClientState(ArrayCap.ColorArray);
 
-            vboID = GL.GenBuffer();
-            eboID = GL.GenBuffer();
+            System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
+
+            /*
+
             grid.welsID = GL.GenLists(2);
             grid.vectorID = grid.welsID + 1;
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vboID);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, eboID);
+
 
 
             grid.Scale = camera.scale;
             grid.ScaleZ = camera.scale_z;
+            */
         }
+
+        public void SetScaleFactors()
+        {
+            float DX, DY, DZ;
+            float MC, SC;
+
+            DX = grid.XMAXCOORD - grid.XMINCOORD;
+            DY = grid.YMAXCOORD - grid.YMINCOORD;
+            DZ = grid.ZMAXCOORD - grid.ZMINCOORD;
+
+            SC = Math.Min(width, height);
+
+            // Z Scale Default
+
+            MC = Math.Max(DX, DY) * 1.1f;
+            ViewPositionZ.scale = SC / MC;
+
+            // X Scale Default
+
+            MC = Math.Max(DY, DZ * camera.scalez) * 1.1f;
+
+            ViewPositionX.scale = SC / MC;
+
+            // Y Scale Default
+
+            MC = Math.Max(DX, DZ * camera.scalez) * 1.1f;
+            
+            ViewPositionY.scale = SC / MC;
+
+            RestorePosition();
+        }
+
 
         public void OnUnload()
         {
-            System.Diagnostics.Debug.WriteLine("Engine [OnUnLoad]");
-
-            GL.DeleteBuffer(vboID);
-            GL.DeleteBuffer(eboID);
-            GL.DeleteLists(grid.welsID, 2);
         }
 
-        public int width, height; // Параметры окна вывода
+        private int width, height; // Параметры окна вывода
 
         public void OnResize(int width, int height)
         {
-            System.Diagnostics.Debug.WriteLine("Engine [OnResize]");
+            System.Diagnostics.Debug.WriteLine("Engine.OnResize");
 
             this.width = width;
             this.height = height;
@@ -233,10 +307,16 @@ namespace mview
 
         readonly Font WellsFont = new Font("Segoe Pro Cond", 11, FontStyle.Bold);
 
+        public void LinkGrid(Grid2D grid)
+        {
+            this.grid = grid;
+        }
+
         public void DrawWells()
         {
             System.Diagnostics.Debug.WriteLine("Engine [DrawWells]");
 
+            /*
             GL.CallList(grid.welsID);
 
             CoordConverter cordconv = new CoordConverter(this);
@@ -251,11 +331,12 @@ namespace mview
                     render.DrawWell(well, WellsFont, Brushes.Black, cordconv, style, camera.is_mouse_shift);
                 }
             }
+            */
         }
 
         public void DrawVectorField()
         {
-            GL.CallList(grid.vectorID);
+            //GL.CallList(grid.vectorID);
         }
 
 
@@ -279,6 +360,8 @@ namespace mview
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            if (grid == null) return;
+
             // Масштабирование и перенос области отображения
 
             GL.MatrixMode(MatrixMode.Modelview);
@@ -287,7 +370,7 @@ namespace mview
 
             if (CurrentViewMode != ViewMode.Z)
             {
-                GL.Scale(1, camera.scale_z, 1);
+                GL.Scale(1, camera.scalez, 1);
             }
 
             // Центрирование
@@ -308,6 +391,7 @@ namespace mview
             {
                 GL.Translate(-grid.XC, -grid.ZC, 0);
             }
+
 
             if (grid.element_count > 0)
             {
@@ -433,8 +517,9 @@ namespace mview
                 }
             }
 
-            DrawFrame();
+                     
 
+            DrawFrame();
 
             if (grid.element_count > 0)
             {
@@ -486,8 +571,8 @@ namespace mview
             // Изменение Scale приводит к изменению масштаба по оси Z.
             // Приходится перерисовывать стволы
 
-            grid.Scale = camera.scale;
-            grid.ScaleZ = camera.scale_z;
+           grid.Scale = camera.scale;
+           grid.ScaleZ = camera.scalez;
         }
 
         public void MouseMove(MouseEventArgs e)
@@ -523,7 +608,7 @@ namespace mview
                     ZS = -1;
 
                     XT = (e.X - 0.5f * width) / camera.scale + grid.YMINCOORD + 0.5f * (grid.YMAXCOORD - grid.YMINCOORD) - camera.shift_x - camera.shift_end_x + camera.shift_start_x;
-                    YT = (e.Y - 0.5f * height) / (camera.scale * camera.scale_z) + grid.ZMINCOORD + 0.5f * (grid.ZMAXCOORD - grid.ZMINCOORD) + camera.shift_y - camera.shift_end_y + camera.shift_start_y;
+                    YT = (e.Y - 0.5f * height) / (camera.scale * camera.scalez) + grid.ZMINCOORD + 0.5f * (grid.ZMAXCOORD - grid.ZMINCOORD) + camera.shift_y - camera.shift_end_y + camera.shift_start_y;
                     var res = grid.GetCellUnderMouseX(XT, YT, pixel);
                     YS = res.Item1;
                     ZS = res.Item2;
@@ -537,7 +622,7 @@ namespace mview
                     ZS = -1;
 
                     XT = (e.X - 0.5f * width) / camera.scale + grid.XMINCOORD + 0.5f * (grid.XMAXCOORD - grid.XMINCOORD) - camera.shift_x - camera.shift_end_x + camera.shift_start_x;
-                    YT = (e.Y - 0.5f * height) / (camera.scale * camera.scale_z) + grid.ZMINCOORD + 0.5f * (grid.ZMAXCOORD - grid.ZMINCOORD) + camera.shift_y - camera.shift_end_y + camera.shift_start_y;
+                    YT = (e.Y - 0.5f * height) / (camera.scale * camera.scalez) + grid.ZMINCOORD + 0.5f * (grid.ZMAXCOORD - grid.ZMINCOORD) + camera.shift_y - camera.shift_end_y + camera.shift_start_y;
                     var res = grid.GetCellUnderMouseY(XT, YT, pixel);
                     XS = res.Item1;
                     ZS = res.Item2;

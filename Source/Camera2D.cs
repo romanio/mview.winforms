@@ -12,7 +12,7 @@ namespace mview
         public ViewMode CurrentViewMode = ViewMode.X;
 
         public float scale = 0.01f;
-        public float scale_z = 20;
+        public float scalez = 20;
 
         public float shift_start_x, shift_start_y;
         public float shift_end_x, shift_end_y;
@@ -38,7 +38,7 @@ namespace mview
 
                             if (CurrentViewMode != ViewMode.Z)
                             {
-                                shift_start_y = e.Y / (scale_z * scale);
+                                shift_start_y = e.Y / (scalez * scale);
                             }
                             else
                             {
@@ -50,7 +50,7 @@ namespace mview
 
                         if (CurrentViewMode != ViewMode.Z)
                         {
-                            shift_end_y = e.Y / (scale_z * scale);
+                            shift_end_y = e.Y / (scalez * scale);
                         }
                         else
                         {

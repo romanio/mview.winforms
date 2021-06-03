@@ -17,6 +17,7 @@ namespace mview
     public class WellFilterSettings
     {
         readonly List<VirtualGroupItem> virtualGroups = new List<VirtualGroupItem>();
+        public string filename = "Path : none";
 
         public void LoadFromFile()
         {
@@ -24,6 +25,8 @@ namespace mview
 
             if (fd.ShowDialog() == DialogResult.OK)
             {
+                filename = fd.FileName;
+
                 virtualGroups.Clear();
 
                 using (TextReader text = new StreamReader(fd.FileName, Encoding.GetEncoding("Windows-1251")))

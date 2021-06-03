@@ -63,7 +63,12 @@ namespace mview
             e.Cancel = true;
         }
 
-        private void ButtonLoadGroupsOnClick(object sender, EventArgs e)
+        public string GetFilename()
+        {
+            return wellFilterSettings.filename;
+        }
+
+        public void LoadVirtualGroups()
         {
             wellFilterSettings.LoadFromFile();
 

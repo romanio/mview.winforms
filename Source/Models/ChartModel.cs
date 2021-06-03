@@ -9,9 +9,7 @@ namespace mview
     public class ChartModel
     {
         private EclipseProject ecl = null;
-        private readonly UserAnnotations userAnnotations = new UserAnnotations();
 
-        public event EventHandler<BinaryReaderArg> UpdateLoadingProgress;
 
         public ChartModel(EclipseProject ecl)
         {
@@ -23,14 +21,9 @@ namespace mview
             this.ecl = ecl;
         }
 
-        public void OpenUserAnnotation()
-        {
-            userAnnotations.LoadUserFunctions();
-        }
-
         public List<AnnotationItem> GetAnnotation(string wellname)
         {
-            return userAnnotations.GetAnnotation(wellname);
+            return ecl.userAnnotations.GetAnnotation(wellname);
         }
 
         public DateTime GetDateByStep(int step)
@@ -95,7 +88,5 @@ namespace mview
         {
             return ecl.SUMMARY.NTIME;
         }
-
     }
-
 }

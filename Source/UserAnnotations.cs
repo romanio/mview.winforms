@@ -20,6 +20,8 @@ namespace mview
     {
         List<AnnotationItem> annotationList = null;
 
+        public string filename = "Path : None";
+
         public List<AnnotationItem> GetAnnotation(string wellname)
         {
             if (annotationList == null) return null;
@@ -38,6 +40,7 @@ namespace mview
             if (fd.ShowDialog() == DialogResult.OK)
             {
                 annotationList = new List<AnnotationItem>();
+                filename = fd.FileName;
 
                 using (TextReader text = new StreamReader(fd.FileName, Encoding.GetEncoding("Windows-1251")))
                 {

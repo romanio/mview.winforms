@@ -7,13 +7,14 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
+using mview.ECL ;
 
 namespace mview
 {
     public class Grid2D
     {
-        public List<ECL.WELLDATA> WELLS; // Опасная копия данных с рестарт файла
-        public List<ECL.WELLDATA> ACTIVE_WELLS; // Только те скважины, которые следует отображать
+        //public List<ECL.WELLDATA> WELLS; // Опасная копия данных с рестарт файла
+        //public List<ECL.WELLDATA> ACTIVE_WELLS; // Только те скважины, которые следует отображать
 
         public ViewMode CurrentViewMode = ViewMode.X;
         public float StretchFactor = 0;
@@ -21,7 +22,13 @@ namespace mview
         public float ScaleZ = 1;
         public Colorizer colorizer = new Colorizer();
 
+        EclipseProject ecl;
+        Func<long, float> lastGetValue;
+
         public int element_count = 0;
+        
+        int vboID;
+        int eboID;
 
         public float XMINCOORD;
         public float YMINCOORD;
@@ -44,6 +51,12 @@ namespace mview
 
         public int welsID;
         public int vectorID;
+
+        public void Delete()
+        {
+            GL.DeleteBuffer(vboID);
+            GL.DeleteBuffer(eboID);
+        }
 
         public void GenerateVectorFiled()
         {
@@ -105,9 +118,9 @@ namespace mview
             System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
         }
 
-
         public void GenerateWellDrawList(bool show_all)
         {
+            /*
             System.Diagnostics.Debug.WriteLine("Grid2D [GenerateWellDrawList]");
 
             ACTIVE_WELLS = new List<ECL.WELLDATA>();
@@ -306,12 +319,12 @@ namespace mview
             GL.EndList();
 
             //  System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
+            */
         }
 
         public void RefreshGrid()
         {
-            System.Diagnostics.Debug.WriteLine("Grid2D [RefreshGrid]");
-            GenerateGrid(tmp_GetValue);
+            GenerateGrid(lastGetValue);
         }
 
         public ECL.Cell GetCell(int X, int Y, int Z)
@@ -343,7 +356,7 @@ namespace mview
 
                     if (cell_index > 0)
                     {
-                        value = tmp_GetValue(cell_index - 1);
+                        value = lastGetValue(cell_index - 1);
                         color = colorizer.ColorByValue(value);
 
                         if (color.R == pixel[0])
@@ -401,7 +414,7 @@ namespace mview
 
                     if (cell_index > 0)
                     {
-                        value = tmp_GetValue(cell_index - 1);
+                        value = lastGetValue(cell_index - 1);
                         color = colorizer.ColorByValue(value);
 
                         if (color.R == pixel[0])
@@ -455,7 +468,7 @@ namespace mview
 
                     if (cell_index > 0)
                     {
-                        value = tmp_GetValue(cell_index - 1);
+                        value = lastGetValue(cell_index - 1);
                         color = colorizer.ColorByValue(value);
 
                         if (color.R == pixel[0])
@@ -486,30 +499,177 @@ namespace mview
         }
 
 
-        EclipseProject ecl;
-        Func<long, float> tmp_GetValue;
+
+
+        public Grid2D(EclipseProject ecl)
+        {
+            vboID = GL.GenBuffer();
+            eboID = GL.GenBuffer();
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vboID);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, eboID);
+
+            SetEclipseProject(ecl);
+        }
 
         public void SetEclipseProject(EclipseProject ecl)
         {
             this.ecl = ecl;
+
+            UpdateMinMax();
+            GenerateGrid(ecl.INIT.GetValue);
+        }
+
+        void UpdateMinMax()
+        {
+            // Определение максимальной и минимальной координаты Х и Y кажется простым,
+            // для этого рассмотрим координаты четырех углов модели.
+            // Более полный алгоритм должен рассматривать все 8 углов модели
+
+            // Координата X четырех углов сетки
+
+            List<float> XCORD = new List<float>()
+            {
+                ecl.EGRID.COORD[0],
+                ecl.EGRID. COORD[6 *  ecl.EGRID.NX + 0],
+                ecl.EGRID.COORD[6 * ( ecl.EGRID.NX + 1) *  ecl.EGRID.NY + 0],
+                ecl.EGRID.COORD[6 * (( ecl.EGRID.NX + 1) * ( ecl.EGRID.NY + 1) - 1) + 0]
+            };
+
+            XMINCOORD = XCORD.Min();
+            XMAXCOORD = XCORD.Max();
+
+            // Координата Y четырех углов сетки
+
+            List<float> YCORD = new List<float>()
+            {
+                 ecl.EGRID.COORD[1],
+                 ecl.EGRID.COORD[6 *  ecl.EGRID.NX + 1],
+                 ecl.EGRID.COORD[6 * (ecl.EGRID.NX + 1) *  ecl.EGRID.NY + 1],
+                 ecl.EGRID.COORD[6 * (( ecl.EGRID.NX + 1) * ( ecl.EGRID.NY + 1) - 1) + 1]
+            };
+
+            YMINCOORD = YCORD.Min();
+            YMAXCOORD = YCORD.Max();
+
+            ZMAXCOORD = ecl.INIT.GetArrayMax("DEPTH");
+            ZMINCOORD = ecl.INIT.GetArrayMin("DEPTH");
+
+            XC = (XMINCOORD + XMAXCOORD) * 0.5f;
+            YC = (YMINCOORD + YMAXCOORD) * 0.5f;
+            ZC = (ZMINCOORD + ZMAXCOORD) * 0.5f;
+        }
+
+        public interface ICellStrategy
+        {
+            int XCOUNT { get; }
+            int YCOUNT { get; }
+            Vector3 NE { get; }
+            Vector3 NW { get; }
+            Vector3 SE { get; }
+            Vector3 SW { get; }
+
+            void SetEclipse(EclipseProject ecl);
+            void SetActiveSlice(int slice);
+            long CellIndex(int X, int Y);
+        }
+
+        public class CellViewModeZSrategy : ICellStrategy
+        {
+            private EclipseProject ecl;
+            private int slice;
+            private long index;
+            private Cell cell;
+
+            public int XCOUNT => ecl.EGRID.NX;
+
+            public int YCOUNT => ecl.EGRID.NY;
+
+            public Vector3 NE => throw new NotImplementedException();
+
+            public Vector3 NW => throw new NotImplementedException();
+
+            public Vector3 SE => throw new NotImplementedException();
+
+            public Vector3 SW => throw new NotImplementedException();
+
+            public long CellIndex(int X, int Y)
+            {
+                index = ecl.INIT.GetActive(X, Y, slice);
+
+                if (index > 0)
+                {
+                    cell = ecl.EGRID.GetCell(X, Y, slice);
+                }
+
+                return index;
+            }
+
+            public void SetEclipse(EclipseProject ecl)
+            {
+                this.ecl = ecl;
+            }
+        }
+
+        public class CellViewModeXStrategy : ICellStrategy
+        {
+            private EclipseProject ecl;
+
+            public int XCOUNT => throw new NotImplementedException();
+
+            public int YCOUNT => throw new NotImplementedException();
+
+            public long CELLINDEX => throw new NotImplementedException();
+
+            public Vector3 NE => throw new NotImplementedException();
+
+            public Vector3 NW => throw new NotImplementedException();
+
+            public Vector3 SE => throw new NotImplementedException();
+
+            public Vector3 SW => throw new NotImplementedException();
+            
+            public void SetEclipse(EclipseProject ecl)
+            {
+                this.ecl = ecl;
+            }
+        }
+
+        public class CellViewModeYStrategy : ICellStrategy
+        {
+            private EclipseProject ecl;
+
+            public int XCOUNT => throw new NotImplementedException();
+
+            public int YCOUNT => throw new NotImplementedException();
+
+            public long CELLINDEX => throw new NotImplementedException();
+
+            public Vector3 NE => throw new NotImplementedException();
+
+            public Vector3 NW => throw new NotImplementedException();
+
+            public Vector3 SE => throw new NotImplementedException();
+
+            public Vector3 SW => throw new NotImplementedException();
+
+            public void SetEclipse(EclipseProject ecl)
+            {
+                this.ecl = ecl;
+            }
         }
 
         public void GenerateGrid(Func<long, float> GetValue)
         {
-            System.Diagnostics.Debug.WriteLine("Grid2D [GenerateGrid]");
-
-            if (GetValue == null) return;
-
-            this.tmp_GetValue = GetValue;
+            this.lastGetValue = GetValue;
 
             IntPtr vertex_ptr;
             IntPtr element_ptr;
 
-            long cell_index = 0;
+            long cellIndex = 0;
 
             Color color;
             float value;
-            ECL.Cell CELL;
+            Cell cell;
             int index = 0;
 
             float DX = 0;
@@ -553,8 +713,6 @@ namespace mview
                 GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
                 GL.ColorPointer(3, ColorPointerType.UnsignedByte, 0, ecl.EGRID.NX * ecl.EGRID.NY * sizeof(float) * 3 * 4);
 
-                System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
-
                 unsafe
                 {
                     float* vertex_mem = (float*)vertex_ptr;
@@ -564,19 +722,19 @@ namespace mview
                     for (int X = 0; X < ecl.EGRID.NX; ++X)
                         for (int Y = 0; Y < ecl.EGRID.NY; ++Y)
                         {
-                            cell_index = ecl.INIT.GetActive(X, Y, ZA);
+                            cellIndex = ecl.INIT.GetActive(X, Y, ZA);
 
-                            if (cell_index > 0)
+                            if (cellIndex > 0)
                             {
-                                CELL = ecl.EGRID.GetCell(X, Y, ZA);
+                                cell = ecl.EGRID.GetCell(X, Y, ZA);
 
-                                value = GetValue(cell_index - 1);
+                                value = GetValue(cellIndex - 1);
 
                                 color = colorizer.ColorByValue(value);
 
                                 index_mem[index] = index;
-                                vertex_mem[index * 3 + 0] = CELL.TNW.X;
-                                vertex_mem[index * 3 + 1] = CELL.TNW.Y;
+                                vertex_mem[index * 3 + 0] = cell.TNW.X;
+                                vertex_mem[index * 3 + 1] = cell.TNW.Y;
                                 vertex_mem[index * 3 + 2] = 0.1f;
 
                                 color_mem[index * 3 + 0] = color.R;
@@ -586,8 +744,8 @@ namespace mview
                                 index++;
 
                                 index_mem[index] = index;
-                                vertex_mem[index * 3 + 0] = CELL.TNE.X;
-                                vertex_mem[index * 3 + 1] = CELL.TNE.Y;
+                                vertex_mem[index * 3 + 0] = cell.TNE.X;
+                                vertex_mem[index * 3 + 1] = cell.TNE.Y;
                                 vertex_mem[index * 3 + 2] = 0.1f;
 
                                 color_mem[index * 3 + 0] = color.R;
@@ -597,8 +755,8 @@ namespace mview
                                 index++;
 
                                 index_mem[index] = index;
-                                vertex_mem[index * 3 + 0] = CELL.TSE.X;
-                                vertex_mem[index * 3 + 1] = CELL.TSE.Y;
+                                vertex_mem[index * 3 + 0] = cell.TSE.X;
+                                vertex_mem[index * 3 + 1] = cell.TSE.Y;
                                 vertex_mem[index * 3 + 2] = 0.1f;
 
                                 color_mem[index * 3 + 0] = color.R;
@@ -608,8 +766,8 @@ namespace mview
                                 index++;
 
                                 index_mem[index] = index;
-                                vertex_mem[index * 3 + 0] = CELL.TSW.X;
-                                vertex_mem[index * 3 + 1] = CELL.TSW.Y;
+                                vertex_mem[index * 3 + 0] = cell.TSW.X;
+                                vertex_mem[index * 3 + 1] = cell.TSW.Y;
                                 vertex_mem[index * 3 + 2] = 0.1f;
 
                                 color_mem[index * 3 + 0] = color.R;
@@ -630,6 +788,9 @@ namespace mview
                       IntPtr.Zero,
                       BufferUsageHint.StaticDraw);
 
+                System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
+
+
                 vertex_ptr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.WriteOnly);
 
                 GL.BufferData(
@@ -638,10 +799,14 @@ namespace mview
                     IntPtr.Zero,
                     BufferUsageHint.StaticDraw);
 
+                System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
+
                 element_ptr = GL.MapBuffer(BufferTarget.ElementArrayBuffer, BufferAccess.WriteOnly);
 
                 GL.VertexPointer(3, VertexPointerType.Float, 0, 0);
                 GL.ColorPointer(3, ColorPointerType.UnsignedByte, 0, ecl.EGRID.NY * ecl.EGRID.NZ * sizeof(float) * 3 * 4);
+
+                System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
 
                 DX = (YMAXCOORD - YMINCOORD) / ecl.EGRID.NY;
                 DY = (ZMAXCOORD - ZMINCOORD) / ecl.EGRID.NZ;
@@ -655,19 +820,19 @@ namespace mview
                     for (int Z = 0; Z < ecl.EGRID.NZ; ++Z)
                         for (int Y = 0; Y < ecl.EGRID.NY; ++Y)
                         {
-                            cell_index = ecl.INIT.GetActive(XA, Y, Z);
+                            cellIndex = ecl.INIT.GetActive(XA, Y, Z);
 
-                            if (cell_index > 0)
+                            if (cellIndex > 0)
                             {
-                                CELL = ecl.EGRID.GetCell(XA, Y, Z);
+                                cell = ecl.EGRID.GetCell(XA, Y, Z);
 
-                                value = GetValue(cell_index - 1);
+                                value = GetValue(cellIndex - 1);
 
                                 color = colorizer.ColorByValue(value);
 
                                 index_mem[index] = index;
-                                vertex_mem[index * 3 + 0] = CELL.TSE.Y * (1 - StretchFactor) + (YMINCOORD + DX * Y + DX) * StretchFactor;
-                                vertex_mem[index * 3 + 1] = CELL.TSE.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z) * StretchFactor;
+                                vertex_mem[index * 3 + 0] = cell.TSE.Y * (1 - StretchFactor) + (YMINCOORD + DX * Y + DX) * StretchFactor;
+                                vertex_mem[index * 3 + 1] = cell.TSE.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z) * StretchFactor;
                                 vertex_mem[index * 3 + 2] = 0.1f;
 
                                 color_mem[index * 3 + 0] = color.R;
@@ -677,8 +842,8 @@ namespace mview
                                 index++;
 
                                 index_mem[index] = index;
-                                vertex_mem[index * 3 + 0] = CELL.BSE.Y * (1 - StretchFactor) + (YMINCOORD + DX * Y + DX) * StretchFactor;
-                                vertex_mem[index * 3 + 1] = CELL.BSE.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z + DY) * StretchFactor;
+                                vertex_mem[index * 3 + 0] = cell.BSE.Y * (1 - StretchFactor) + (YMINCOORD + DX * Y + DX) * StretchFactor;
+                                vertex_mem[index * 3 + 1] = cell.BSE.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z + DY) * StretchFactor;
                                 vertex_mem[index * 3 + 2] = 0.1f;
 
                                 color_mem[index * 3 + 0] = color.R;
@@ -688,8 +853,8 @@ namespace mview
                                 index++;
 
                                 index_mem[index] = index;
-                                vertex_mem[index * 3 + 0] = CELL.BNE.Y * (1 - StretchFactor) + (YMINCOORD + DX * Y) * StretchFactor;
-                                vertex_mem[index * 3 + 1] = CELL.BNE.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z + DY) * StretchFactor;
+                                vertex_mem[index * 3 + 0] = cell.BNE.Y * (1 - StretchFactor) + (YMINCOORD + DX * Y) * StretchFactor;
+                                vertex_mem[index * 3 + 1] = cell.BNE.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z + DY) * StretchFactor;
                                 vertex_mem[index * 3 + 2] = 0.1f;
 
                                 color_mem[index * 3 + 0] = color.R;
@@ -699,8 +864,8 @@ namespace mview
                                 index++;
 
                                 index_mem[index] = index;
-                                vertex_mem[index * 3 + 0] = CELL.TNE.Y * (1 - StretchFactor) + (YMINCOORD + DX * Y) * StretchFactor;
-                                vertex_mem[index * 3 + 1] = CELL.TNE.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z) * StretchFactor;
+                                vertex_mem[index * 3 + 0] = cell.TNE.Y * (1 - StretchFactor) + (YMINCOORD + DX * Y) * StretchFactor;
+                                vertex_mem[index * 3 + 1] = cell.TNE.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z) * StretchFactor;
                                 vertex_mem[index * 3 + 2] = 0.1f;
 
                                 color_mem[index * 3 + 0] = color.R;
@@ -747,19 +912,19 @@ namespace mview
                     for (int Z = 0; Z < ecl.EGRID.NZ; ++Z)
                         for (int X = 0; X < ecl.EGRID.NX; ++X)
                         {
-                            cell_index = ecl.INIT.GetActive(X, YA, Z);
+                            cellIndex = ecl.INIT.GetActive(X, YA, Z);
 
-                            if (cell_index > 0)
+                            if (cellIndex > 0)
                             {
-                                CELL = ecl.EGRID.GetCell(X, YA, Z);
+                                cell = ecl.EGRID.GetCell(X, YA, Z);
 
-                                value = GetValue(cell_index - 1);
+                                value = GetValue(cellIndex - 1);
 
                                 color = colorizer.ColorByValue(value);
 
                                 index_mem[index] = index;
-                                vertex_mem[index * 3 + 0] = CELL.TSW.X * (1 - StretchFactor) + (XMINCOORD + DX * X) * StretchFactor;
-                                vertex_mem[index * 3 + 1] = CELL.TSW.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z) * StretchFactor;
+                                vertex_mem[index * 3 + 0] = cell.TSW.X * (1 - StretchFactor) + (XMINCOORD + DX * X) * StretchFactor;
+                                vertex_mem[index * 3 + 1] = cell.TSW.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z) * StretchFactor;
                                 vertex_mem[index * 3 + 2] = 0.1f;
 
                                 color_mem[index * 3 + 0] = color.R;
@@ -769,8 +934,8 @@ namespace mview
                                 index++;
 
                                 index_mem[index] = index;
-                                vertex_mem[index * 3 + 0] = CELL.TSE.X * (1 - StretchFactor) + (XMINCOORD + DX * X + DX) * StretchFactor;
-                                vertex_mem[index * 3 + 1] = CELL.TSE.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z) * StretchFactor;
+                                vertex_mem[index * 3 + 0] = cell.TSE.X * (1 - StretchFactor) + (XMINCOORD + DX * X + DX) * StretchFactor;
+                                vertex_mem[index * 3 + 1] = cell.TSE.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z) * StretchFactor;
                                 vertex_mem[index * 3 + 2] = 0.1f;
 
                                 color_mem[index * 3 + 0] = color.R;
@@ -780,8 +945,8 @@ namespace mview
                                 index++;
 
                                 index_mem[index] = index;
-                                vertex_mem[index * 3 + 0] = CELL.BSE.X * (1 - StretchFactor) + (XMINCOORD + DX * X + DX) * StretchFactor;
-                                vertex_mem[index * 3 + 1] = CELL.BSE.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z + DY) * StretchFactor;
+                                vertex_mem[index * 3 + 0] = cell.BSE.X * (1 - StretchFactor) + (XMINCOORD + DX * X + DX) * StretchFactor;
+                                vertex_mem[index * 3 + 1] = cell.BSE.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z + DY) * StretchFactor;
                                 vertex_mem[index * 3 + 2] = 0.1f;
 
                                 color_mem[index * 3 + 0] = color.R;
@@ -791,8 +956,8 @@ namespace mview
                                 index++;
 
                                 index_mem[index] = index;
-                                vertex_mem[index * 3 + 0] = CELL.BSW.X * (1 - StretchFactor) + (XMINCOORD + DX * X) * StretchFactor;
-                                vertex_mem[index * 3 + 1] = CELL.BSW.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z + DY) * StretchFactor;
+                                vertex_mem[index * 3 + 0] = cell.BSW.X * (1 - StretchFactor) + (XMINCOORD + DX * X) * StretchFactor;
+                                vertex_mem[index * 3 + 1] = cell.BSW.Z * (1 - StretchFactor) + (ZMINCOORD + DY * Z + DY) * StretchFactor;
                                 vertex_mem[index * 3 + 2] = 0.1f;
 
                                 color_mem[index * 3 + 0] = color.R;

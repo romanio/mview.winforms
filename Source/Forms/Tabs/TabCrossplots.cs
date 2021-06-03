@@ -139,8 +139,6 @@ namespace mview
 
         public void UpdateSelectedProjects()
         {
-            System.Diagnostics.Debug.WriteLine("Event Selected Projects");
-
             suspendEvents = true;
 
             List<string> dates = new List<string>();

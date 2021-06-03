@@ -22,7 +22,6 @@ namespace mview
         private bool suspendEvents = false;
         private List<string> selectedNames = null;
         private List<string> selectedKeywords = null;
-        //private List<int> selectedProjects = null;
         private int[] selectedIndex = null;
         private readonly ChartSettings settings = null;
 
@@ -114,13 +113,8 @@ namespace mview
             listKeywords.ResumeLayout();
 
             suspendEvents = false;
-
-            // Индексы выбранных проектов
-
-            //selectedProjects = model.GetSelectedProjectIndex();
             
             UpdateChartAndTable();
-
         }
 
         void UpdateChartAndTable()
