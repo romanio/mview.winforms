@@ -13,22 +13,6 @@ namespace mview
         SimVSHist
     }
 
-    public class MapStyle
-    {
-        public bool showGridLines = true;
-        public bool showAllWelltrack = true;
-        public bool showBubbles = true;
-        public bool showNoFillColor = false;
-        public bool showVectorField = false;
-
-        public BubbleMode bubbleMode = BubbleMode.Simulation;
-        public double minValue = 0;
-        public double maxValue = 1;
-        public double scaleFactor = 30;
-        public double zscale = 12;
-        public double stretchFactor = 0;
-    }
-
     public class MapModel
     {
         private readonly EclipseProject ecl;
@@ -48,6 +32,7 @@ namespace mview
             ecl.INIT.ReadGrid("PERMX");
 
             grid = new Grid2D(ecl);
+            grid.GenerateGrid(ecl.INIT.GetValue);
             
             engine.LinkGrid(grid);
             engine.SetScaleFactors();
@@ -155,5 +140,47 @@ namespace mview
             engine.SetPosition(position);
         }
 
+        public void SetXA(int X)
+        {
+            grid.XA = X;
+            grid.RefreshGrid();
+        }
+
+        public void SetYA(int Y)
+        {
+            grid.YA = Y;
+            grid.RefreshGrid();
+        }
+
+        public void SetZA(int Z)
+        {
+            grid.ZA = Z;
+            grid.RefreshGrid();
+        }
+
+        public void SetStaticProperty(string name)
+        {
+            ecl.INIT.ReadGrid(name);
+            grid.GenerateGrid(ecl.INIT.GetValue);
+        }
+
+        public void ReadRestart(int step)
+        {
+            ecl.ReadRestart(step);
+        }
+
+        public void SetDynamicProperty(string name)
+        {
+            ecl.RESTART.ReadGrid(name);
+            grid.GenerateGrid(ecl.RESTART.GetValue);
+        }
+
+        public void SetMapStyle(MapStyle style)
+        {
+            grid.StretchFactor = style.stretchFactor;
+            grid.RefreshGrid();
+
+            engine.SetMapStyle(style);
+        }
     }
 }

@@ -125,17 +125,18 @@ namespace mview
 
                     for (int iw = 0; iw < count; ++iw)
                     {
-                        var tmpStyle = new SeriesStyle();
-
-                        tmpStyle.name = text.ReadLine();
-                        tmpStyle.lineColor = OxyColor.FromUInt32(UInt32.Parse(text.ReadLine()));
-                        tmpStyle.markerColor = OxyColor.FromUInt32(UInt32.Parse(text.ReadLine()));
-                        tmpStyle.markerFillColor = OxyColor.FromUInt32(UInt32.Parse(text.ReadLine()));
-                        tmpStyle.markerSize = Int32.Parse(text.ReadLine());
-                        tmpStyle.lineWidth = Int32.Parse(text.ReadLine());
-                        tmpStyle.lineSmooth = Boolean.Parse(text.ReadLine());
-                        tmpStyle.markerType = (MarkerType)Enum.Parse(typeof(MarkerType), text.ReadLine(), true);
-                        tmpStyle.lineStyle = (LineStyle)Enum.Parse(typeof(LineStyle), text.ReadLine(), true);
+                        var tmpStyle = new SeriesStyle
+                        {
+                            name = text.ReadLine(),
+                            lineColor = OxyColor.FromUInt32(UInt32.Parse(text.ReadLine())),
+                            markerColor = OxyColor.FromUInt32(UInt32.Parse(text.ReadLine())),
+                            markerFillColor = OxyColor.FromUInt32(UInt32.Parse(text.ReadLine())),
+                            markerSize = Int32.Parse(text.ReadLine()),
+                            lineWidth = Int32.Parse(text.ReadLine()),
+                            lineSmooth = Boolean.Parse(text.ReadLine()),
+                            markerType = (MarkerType)Enum.Parse(typeof(MarkerType), text.ReadLine(), true),
+                            lineStyle = (LineStyle)Enum.Parse(typeof(LineStyle), text.ReadLine(), true)
+                        };
 
                         listSeriesStyle.Add(tmpStyle);
                     }

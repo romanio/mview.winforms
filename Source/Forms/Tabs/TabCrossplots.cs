@@ -438,9 +438,8 @@ namespace mview
 
         private void TextFirstConditionOnValidating(object sender, CancelEventArgs e)
         {
-            double value;
 
-            if (Double.TryParse(textFirstCondition.Text, out value))
+            if (Double.TryParse(textFirstCondition.Text, out double value))
             {
                 if (activeCondition == TypeCondition.Relative)
                 {
@@ -450,7 +449,7 @@ namespace mview
                 {
                     firstCondition[1] = value;
                 }
-         
+
                 textFirstCondition.ForeColor = Color.Black;
                 UpdateChart();
             }
@@ -463,9 +462,7 @@ namespace mview
 
         private void TextSecondConditionOnValidating(object sender, CancelEventArgs e)
         {
-            double value;
-
-            if (Double.TryParse(textSecondCondition.Text, out value))
+            if (Double.TryParse(textSecondCondition.Text, out double value))
             {
                 if (activeCondition == TypeCondition.Relative)
                 {

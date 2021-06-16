@@ -12,6 +12,7 @@ namespace mview
 
         readonly MapModel model = null;
         readonly GLControl glControl = null;
+        readonly MapStyle style = new MapStyle();
 
         public Tab2DView(EclipseProject ecl)
         {
@@ -33,11 +34,20 @@ namespace mview
             glControl.MouseWheel += GlControlOnMouseWheel;
 
             glControl.Dock = DockStyle.Fill;
-
+                
             panelOpenGL.Controls.Add(glControl);
+
+            // Default settings
+
+            numericZScale.Value = (decimal)style.zscale;
 
             suspendEvents = false;
        }
+        
+        ~Tab2DView()
+        {
+            model.OnUnload();
+        }
 
         private void GlControlOnMouseWheel(object sender, MouseEventArgs e)
         {
@@ -47,6 +57,8 @@ namespace mview
 
         private void GLControlOnMouseMove(object sender, MouseEventArgs e)
         {
+            //if (e.Button == MouseButtons.None) return;
+
             model.MouseMove(e);
             GLControlOnPaint(null, null);
         }
@@ -132,7 +144,10 @@ namespace mview
             boxRestartDates.Items.AddRange(model.GetRestartDates());
 
             if (boxRestartDates.Items.Count > 0)
+            {
                 boxRestartDates.SelectedIndex = boxRestartDates.Items.Count - 1;
+                model.ReadRestart(boxRestartDates.SelectedIndex);
+            }
 
             boxRestartDates.EndUpdate();
 
@@ -193,6 +208,79 @@ namespace mview
                 GLControlOnPaint(null, null);
             }
 
+        }
+
+        private void boxSlideX_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
+
+            model.SetXA(boxSlideX.SelectedIndex);
+            GLControlOnPaint(null, null);
+
+        }
+
+        private void boxSlideY_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
+
+            model.SetYA(boxSlideY.SelectedIndex);
+            GLControlOnPaint(null, null);
+        }
+
+        private void boxSlideZ_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
+
+            model.SetZA(boxSlideZ.SelectedIndex);
+            GLControlOnPaint(null, null);
+        }
+
+        private void TreePropertiesOnAfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (treeProperties.SelectedNode?.Parent?.Index == 0) // Static property
+            {
+                string name = treeProperties.SelectedNode.Text;
+                model.SetStaticProperty(name);
+                GLControlOnPaint(null, null);
+            }
+            if (treeProperties.SelectedNode?.Parent?.Index == 1) // Dynamic property
+            {
+                string name = treeProperties.SelectedNode.Text;
+                model.SetDynamicProperty(name);
+                GLControlOnPaint(null, null);
+            }
+        }
+
+        private void boxRestartDates_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
+
+            model.ReadRestart(boxRestartDates.SelectedIndex);
+            TreePropertiesOnAfterSelect(null, null);
+        }
+
+        private void SetMapStyle()
+        {
+            model.SetMapStyle(style);
+            GLControlOnPaint(null, null);
+        }
+
+        private void numericZScale_ValueChanged(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
+
+            style.zscale = (float)numericZScale.Value;
+            SetMapStyle();
+        }
+
+        private void trackStratch_Scroll(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
+
+            label4.Text = trackStratch.Value.ToString();
+
+            style.stretchFactor = trackStratch.Value * 0.01f;
+            SetMapStyle();
         }
     }
 }

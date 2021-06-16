@@ -150,9 +150,11 @@
       <DependentUpon>TabCharts.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Forms\WellFilterSettings.cs" />
+    <Compile Include="Source\ICellStrategy.cs" />
     <Compile Include="Source\ITabObserver.cs" />
     <Compile Include="Source\BitmapRender.cs" />
     <Compile Include="Source\Camera2D.cs" />
+    <Compile Include="Source\MapStyle.cs" />
     <Compile Include="Source\Models\ChartModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

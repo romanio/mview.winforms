@@ -109,6 +109,8 @@ namespace mview.ECL
         public List<float[]> ARRAYMIN = new List<float[]>(); // Minimum values
         public List<string[]> UNITS = new List<string[]>(); // Единица измерения
         public string FILENAME = null;
+        public string GridUnit = null;
+
 
         public RSSPEC(string filename)
         {
@@ -270,15 +272,15 @@ namespace mview.ECL
             RESTART_STEP = LGR ? step * 2 : step;
 
             FileReader br = new FileReader();
-            
-            Action<string> SetPosition = (name) =>
+
+            void SetPosition(string name)
             {
                 int index = Array.IndexOf(NAME[RESTART_STEP], name);
                 long pointer = POINTER[RESTART_STEP][index];
                 long pointerb = POINTERB[RESTART_STEP][index];
                 br.SetPosition(pointerb * 2147483648 + pointer);
-            };
-            
+            }
+
             WELLS = new List<WELLDATA>();
 
             br.OpenBinaryFile(filename);
@@ -505,33 +507,25 @@ namespace mview.ECL
             br.CloseBinaryFile();
         }
 
-
-
-        public string GridUnit = null;
-
         public void ReadGrid(string property)
         {
+            int index = Array.IndexOf(NAME[RESTART_STEP], property);
+
+            if (index == -1) return;
+
             FileReader br = new FileReader();
-
-            Action<string> SetPosition = (name) =>
-            {
-                int index = Array.IndexOf(NAME[RESTART_STEP], name);
-
-               
-                if (UNITS.Count != 0)
-                {
-                    GridUnit = UNITS[RESTART_STEP][index].ToString();
-                }
-
-                long pointer = POINTER[RESTART_STEP][index];
-                long pointerb = POINTERB[RESTART_STEP][index];
-
-
-                br.SetPosition(pointerb * 2147483648 + pointer);
-            };
-
             br.OpenBinaryFile(FILENAME);
-            SetPosition(property);
+
+            if (UNITS.Count != 0)
+            {
+                GridUnit = UNITS[RESTART_STEP][index].ToString();
+            }
+
+            long pointer = POINTER[RESTART_STEP][index];
+            long pointerb = POINTERB[RESTART_STEP][index];
+
+
+            br.SetPosition(pointerb * 2147483648 + pointer);
             br.ReadHeader();
 
             // Если модель запущена с NOSIM
@@ -546,13 +540,6 @@ namespace mview.ECL
         {
             return DATA[index];
         }
-
-
-        int GetNameIndex(string name, int LGR)
-        {
-            return 0;
-        }
-
 
         public void ReadVectorFile()
         {

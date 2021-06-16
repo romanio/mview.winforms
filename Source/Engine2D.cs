@@ -78,6 +78,8 @@ namespace mview
 
         public ViewMode CurrentViewMode = ViewMode.X;
 
+        MapStyle style = new MapStyle();
+
         BitmapRender render;
 
         public void SetPosition(ViewMode Position)
@@ -201,6 +203,12 @@ namespace mview
             }
         }
 
+        
+        public void SetMapStyle(MapStyle style)
+        {
+            camera.scalez = style.zscale;
+        }
+
         public void OnLoad()
         {
             GL.GetError();
@@ -208,25 +216,10 @@ namespace mview
             System.Diagnostics.Debug.WriteLine("OpenGL Version " + GL.GetString(StringName.Version));
 
             GL.Enable(EnableCap.DepthTest);
-
-            System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
-
             GL.Enable(EnableCap.PolygonOffsetFill);
-
-            System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
-
             GL.ClearColor(Color.White);
-
-            System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
-
             GL.EnableClientState(ArrayCap.VertexArray);
-
-            System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
-
             GL.EnableClientState(ArrayCap.ColorArray);
-
-            System.Diagnostics.Debug.WriteLine(GL.GetError().ToString());
-
             /*
 
             grid.welsID = GL.GenLists(2);
@@ -271,9 +264,10 @@ namespace mview
             RestorePosition();
         }
 
-
+        
         public void OnUnload()
         {
+            
         }
 
         private int width, height; // Параметры окна вывода
@@ -548,19 +542,10 @@ namespace mview
             }
         }
 
-        MapStyle style = new MapStyle()
-        {
-            showBubbles = true,
-            showGridLines = true,
-            showAllWelltrack = true,
-            showNoFillColor = false,
-            bubbleMode = BubbleMode.Simulation,
-            scaleFactor = 100
-        };
-
         public void SetStyle(MapStyle style)
         {
             this.style = style;
+
             OnPaint();
         }
 

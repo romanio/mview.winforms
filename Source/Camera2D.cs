@@ -12,7 +12,7 @@ namespace mview
         public ViewMode CurrentViewMode = ViewMode.X;
 
         public float scale = 0.01f;
-        public float scalez = 20;
+        public float scalez = 12;
 
         public float shift_start_x, shift_start_y;
         public float shift_end_x, shift_end_y;
