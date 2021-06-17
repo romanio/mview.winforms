@@ -34,7 +34,8 @@ namespace mview
             glControl.MouseWheel += GlControlOnMouseWheel;
 
             glControl.Dock = DockStyle.Fill;
-                
+            glControl.VSync = true;
+            
             panelOpenGL.Controls.Add(glControl);
 
             // Default settings
@@ -57,10 +58,12 @@ namespace mview
 
         private void GLControlOnMouseMove(object sender, MouseEventArgs e)
         {
-            //if (e.Button == MouseButtons.None) return;
-
             model.MouseMove(e);
-            GLControlOnPaint(null, null);
+
+            if (e.Button != MouseButtons.None)
+            {
+                GLControlOnPaint(null, null);
+            }
         }
 
         private void GlControlOnMouseClick(object sender, MouseEventArgs e)
@@ -90,10 +93,17 @@ namespace mview
             glControl.SwapBuffers();
         }
 
+        int timeResize = 0;
+
         private void GLControlOnResize(object sender, EventArgs e)
         {
             model.OnResize(glControl.Width, glControl.Height);
-            glControl.SwapBuffers();
+            if (DateTime.Now.Millisecond - timeResize > 1000)
+            {
+                glControl.SwapBuffers();
+            }
+            timeResize = DateTime.Now.Millisecond;
+
         }
 
         public void UpdateSelectedProjects(EclipseProject ecl)
@@ -276,8 +286,6 @@ namespace mview
         private void trackStratch_Scroll(object sender, EventArgs e)
         {
             if (suspendEvents) return;
-
-            label4.Text = trackStratch.Value.ToString();
 
             style.stretchFactor = trackStratch.Value * 0.01f;
             SetMapStyle();

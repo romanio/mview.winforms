@@ -33,11 +33,10 @@ namespace mview
         public float XMAXCOORD;
         public float YMAXCOORD;
         public float ZMAXCOORD;
-        
-        public float XC;
-        public float YC;
-        public float ZC;
-        
+
+        public float XC, YC, ZC;
+        public float DX, DY, DZ;
+
         public int NX;
         public int NY;
         public int NZ;
@@ -47,6 +46,13 @@ namespace mview
         public int ZA = 0;
         public int XA = 0;
         public int YA = 0;
+
+        // Координаты выбранной ячейки и значение
+
+        public int ZS = -1;
+        public int XS = -1;
+        public int YS = -1;
+        public float VS = -1;
 
         public int welsID;
         public int vectorID;
@@ -338,165 +344,6 @@ namespace mview
             return new ECL.Cell();
         }
 
-        public Tuple<int, int, float> GetCellUnderMouseX(float eX, float eY, byte[] pixel)
-        {
-            long cell_index = 0;
-            float value;
-            Color color;
-            ECL.Cell CELL;
-
-            float DY = (YMAXCOORD - YMINCOORD) / ecl.EGRID.NY;
-            float DZ = (ZMAXCOORD - ZMINCOORD) / ecl.EGRID.NZ;
-
-            for (int Y = 0; Y < ecl.EGRID.NY; ++Y)
-                for (int Z = 0; Z < ecl.EGRID.NZ; ++Z)
-                {
-                    cell_index = ecl.INIT.GetActive(XA, Y, Z);
-
-                    if (cell_index > 0)
-                    {
-                        value = lastGetValue(cell_index - 1);
-                        color = colorizer.ColorByValue(value);
-
-                        if (color.R == pixel[0])
-                            if (color.G == pixel[1])
-                                if (color.B == pixel[2])
-                                {
-                                    CELL = ecl.EGRID.GetCell(XA, Y, Z);
-
-                                    float[] xcoords = new float[4] {
-                                        CELL.TSE.Y * (1 - StretchFactor) + (YMINCOORD + DY * Y + DY) * StretchFactor,
-                                        CELL.BSE.Y * (1 - StretchFactor) + (YMINCOORD + DY * Y + DY) * StretchFactor,
-                                        CELL.BNE.Y * (1 - StretchFactor) + (YMINCOORD + DY * Y) * StretchFactor,
-                                        CELL.TNE.Y * (1 - StretchFactor) + (YMINCOORD + DY * Y) * StretchFactor };
-
-                                    float xmin = xcoords.Min();
-                                    float xmax = xcoords.Max();
-
-                                    if (eX >= xmin && eX <= xmax)
-                                    {
-                                        float[] ycoords = new float[4] {
-
-                                            CELL.TSE.Z * (1 - StretchFactor) + (ZMINCOORD + DZ * Z) * StretchFactor,
-                                            CELL.BSE.Z * (1 - StretchFactor) + (ZMINCOORD + DZ * Z + DZ) * StretchFactor,
-                                            CELL.BNE.Z * (1 - StretchFactor) + (ZMINCOORD + DZ * Z + DZ) * StretchFactor,
-                                            CELL.TNE.Z * (1 - StretchFactor) + (ZMINCOORD + DZ * Z) * StretchFactor };
-
-                                        float ymin = ycoords.Min();
-                                        float ymax = ycoords.Max();
-                                        if (eY >= ymin && eY <= ymax)
-                                        {
-                                            return new Tuple<int, int, float>(Y, Z, value);
-                                        }
-                                    }
-                                }
-                    }
-                }
-
-            return new Tuple<int, int, float>(-1, -1, -1);
-        }
-
-        public Tuple<int, int, float> GetCellUnderMouseY(float eX, float eY, byte[] pixel)
-        {
-            long cell_index = 0;
-            float value;
-            Color color;
-            ECL.Cell CELL;
-
-            float DX = (XMAXCOORD - XMINCOORD) / ecl.EGRID.NX;
-            float DZ = (ZMAXCOORD - ZMINCOORD) / ecl.EGRID.NZ;
-
-            for (int X = 0; X < ecl.EGRID.NX; ++X)
-                for (int Z = 0; Z < ecl.EGRID.NZ; ++Z)
-                {
-                    cell_index = ecl.INIT.GetActive(X, YA, Z);
-
-                    if (cell_index > 0)
-                    {
-                        value = lastGetValue(cell_index - 1);
-                        color = colorizer.ColorByValue(value);
-
-                        if (color.R == pixel[0])
-                            if (color.G == pixel[1])
-                                if (color.B == pixel[2])
-                                {
-                                    CELL = ecl.EGRID.GetCell(X, YA, Z);
-
-                                    float[] xcoords = new float[4] {
-                                        CELL.TSW.X * (1 - StretchFactor) + (XMINCOORD + DX * X) * StretchFactor,
-                                        CELL.TSE.X * (1 - StretchFactor) + (XMINCOORD + DX * X + DX) * StretchFactor,
-                                        CELL.BSE.X * (1 - StretchFactor) + (XMINCOORD + DX * X + DX) * StretchFactor,
-                                        CELL.BSW.X * (1 - StretchFactor) + (XMINCOORD + DX * X) * StretchFactor };
-
-                                    float xmin = xcoords.Min();
-                                    float xmax = xcoords.Max();
-
-                                    if (eX >= xmin && eX <= xmax)
-                                    {
-                                        float[] ycoords = new float[4] {
-                                            CELL.TSW.Z * (1 - StretchFactor) + (ZMINCOORD + DZ * Z) * StretchFactor,
-                                            CELL.TSE.Z * (1 - StretchFactor) + (ZMINCOORD + DZ * Z) * StretchFactor,
-                                            CELL.BSE.Z * (1 - StretchFactor) + (ZMINCOORD + DZ * Z + DZ) * StretchFactor,
-                                            CELL.BSW.Z * (1 - StretchFactor) + (ZMINCOORD + DZ * Z + DZ) * StretchFactor };
-
-                                        float ymin = ycoords.Min();
-                                        float ymax = ycoords.Max();
-                                        if (eY >= ymin && eY <= ymax)
-                                        {
-                                            return new Tuple<int, int, float>(X, Z, value);
-                                        }
-                                    }
-                                }
-                    }
-                }
-
-            return new Tuple<int, int, float>(-1, -1, -1);
-        }
-
-        public Tuple<int, int, float> GetCellUnderMouseZ(float eX, float eY, byte[] pixel)
-        {
-            long cell_index = 0;
-            float value;
-            Color color;
-            ECL.Cell CELL;
-
-            for (int X = 0; X < ecl.EGRID.NX; ++X)
-                for (int Y = 0; Y < ecl.EGRID.NY; ++Y)
-                {
-                    cell_index = ecl.INIT.GetActive(X, Y, ZA);
-
-                    if (cell_index > 0)
-                    {
-                        value = lastGetValue(cell_index - 1);
-                        color = colorizer.ColorByValue(value);
-
-                        if (color.R == pixel[0])
-                            if (color.G == pixel[1])
-                                if (color.B == pixel[2])
-                                {
-                                    CELL = ecl.EGRID.GetCell(X, Y, ZA);
-
-                                    float[] xcoords = new float[4] { CELL.TNE.X, CELL.TNW.X, CELL.TSE.X, CELL.TSW.X };
-                                    float xmin = xcoords.Min();
-                                    float xmax = xcoords.Max();
-
-                                    if (eX >= xmin && eX <= xmax)
-                                    {
-                                        float[] ycoords = new float[4] { CELL.TNE.Y, CELL.TNW.Y, CELL.TSE.Y, CELL.TSW.Y };
-                                        float ymin = ycoords.Min();
-                                        float ymax = ycoords.Max();
-                                        if (eY >= ymin && eY <= ymax)
-                                        {
-                                            return new Tuple<int, int, float>(X, Y, value);
-                                        }
-                                    }
-                                }
-                    }
-                }
-
-            return new Tuple<int, int, float>(-1, -1, -1);
-        }
-
         public Grid2D(EclipseProject ecl)
         {
             vboID = GL.GenBuffer();
@@ -511,10 +358,10 @@ namespace mview
         {
             this.ecl = ecl;
 
-            UpdateMinMax();
+            CalculateGridAttributes();
         }
 
-        void UpdateMinMax()
+        void CalculateGridAttributes()
         {
             // Определение максимальной и минимальной координаты Х и Y кажется простым,
             // для этого рассмотрим координаты четырех углов модели.
@@ -552,6 +399,101 @@ namespace mview
             XC = (XMINCOORD + XMAXCOORD) * 0.5f;
             YC = (YMINCOORD + YMAXCOORD) * 0.5f;
             ZC = (ZMINCOORD + ZMAXCOORD) * 0.5f;
+
+            DX = XMAXCOORD - XMINCOORD;
+            DY = YMAXCOORD - YMINCOORD;
+            DZ = ZMAXCOORD - ZMINCOORD;
+        }
+
+        ICellStrategy SelectCellStrategy()
+        {
+            ICellStrategy cell = null;
+
+            if (CurrentViewMode == ViewMode.X)
+            {
+                cell = new CellViewModeXStrategy()
+                {
+                    StretchFactor = StretchFactor,
+                    Slice = XA,
+                    DxDy = new Vector2(DY / NY, DZ / NZ),
+                    MinPoint = new Vector2(YMINCOORD, ZMINCOORD)
+                };
+            }
+
+            if (CurrentViewMode == ViewMode.Y)
+            {
+                cell = new CellViewModeYStrategy()
+                {
+                    StretchFactor = StretchFactor,
+                    Slice = YA,
+                    DxDy = new Vector2(DX / NX, DZ / NZ),
+                    MinPoint = new Vector2(XMINCOORD, ZMINCOORD)
+                };
+            }
+
+            if (CurrentViewMode == ViewMode.Z)
+            {
+                cell = new CellViewModeZStrategy()
+                {
+                    StretchFactor = StretchFactor,
+                    Slice = ZA
+                };
+            }
+
+            return cell;
+        }
+
+        public void GetCellUnderMouse(Vector2 point, byte[] RGB)
+        {
+            ICellStrategy cell = SelectCellStrategy();
+
+            cell.SetEclipse(ecl);
+
+            for (int X = 0; X < cell.NX; ++X)
+                for (int Y = 0; Y < cell.NY; ++Y)
+                {
+                    if (cell.Extract(X, Y))
+                    {
+                        var color = colorizer.ColorByValue(lastGetValue(cell.Index - 1));
+                        if (color.R == RGB[0] && color.G == RGB[1] && color.B == RGB[2])
+                        {
+                            float xmin = cell.Points.Min(c => c.X);
+                            float xmax = cell.Points.Max(c => c.X);
+
+                            if (point.X >= xmin && point.X <= xmax)
+                            {
+                                float ymin = cell.Points.Min(c => c.Y);
+                                float ymax = cell.Points.Max(c => c.Y);
+
+                                if (point.Y >= ymin && point.Y <= ymax)
+                                {
+                                    VS = lastGetValue(cell.Index - 1);
+
+                                    if (CurrentViewMode == ViewMode.X)
+                                    {
+                                        XS = -1;
+                                        YS = Y;
+                                        ZS = X;
+                                    }
+
+                                    if (CurrentViewMode == ViewMode.Y)
+                                    {
+                                        XS = Y;
+                                        YS = -1;
+                                        ZS = X;
+                                    }
+
+                                    if (CurrentViewMode == ViewMode.Z)
+                                    {
+                                        XS = X;
+                                        YS = Y;
+                                        ZS = -1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
         }
 
         public void GenerateGrid(Func<long, float> GetValue)
@@ -578,43 +520,8 @@ namespace mview
                 IntPtr.Zero,
                 BufferUsageHint.StaticDraw);
 
-            ICellStrategy cell = null;
-            
-            if (CurrentViewMode == ViewMode.X)
-            {
-                cell = new CellViewModeXStrategy()
-                {
-                    StretchFactor = StretchFactor,
-                    Slice = XA,
-                    DxDy = new Vector2(
-                        (YMAXCOORD - YMINCOORD) / NY,
-                        (ZMAXCOORD - ZMINCOORD) / NZ),
-                    MinPoint = new Vector2(YMINCOORD, ZMINCOORD)
-                };
-            }
+            ICellStrategy cell = SelectCellStrategy();
 
-            if (CurrentViewMode == ViewMode.Y)
-            {
-                cell = new CellViewModeYStrategy()
-                {
-                    StretchFactor = StretchFactor,
-                    Slice = YA,
-                    DxDy = new Vector2(
-                        (XMAXCOORD - XMINCOORD) / NX,
-                        (ZMAXCOORD - ZMINCOORD) / NZ),
-                    MinPoint = new Vector2(XMINCOORD, ZMINCOORD)
-                };
-            }
-
-            if (CurrentViewMode == ViewMode.Z)
-            {
-                cell = new CellViewModeZStrategy()
-                { 
-                    StretchFactor = StretchFactor,
-                    Slice = ZA
-                };
-            }
-                       
             cell.SetEclipse(ecl);
 
             GL.BufferData(

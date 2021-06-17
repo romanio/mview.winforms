@@ -64,9 +64,8 @@ namespace mview
             }
         }
 
-        public abstract bool Extract(int X, int Y);
-
         public void SetEclipse(EclipseProject ecl) => this.ecl = ecl;
+        public abstract bool Extract(int X, int Y);
     }
 
     public class CellViewModeZStrategy : CellViewModeBaseStrategy
@@ -91,12 +90,9 @@ namespace mview
                     };
 
             }
-
             return index > 0;
         }
-
     }
-
 
     public class CellViewModeXStrategy : CellViewModeBaseStrategy
     {
@@ -143,11 +139,8 @@ namespace mview
                         new Vector2(cell.BSE.X * (1 - sf) + (xmin + dx * (Y + 1)) * sf, cell.BSE.Z * (1 - sf) + (ymin + dy * (X + 1)) * sf),
                         new Vector2(cell.BSW.X * (1 - sf) + (xmin + dx * Y) * sf, cell.BSW.Z * (1 - sf) + (ymin + dy * (X + 1)) * sf)
                     };
-
             }
-
             return index > 0;
         }
     }
-
 }

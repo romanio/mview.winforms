@@ -35,6 +35,7 @@ namespace mview
             this.engine = engine;
         }
 
+     
         public PointF ConvertWorldToScreen(float XC, float YC)
         {
             float X = 0;
@@ -235,29 +236,23 @@ namespace mview
 
         public void SetScaleFactors()
         {
-            float DX, DY, DZ;
             float MC, SC;
-
-            DX = grid.XMAXCOORD - grid.XMINCOORD;
-            DY = grid.YMAXCOORD - grid.YMINCOORD;
-            DZ = grid.ZMAXCOORD - grid.ZMINCOORD;
-
             SC = Math.Min(width, height);
 
             // Z Scale Default
 
-            MC = Math.Max(DX, DY) * 1.1f;
+            MC = Math.Max(grid.DX, grid.DY) * 1.1f;
             ViewPositionZ.scale = SC / MC;
 
             // X Scale Default
 
-            MC = Math.Max(DY, DZ * camera.scalez) * 1.1f;
+            MC = Math.Max(grid.DY, grid.DZ * camera.scalez) * 1.1f;
 
             ViewPositionX.scale = SC / MC;
 
             // Y Scale Default
 
-            MC = Math.Max(DX, DZ * camera.scalez) * 1.1f;
+            MC = Math.Max(grid.DX, grid.DZ * camera.scalez) * 1.1f;
             
             ViewPositionY.scale = SC / MC;
 
@@ -556,8 +551,8 @@ namespace mview
             // Изменение Scale приводит к изменению масштаба по оси Z.
             // Приходится перерисовывать стволы
 
-           grid.Scale = camera.scale;
-           grid.ScaleZ = camera.scalez;
+           //grid.Scale = camera.scale;
+           //grid.ScaleZ = camera.scalez;
         }
 
         public void MouseMove(MouseEventArgs e)
@@ -568,64 +563,64 @@ namespace mview
         public int XS, YS, ZS; // Координаты выбранной ячейки
         public float VS; // Значение выбранной ячейки
 
+        byte[] GetPixelRGBColor(int X, int Y)
+        {
+            int[] viewport = new int[4];
+            GL.GetInteger(GetPName.Viewport, viewport);
+            IntPtr p = new IntPtr();
+            GL.ReadPixels(X, viewport[3] - Y, 1, 1, PixelFormat.Rgb, PixelType.UnsignedByte, ref p);
+            return BitConverter.GetBytes(p.ToInt32());
+        }
+
         public void MouseClick(MouseEventArgs e)
         {
             if (grid.element_count == 0) return;
 
             if (e.Button == MouseButtons.Left)
             {
-                int[] viewport = new int[4];
-                GL.GetInteger(GetPName.Viewport, viewport);
-                byte[] pixel = null;
-                IntPtr p = new IntPtr();
+                byte[] pixel = GetPixelRGBColor(e.X, e.Y);
 
-                GL.ReadPixels(e.X, viewport[3] - e.Y, 1, 1, PixelFormat.Rgb, PixelType.UnsignedByte, ref p);
+                float XT;
+                float YT;
 
-                pixel = BitConverter.GetBytes(p.ToInt32());  // Цвет под мышкой
-
-                float XT = 0;
-                float YT = 0;
+                XS = grid.XA;
+                YS = grid.YA;
+                ZS = grid.ZA;
 
                 if (CurrentViewMode == ViewMode.X)
                 {
-                    XS = grid.XA;
-                    YS = -1;
-                    ZS = -1;
+                    XT = (e.X - 0.5f * width) / camera.scale + grid.YMINCOORD + 0.5f * grid.DY - camera.shift_x - camera.shift_end_x + camera.shift_start_x;
+                    YT = (e.Y - 0.5f * height) / (camera.scale * camera.scalez) + grid.ZMINCOORD + 0.5f * grid.DZ + camera.shift_y - camera.shift_end_y + camera.shift_start_y;
 
-                    XT = (e.X - 0.5f * width) / camera.scale + grid.YMINCOORD + 0.5f * (grid.YMAXCOORD - grid.YMINCOORD) - camera.shift_x - camera.shift_end_x + camera.shift_start_x;
-                    YT = (e.Y - 0.5f * height) / (camera.scale * camera.scalez) + grid.ZMINCOORD + 0.5f * (grid.ZMAXCOORD - grid.ZMINCOORD) + camera.shift_y - camera.shift_end_y + camera.shift_start_y;
-                    var res = grid.GetCellUnderMouseX(XT, YT, pixel);
-                    YS = res.Item1;
-                    ZS = res.Item2;
-                    VS = res.Item3;
+                    grid.GetCellUnderMouse(new Vector2(XT, YT), pixel);
+
+                    ZS = grid.ZS;
+                    YS = grid.YS;
+                    VS = grid.VS;
                 }
 
                 if (CurrentViewMode == ViewMode.Y)
                 {
-                    XS = -1;
-                    YS = grid.YA;
-                    ZS = -1;
+                    XT = (e.X - 0.5f * width) / camera.scale + grid.XMINCOORD + 0.5f * grid.DX - camera.shift_x - camera.shift_end_x + camera.shift_start_x;
+                    YT = (e.Y - 0.5f * height) / (camera.scale * camera.scalez) + grid.ZMINCOORD + 0.5f * grid.DZ + camera.shift_y - camera.shift_end_y + camera.shift_start_y;
 
-                    XT = (e.X - 0.5f * width) / camera.scale + grid.XMINCOORD + 0.5f * (grid.XMAXCOORD - grid.XMINCOORD) - camera.shift_x - camera.shift_end_x + camera.shift_start_x;
-                    YT = (e.Y - 0.5f * height) / (camera.scale * camera.scalez) + grid.ZMINCOORD + 0.5f * (grid.ZMAXCOORD - grid.ZMINCOORD) + camera.shift_y - camera.shift_end_y + camera.shift_start_y;
-                    var res = grid.GetCellUnderMouseY(XT, YT, pixel);
-                    XS = res.Item1;
-                    ZS = res.Item2;
-                    VS = res.Item3;
+                    grid.GetCellUnderMouse(new Vector2(XT, YT), pixel);
+
+                    ZS = grid.ZS;
+                    XS = grid.XS;
+                    VS = grid.VS;
                 }
 
                 if (CurrentViewMode == ViewMode.Z)
                 {
-                    XS = -1;
-                    YS = -1;
-                    ZS = grid.ZA;
+                    XT = (e.X - 0.5f * width) / camera.scale + grid.XMINCOORD + 0.5f * grid.DX - camera.shift_x - camera.shift_end_x + camera.shift_start_x;
+                    YT = (e.Y - 0.5f * height) / camera.scale + grid.YMINCOORD + 0.5f * grid.DY + camera.shift_y - camera.shift_end_y + camera.shift_start_y;
 
-                    XT = (e.X - 0.5f * width) / camera.scale + grid.XMINCOORD + 0.5f * (grid.XMAXCOORD - grid.XMINCOORD) - camera.shift_x - camera.shift_end_x + camera.shift_start_x;
-                    YT = (e.Y - 0.5f * height) / camera.scale + grid.YMINCOORD + 0.5f * (grid.YMAXCOORD - grid.YMINCOORD) + camera.shift_y - camera.shift_end_y + camera.shift_start_y;
-                    var res = grid.GetCellUnderMouseZ(XT, YT, pixel);
-                    XS = res.Item1;
-                    YS = res.Item2;
-                    VS = res.Item3;
+                    grid.GetCellUnderMouse(new Vector2(XT, YT), pixel);
+
+                    YS = grid.YS;
+                    XS = grid.XS;
+                    VS = grid.VS;
                 }
             }
         }
