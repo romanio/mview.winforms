@@ -8,6 +8,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System.Windows.Forms;
 using System.Drawing;
+using mview.ECL;
 
 namespace mview
 {
@@ -20,7 +21,7 @@ namespace mview
         Bitmap bmp;
         Graphics gfx;
         int texture;
-        Rectangle dirty_region;
+        Rectangle dirtyRegion;
         bool disposed;
 
         public BitmapRender(int width, int height)
@@ -43,202 +44,227 @@ namespace mview
             GL.BindTexture(TextureTarget.Texture2D, texture);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0,
+            GL.TexImage2D(
+                TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0,
                 PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
         }
 
         public void Clear(Color color)
         {
             gfx.Clear(color);
-            dirty_region = new Rectangle(0, 0, bmp.Width, bmp.Height);
+            dirtyRegion = new Rectangle(0, 0, bmp.Width, bmp.Height);
             UploadBitmap();
         }
 
-        Font InfoFont = new Font("Segoe Pro Cond", 09, FontStyle.Regular);
+        // Settings
 
+        Font infoFont = new Font("Segoe Pro Cond", 09, FontStyle.Regular);
+        Font wellsFont = new Font("Segoe Pro Cond", 11, FontStyle.Bold);
+      
         // Text label format
 
-        int min_bubble_size = 4;
-        int pen_bubble_width = 1;
-        float label_pos_x = -8;
-        float label_pos_y = -32;
-        float value_label_pos_x = -16;
-        float value_label_pos_y = +16;
+        readonly int minBubbleSize = 6;
+        readonly int maxBubbleSize = 120;
+        readonly int penBubbleWidth = 1;
+        readonly int wellPointSize = 8;
+        readonly float scaleRate = 0.01f;
+        readonly float scaleTotal = 0.01f * 0.001f;
 
+        readonly PointF labelPos = new PointF(-8, -32);
+        readonly PointF valueLabelPos = new PointF(-16, +16);
+        
+        List<Rectangle> drawList = new List<Rectangle>();
 
-
-        public void DrawWell(ECL.WELLDATA well, Font font, Brush brush, CoordConverter cordconv, MapStyle style, bool MoveMode)
+        public void DrawWell(Point point, WELLDATA well, MapStyle style)
         {
-            PointF point = cordconv.ConvertWorldToScreen(well.XC, well.YC);
-
             // 100 m3 = 10 pt
 
             float size = 0; // Размер круга
             float wcut = 1; // Обводненность
             double wlpr = 0;
 
-            Rectangle bubble_rec = new Rectangle(0, 0, 0, 0);
-            RectangleF value_label_rec = new RectangleF(0, 0, 0, 0);
-            Rectangle point_rec = new Rectangle(0, 0, 0, 0);
 
             if (style.bubbleMode == BubbleMode.Simulation)
             {
-                size = (int)(Math.Abs(well.WLPR) * style.scaleFactor * 0.01);
-                if (size < min_bubble_size) size = min_bubble_size;
+                size = (int)(Math.Abs(well.WLPR) * style.scaleFactor * scaleRate);
 
                 wcut = well.WLPR == 0 ? 0 : (float)(well.WWPR / well.WLPR);
                 wlpr = well.WLPR;
             }
 
+            if (size < minBubbleSize) size = minBubbleSize;
+            if (size > maxBubbleSize) size = maxBubbleSize;
+
+            /*
             if (style.bubbleMode == BubbleMode.Historical)
             {
                 if (well.WLPR < 0)
                 {
-                    size = (int)(Math.Abs(well.WWPRH) * style.scaleFactor * 0.01);
+                    size = (int)(Math.Abs(well.WWPRH) * style.scaleFactor * scaleRate);
                     wlpr = Math.Abs(well.WWPRH);
                     wcut = 1;
                 }
                 else
                 {
-                    size = (int)(Math.Abs(well.WLPRH) * style.scaleFactor * 0.01);
+                    size = (int)(Math.Abs(well.WLPRH) * style.scaleFactor * scaleRate);
                     wcut = well.WLPRH == 0 ? 0 : (float)(well.WWPRH / well.WLPRH);
                     wlpr = well.WLPRH;
                 }
-
-                if (size < min_bubble_size) size = min_bubble_size;
             }
+            */
+
+
+
 
             // Добывающие скважины
 
             if (well.WLPR >= 0)
             {
-                if (style.showBubbles && !MoveMode)
+
+                    drawList.Add(DrawComplicatedBubble(point, size, wcut));
+
+                /*
+                if (wlpr > 0)
                 {
-                    Point bubble_centr = new Point((int)(point.X - size / 2), (int)(point.Y - size / 2));
-                    bubble_rec = new Rectangle(bubble_centr, new Size((int)size, (int)size));
-
-                    gfx.DrawEllipse(new Pen(Color.Black, pen_bubble_width), bubble_rec);
-                    gfx.FillPie(Brushes.BurlyWood, bubble_rec, 0, (float)Math.Round(360.0 * (1 - wcut)));
-                    gfx.FillPie(Brushes.SteelBlue, bubble_rec, (float)Math.Round(360.0 * (1 - wcut)), 360 - (float)Math.Round(360.0 * (1 - wcut)));
+                    Point valueLabelPoint = new Point((int)(point.X + valueLabelPos.X), (int)(point.Y + valueLabelPos.Y));
+                    string valueLabelText = wlpr.ToString("N1") + " / " + (100 * wcut).ToString("N1") + " %";
+                    SizeF labelSizeText = gfx.MeasureString(valueLabelText, infoFont);
+                    valueLabelRec = new RectangleF(valueLabelPoint, labelSizeText);
+                    gfx.DrawString(valueLabelText, infoFont, Brushes.Black, valueLabelPoint);
                 }
-
-
-                Point value_label_point = new Point((int)(point.X + value_label_pos_x), (int)(point.Y + value_label_pos_y));
-                string value_label_text = wlpr.ToString("N1") + " / " + (100 * wcut).ToString("N1");
-                SizeF label_size_text = gfx.MeasureString(value_label_text, InfoFont);
-                value_label_rec = new RectangleF(value_label_point, label_size_text);
-                gfx.DrawString(value_label_text, InfoFont, brush, value_label_point);
+                */
             }
 
             // Нагнетательные скважины
 
             if (well.WLPR < 0) // Меньше нуля, это у нас закачка
             {
-                if (style.showBubbles && !MoveMode)
+                if (style.showBubbles)
                 {
-                    Point bubble_centr = new Point((int)(point.X - size / 2), (int)(point.Y - size / 2));
-                    bubble_rec = new Rectangle(bubble_centr, new Size((int)size, (int)size));
-                    gfx.DrawEllipse(new Pen(Color.Black, pen_bubble_width), bubble_rec);
-                    gfx.FillPie(Brushes.LightBlue, bubble_rec, 0, 360);
+                    DrawSingleBubble(point, size);
                 }
 
-                wlpr = Math.Abs(wlpr);
+               // wlpr = Math.Abs(wlpr);
 
-                Point value_label_point = new Point((int)(point.X + value_label_pos_x), (int)(point.Y + value_label_pos_y));
-                string value_label_text = wlpr.ToString("N1") + " / " + (100 * wcut).ToString("N1");
-                SizeF label_size_text = gfx.MeasureString(value_label_text, InfoFont);
-                value_label_rec = new RectangleF(value_label_point, label_size_text);
-                gfx.DrawString(value_label_text, InfoFont, brush, value_label_point);
+               
+                /*
+            string valueLabelText = wlpr.ToString("N1") + " / " + (100 * wcut).ToString("N1");
+
+                DrawComplicatedLabel(valueLabelText, valueLabelPoint);
+                */
             }
 
-            if (!MoveMode)
+
+            drawList.Add(DrawWellPoint(point));
+            drawList.Add(DrawWellName(point, well.WELLNAME));
+        }
+
+        public void BeginDraw()
+        {
+            drawList.Clear();
+        }
+
+        public void EndDraw()
+        {
+            Rectangle final = new Rectangle(0, 0, 0, 0);
+
+            foreach (Rectangle item in drawList)
             {
-                Point well_point = new Point((int)(point.X) - 4, (int)(point.Y) - 4);
-                point_rec = new Rectangle(well_point, new Size(8, 8));
-                gfx.FillEllipse(Brushes.White, point_rec);
-                gfx.DrawEllipse(Pens.Black, point_rec);
+                final = Rectangle.Union(final, item);
             }
 
-            SizeF size_wellname_text = gfx.MeasureString(well.WELLNAME, font);
-            PointF well_name_point = new PointF(point.X + label_pos_x, point.Y + label_pos_y);
-            gfx.DrawString(well.WELLNAME, font, brush, well_name_point);
-
-
-            // Подготовка активного прямоугольника для обновления текстуры
-
-            RectangleF rec = new RectangleF(well_name_point, size_wellname_text);
-
-            if (value_label_rec.Width > 0 && value_label_rec.Height > 0)
+            if (final.X > 2)
             {
-                rec = RectangleF.Union(rec, value_label_rec);
+                final.X += -8;
+                final.Width += 12;
             }
 
-            if (style.showBubbles && !MoveMode)
+            if (final.Y > 2)
             {
-                if (bubble_rec.Width > 0 && bubble_rec.Height > 0)
-                {
-                    rec = RectangleF.Union(rec, bubble_rec);
-                }
+                final.Y += -8;
+                final.Height += 12;
             }
 
-            if (!MoveMode)
-            {
-                if (point_rec.Width > 0 && point_rec.Height > 0)
-                {
-                    rec = RectangleF.Union(rec, point_rec);
-                }
-            }
+            final = Rectangle.Intersect(final, new Rectangle(0, 0, bmp.Width, bmp.Height));
 
-            if (rec.X > 2)
-            {
-                rec.X += -2;
-                rec.Width += 4;
-            }
+            dirtyRegion = Rectangle.Round(final);
 
-            if (rec.Y > 2)
-            {
-                rec.Y += -2;
-                rec.Height += 4;
-            }
-
-            rec = RectangleF.Intersect(rec, new Rectangle(0, 0, bmp.Width, bmp.Height));
-
-            dirty_region = Rectangle.Round(rec);
-
-            //dirty_region = new Rectangle(0, 0, bmp.Width, bmp.Height);
-
-            //dirty_region = Rectangle.Round(RectangleF.Union(dirty_region, new RectangleF(point, size_text)));
-            //dirty_region = Rectangle.Intersect(dirty_region, new Rectangle(0, 0, bmp.Width, bmp.Height));
-
-
-            //gfx.DrawRectangle(Pens.Black, Rectangle.Round(rec));
-
-            if (dirty_region.Height > 0 && dirty_region.Width > 0)
+            if (dirtyRegion.Height > 0 && dirtyRegion.Width > 0)
             {
                 UploadBitmap();
             }
+        }
+
+
+        Rectangle DrawWellPoint(Point point)
+        {
+            Point startPoint = new Point((int)(point.X) - wellPointSize / 2, (int)(point.Y) - wellPointSize / 2);
+            Rectangle rectangle = new Rectangle(startPoint, new Size(wellPointSize, wellPointSize));
+            gfx.FillEllipse(Brushes.White, rectangle);
+            gfx.DrawEllipse(Pens.Black, rectangle);
+
+            return rectangle;
+        }
+        
+        Rectangle DrawWellName(Point point, string text)
+        {
+            SizeF size = gfx.MeasureString(text, wellsFont);
+            Point p = new Point((int)(point.X + labelPos.X), (int)(point.Y + labelPos.Y));
+            gfx.DrawString(text, wellsFont, Brushes.Black, p);
+            return new Rectangle(p, size.ToSize());
+        }
+
+        Rectangle DrawSingleBubble(Point point, float size)
+        {
+            Point p = new Point((int)(point.X - size / 2), (int)(point.Y - size / 2));
+            Rectangle rectangle = new Rectangle(p, new Size((int)size, (int)size));
+
+            gfx.DrawEllipse(new Pen(Color.Black, penBubbleWidth), rectangle);
+            gfx.FillPie(Brushes.LightBlue, rectangle, 0, 360);
+
+            return rectangle;
+        }
+
+        Rectangle DrawComplicatedBubble(Point point, float size, float fraction)
+        {
+            Point p = new Point((int)(point.X - size / 2), (int)(point.Y - size / 2));
+            Rectangle rectangle = new Rectangle(p, new Size((int)size, (int)size));
+
+            gfx.DrawEllipse(new Pen(Color.Black, penBubbleWidth), rectangle);
+            gfx.FillPie(Brushes.BurlyWood, rectangle, 0, (float)Math.Round(360.0 * (1 - fraction)));
+            gfx.FillPie(Brushes.SteelBlue, rectangle, (float)Math.Round(360.0 * (1 - fraction)), 360 - (float)Math.Round(360.0 * (1 - fraction)));
+
+            return rectangle;
+        }
+
+        void DrawComplicatedLabel(string text, Point point)
+        {
+            Point valueLabelPoint = new Point((int)(point.X + valueLabelPos.X), (int)(point.Y + valueLabelPos.Y));
+
+            SizeF size = gfx.MeasureString(text, infoFont);
+            //valueLabelRec = new RectangleF(valueLabelPoint, labelSizeText);
+            //gfx.DrawString(valueLabelText, infoFont, Brushes.Black, valueLabelPoint);
         }
 
         public int Texture
         {
             get
             {
-                //UploadBitmap();
                 return texture;
             }
         }
 
         unsafe void UploadBitmap()
         {
-            if (dirty_region != RectangleF.Empty)
+            if (dirtyRegion != RectangleF.Empty)
             {
-                System.Drawing.Imaging.BitmapData data = bmp.LockBits(dirty_region, System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                System.Drawing.Imaging.BitmapData data = bmp.LockBits(dirtyRegion, System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 GL.BindTexture(TextureTarget.Texture2D, texture);
 
-                GL.TexSubImage2D(TextureTarget.Texture2D, 0, dirty_region.X, dirty_region.Y, dirty_region.Width, dirty_region.Height, PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+                GL.TexSubImage2D(TextureTarget.Texture2D, 0, dirtyRegion.X, dirtyRegion.Y, dirtyRegion.Width, dirtyRegion.Height, PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
 
                 bmp.UnlockBits(data);
-                dirty_region = Rectangle.Empty;
+                dirtyRegion = Rectangle.Empty;
             }
         }
 

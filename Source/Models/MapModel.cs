@@ -3,21 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenTK;
 
 namespace mview
 {
     public enum BubbleMode
     {
+        None,
         Simulation,
         Historical,
-        SimVSHist
+        DiffLPT,
+        DiffOPT,
+        DiffGPT,
+        DiffOPR,
+        DiffLPR,
+        DiffGPR,
+        DiffWCUT,
+        DiffBHP
     }
 
-    public class MapModel
+
+public class MapModel
     {
         private readonly EclipseProject ecl;
         private readonly Engine2D engine = new Engine2D();
         private Grid2D grid;
+
+        private string gridUnit;
+        private float maxValue = 1;
+        private float minValue = 0;
 
         public MapModel(EclipseProject ecl)
         {
@@ -32,6 +46,7 @@ namespace mview
             ecl.INIT.ReadGrid("PERMX");
 
             grid = new Grid2D(ecl);
+
             grid.GenerateGrid(ecl.INIT.GetValue);
             
             engine.LinkGrid(grid);
@@ -68,8 +83,6 @@ namespace mview
         public void MouseWheel(System.Windows.Forms.MouseEventArgs e)
         {
             engine.MouseWheel(e);
-            //engine.grid.GenerateWellDrawList(style.ShowAllWelltrack);
-            //engine.grid.GenerateVectorFiled();
         }
 
         public void MouseClick(System.Windows.Forms.MouseEventArgs e)
@@ -135,6 +148,21 @@ namespace mview
             return ecl.EGRID.NZ;
         }
 
+        public string GetGridUnit()
+        {
+            return gridUnit;
+        }
+
+        public float GetMinValue()
+        {
+            return minValue;
+        }
+
+        public float GetMaxValue()
+        {
+            return maxValue;
+        }
+
         public void SetPosition(ViewMode position)
         {
             engine.SetPosition(position);
@@ -161,6 +189,14 @@ namespace mview
         public void SetStaticProperty(string name)
         {
             ecl.INIT.ReadGrid(name);
+
+            gridUnit = ecl.INIT.GridUnit;
+            minValue = ecl.INIT.DATA.Min();
+            maxValue = ecl.INIT.DATA.Max();
+
+            grid.colorizer.SetMaximum(maxValue);
+            grid.colorizer.SetMinimum(minValue);
+
             grid.GenerateGrid(ecl.INIT.GetValue);
         }
 
@@ -172,15 +208,25 @@ namespace mview
         public void SetDynamicProperty(string name)
         {
             ecl.RESTART.ReadGrid(name);
+
+            gridUnit = ecl.RESTART.GridUnit;
+            minValue = ecl.RESTART.DATA.Min();
+            maxValue = ecl.RESTART.DATA.Max();
+
+            grid.colorizer.SetMaximum(maxValue);
+            grid.colorizer.SetMinimum(minValue);
+
             grid.GenerateGrid(ecl.RESTART.GetValue);
         }
 
         public void SetMapStyle(MapStyle style)
         {
-            grid.StretchFactor = style.stretchFactor;
-            grid.RefreshGrid();
-
             engine.SetMapStyle(style);
+        }
+
+        public Vector4 GetSelectedCellValue()
+        {
+            return engine.GetSelectedCellValue();
         }
     }
 }

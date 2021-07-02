@@ -20,7 +20,7 @@ namespace mview.ECL
 
     public class COMPLDATA
     {
-        public bool is_show;
+        public bool isShow;
         public int I;
         public int J;
         public int K;
@@ -28,7 +28,10 @@ namespace mview.ECL
         public int LUMPNUM;
         public float WPIMULT = 1;
 
-        public Cell Cell;
+        public float Xw;
+        public float Yw;
+
+        //public Cell Cell;
         public float XC;
         public float YC;
         public float ZC;

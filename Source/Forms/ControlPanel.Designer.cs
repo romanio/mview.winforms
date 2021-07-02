@@ -44,7 +44,7 @@ namespace mview
             this.listBoxProjectNames.IntegralHeight = false;
             this.listBoxProjectNames.Location = new System.Drawing.Point(134, 12);
             this.listBoxProjectNames.Name = "listBoxProjectNames";
-            this.listBoxProjectNames.Size = new System.Drawing.Size(269, 128);
+            this.listBoxProjectNames.Size = new System.Drawing.Size(268, 128);
             this.listBoxProjectNames.TabIndex = 0;
             this.listBoxProjectNames.SelectedIndexChanged += new System.EventHandler(this.ListBoxProjectNamesOnSelectedIndexChanged);
             // 
@@ -88,7 +88,7 @@ namespace mview
             ",,,^.^,,,"});
             this.listBoxLog.Location = new System.Drawing.Point(12, 170);
             this.listBoxLog.Name = "listBoxLog";
-            this.listBoxLog.Size = new System.Drawing.Size(391, 225);
+            this.listBoxLog.Size = new System.Drawing.Size(390, 222);
             this.listBoxLog.TabIndex = 8;
             // 
             // ControlPanel
@@ -96,7 +96,7 @@ namespace mview
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(415, 414);
+            this.ClientSize = new System.Drawing.Size(414, 411);
             this.Controls.Add(this.listBoxLog);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonSeriesSettings);

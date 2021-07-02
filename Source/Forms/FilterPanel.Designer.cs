@@ -43,7 +43,7 @@ namespace mview
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button1.Location = new System.Drawing.Point(252, 37);
+            this.button1.Location = new System.Drawing.Point(302, 51);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(100, 30);
             this.button1.TabIndex = 10;
@@ -57,16 +57,16 @@ namespace mview
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listWells.FormattingEnabled = true;
             this.listWells.IntegralHeight = false;
-            this.listWells.Location = new System.Drawing.Point(134, 37);
+            this.listWells.Location = new System.Drawing.Point(157, 51);
             this.listWells.Name = "listWells";
             this.listWells.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.listWells.Size = new System.Drawing.Size(100, 274);
+            this.listWells.Size = new System.Drawing.Size(128, 338);
             this.listWells.TabIndex = 7;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(131, 21);
+            this.label2.Location = new System.Drawing.Point(154, 21);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(69, 13);
             this.label2.TabIndex = 9;
@@ -75,7 +75,7 @@ namespace mview
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 21);
+            this.label1.Location = new System.Drawing.Point(12, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(101, 13);
             this.label1.TabIndex = 8;
@@ -87,10 +87,10 @@ namespace mview
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listGroups.FormattingEnabled = true;
             this.listGroups.IntegralHeight = false;
-            this.listGroups.Location = new System.Drawing.Point(12, 37);
+            this.listGroups.Location = new System.Drawing.Point(12, 51);
             this.listGroups.Name = "listGroups";
             this.listGroups.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listGroups.Size = new System.Drawing.Size(100, 274);
+            this.listGroups.Size = new System.Drawing.Size(128, 226);
             this.listGroups.TabIndex = 0;
             this.listGroups.SelectedIndexChanged += new System.EventHandler(this.ListGroupsOnSelectedIndexChanged);
             // 
@@ -99,7 +99,7 @@ namespace mview
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(364, 332);
+            this.ClientSize = new System.Drawing.Size(414, 411);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listWells);
             this.Controls.Add(this.label1);

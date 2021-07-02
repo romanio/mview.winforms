@@ -13,8 +13,8 @@ namespace mview
 {
     public class Grid2D
     {
-        //public List<ECL.WELLDATA> WELLS; // Опасная копия данных с рестарт файла
-        //public List<ECL.WELLDATA> ACTIVE_WELLS; // Только те скважины, которые следует отображать
+        public List<WELLDATA> activeWells = new List<WELLDATA>();
+        public int wellsID;
 
         public ViewMode CurrentViewMode = ViewMode.X;
         public float StretchFactor = 0;
@@ -61,6 +61,7 @@ namespace mview
         {
             GL.DeleteBuffer(vboID);
             GL.DeleteBuffer(eboID);
+            GL.DeleteLists(wellsID, 1);
         }
 
         public void GenerateVectorFiled()
@@ -330,24 +331,29 @@ namespace mview
         public void RefreshGrid()
         {
             GenerateGrid(lastGetValue);
+            GenerateWellTracks(true);
         }
 
-        public Cell GetCell(int X, int Y, int Z)
+        public List<Vector2> GetSelectedCell(int Xw, int Yw)
         {
-            var cell_index = ecl.INIT.GetActive(X, Y, Z);
+            ICellStrategy cell = SelectCellStrategy();
+            
+            cell.SetEclipse(ecl);
 
-            if (cell_index > 0)
+            if (cell.Extract(Xw, Yw))
             {
-                return ecl.EGRID.GetCell(X, Y, Z);
+                return cell.Points;
             }
 
-            return new ECL.Cell();
+            return new List<Vector2>();
         }
 
         public Grid2D(EclipseProject ecl)
         {
             vboID = GL.GenBuffer();
             eboID = GL.GenBuffer();
+            wellsID = GL.GenLists(1);
+
             GL.BindBuffer(BufferTarget.ArrayBuffer, vboID);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, eboID);
 
@@ -445,6 +451,10 @@ namespace mview
 
         public void GetCellUnderMouse(Vector2 point, byte[] RGB)
         {
+            XS = -1;
+            YS = -1;
+            ZS = -1;
+
             ICellStrategy cell = SelectCellStrategy();
 
             cell.SetEclipse(ecl);
@@ -498,6 +508,8 @@ namespace mview
 
         public void GenerateGrid(Func<long, float> GetValue)
         {
+            GenerateWellTracks(true);
+
             this.lastGetValue = GetValue;
 
             IntPtr vertex_ptr;
@@ -578,5 +590,116 @@ namespace mview
             GL.UnmapBuffer(BufferTarget.ArrayBuffer);
             GL.UnmapBuffer(BufferTarget.ElementArrayBuffer);
         }        
+    
+        public void GenerateWellTracks(bool isShowAll)
+        { 
+            activeWells.Clear();
+
+            GL.NewList(wellsID, ListMode.Compile);
+
+            ICellStrategy cell = SelectCellStrategy();
+
+            cell.SetEclipse(ecl);
+
+            GL.PointSize(5);
+            GL.Color3(Color.Black);
+            GL.Begin(PrimitiveType.Points);
+
+            // Перфорации
+            
+            foreach (WELLDATA well in ecl.RESTART.WELLS)
+            {
+                if (well.LGR == 0)
+                {
+                    foreach (COMPLDATA comp in well.COMPLS)
+                    {
+                        comp.isShow = false;
+                       
+                        if (CurrentViewMode == ViewMode.X && comp.I == XA)
+                        {
+                            cell.Extract(comp.K, comp.J);
+                            comp.Xw = cell.Points.Average(c => c.X);
+                            comp.Yw = cell.Points.Average(c => c.Y);
+                            comp.isShow = true;
+                        }
+
+                        if (CurrentViewMode == ViewMode.Y && comp.J == YA)
+                        {
+                            cell.Extract(comp.K, comp.I);
+                            comp.Xw = cell.Points.Average(c => c.X);
+                            comp.Yw = cell.Points.Average(c => c.Y);
+                            comp.isShow = true;
+                        }
+
+                        if (CurrentViewMode == ViewMode.Z && comp.K == ZA)
+                        {
+                            cell.Extract(comp.I, comp.J);
+                            comp.Xw = cell.Points.Average(c => c.X);
+                            comp.Yw = cell.Points.Average(c => c.Y);
+                            comp.isShow = true;
+                        }
+
+                        if (comp.isShow)
+                        {
+                            GL.Vertex3(comp.Xw, comp.Yw, 0.2);
+                        }
+                    }
+                }
+            }
+
+            // Ствол скважины
+            
+            GL.End();
+
+            GL.Color3(Color.Black);
+            GL.LineWidth(2);
+            GL.Begin(PrimitiveType.Lines);
+
+
+            foreach (WELLDATA well in ecl.RESTART.WELLS)
+            {
+                bool isFirstName = true;
+
+                float lastXw = 0;
+                float lastYw = 0;
+
+                if (well.LGR == 0)
+                {
+                    foreach (COMPLDATA comp in well.COMPLS)
+                    {
+                        if (comp.isShow)
+                        {
+                            if (isFirstName)
+                            {
+                                if (CurrentViewMode != ViewMode.Z)
+                                {
+                                    GL.Vertex3(comp.Xw, ZMINCOORD - 30, 0.2);
+                                    GL.Vertex3(comp.Xw, comp.Yw, 0.2);
+                                }
+
+                                lastXw = comp.Xw;
+                                lastYw = comp.Yw;
+                                isFirstName = false;
+                                well.XC = comp.Xw;
+                                well.YC = comp.Yw;
+                                activeWells.Add(well);
+                            }
+                            else
+                            {
+                                GL.Vertex3(lastXw, lastYw, 0.2);
+                                GL.Vertex3(comp.Xw, comp.Yw, 0.2);
+                                lastXw = comp.Xw;
+                                lastYw = comp.Yw;
+
+                            }
+                        }
+                    }
+                }
+            }
+            GL.End();
+            GL.LineWidth(1);
+
+            GL.EndList();
+        }
     }
 }

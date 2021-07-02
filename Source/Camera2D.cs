@@ -4,21 +4,47 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using OpenTK;
 
 namespace mview
 {
     public class Camera2D
     {
-        public ViewMode CurrentViewMode = ViewMode.X;
+        private float startX, startY;
+        private float endX, endY;
+        private float shiftX;
+        private float shiftY;
 
-        public float scale = 0.01f;
-        public float scalez = 12;
+        private float scale = 0.01f;
+        private float zscale = 12;
 
-        public float shift_start_x, shift_start_y;
-        public float shift_end_x, shift_end_y;
-        public float shift_x, shift_y;
+        public float ZScale
+        {
+            set => zscale = value;
+            get => zscale;
+        }
 
-        public bool is_mouse_shift = false;
+        public float Scale
+        {
+            set => scale = value;
+            get => scale;
+        }
+
+        public Vector2 Shift
+        {
+            set
+            {
+                shiftX = value.X;
+                shiftY = value.Y;
+            }
+
+            get
+            {
+                return new Vector2((shiftX + endX - startX), (-shiftY + endY - startY));
+            }
+        }
+
+        public bool isMouseShift = false;
 
         public void MouseWheel(MouseEventArgs e)
         {
@@ -30,56 +56,40 @@ namespace mview
         {
             switch (e.Button)
             {
-                case MouseButtons.Right:
+                case MouseButtons.None:
                     {
-                        if (!is_mouse_shift)
+                        if (isMouseShift)
                         {
-                            shift_start_x = e.X / scale;
+                            isMouseShift = false;
+                            shiftX += endX - startX;
+                            shiftY += -(endY - startY);
 
-                            if (CurrentViewMode != ViewMode.Z)
-                            {
-                                shift_start_y = e.Y / (scalez * scale);
-                            }
-                            else
-                            {
-                                shift_start_y = e.Y / scale;
-                            }
+                            startX = 0;
+                            startY = 0;
+                            endX = 0;
+                            endY = 0;
                         }
 
-                        shift_end_x = e.X / scale;
-
-                        if (CurrentViewMode != ViewMode.Z)
-                        {
-                            shift_end_y = e.Y / (scalez * scale);
-                        }
-                        else
-                        {
-                            shift_end_y = e.Y / scale;
-                        }
-
-                        is_mouse_shift = true;
+                        isMouseShift = false;
 
                         break;
                     }
-
-                default:
-                    if (is_mouse_shift)
+                case MouseButtons.Right:
                     {
-                        is_mouse_shift = false;
-                        shift_x += shift_end_x - shift_start_x;
-                        shift_y += -(shift_end_y - shift_start_y);
+                        if (!isMouseShift)
+                        {
+                            startX = e.X / scale;
+                            startY = e.Y / scale;
+                        }
 
-                        shift_start_x = 0;
-                        shift_start_y = 0;
-                        shift_end_x = 0;
-                        shift_end_y = 0;
+                        endX = e.X / scale;
+                        endY = e.Y / scale;
+
+                        isMouseShift = true;
+
+                        break;
                     }
-
-                    is_mouse_shift = false;
-
-                    break;
             }
         }
     }
-
 }

@@ -41,6 +41,10 @@ namespace mview
             // Default settings
 
             numericZScale.Value = (decimal)style.zscale;
+            checkShowGridlines.Checked = style.showGridLines;
+            checkNoFillColor.Checked = style.showNoFillColor;
+
+            boxBubbleMode.SelectedIndex = (int)style.bubbleMode;
 
             suspendEvents = false;
        }
@@ -69,6 +73,10 @@ namespace mview
         private void GlControlOnMouseClick(object sender, MouseEventArgs e)
         {
             model.MouseClick(e);
+            var value = model.GetSelectedCellValue();
+
+            labelCellValue.Text = String.Format("Cell[{0}, {1}, {2}] = {3} {4}", (value.X) + 1, (value.Y) + 1, (value.Z) + 1, value.W, model.GetGridUnit());
+
             GLControlOnPaint(null, null);
         }
 
@@ -98,12 +106,13 @@ namespace mview
         private void GLControlOnResize(object sender, EventArgs e)
         {
             model.OnResize(glControl.Width, glControl.Height);
+
             if (DateTime.Now.Millisecond - timeResize > 1000)
             {
                 glControl.SwapBuffers();
             }
-            timeResize = DateTime.Now.Millisecond;
 
+            timeResize = DateTime.Now.Millisecond;
         }
 
         public void UpdateSelectedProjects(EclipseProject ecl)
@@ -115,9 +124,13 @@ namespace mview
         {
             model.ReadGrid();
 
+            SetMapStyle();
+
             UpdateFormData();
 
             GLControlOnPaint(null, null);
+
+            button2.Visible = false;
         }
             
         void UpdateFormData()
@@ -194,7 +207,7 @@ namespace mview
             boxSlideZ.SelectedIndex = 0;
             boxSlideZ.EndUpdate();
 
-            //
+
             suspendEvents = false;
         }
 
@@ -250,13 +263,22 @@ namespace mview
             if (treeProperties.SelectedNode?.Parent?.Index == 0) // Static property
             {
                 string name = treeProperties.SelectedNode.Text;
+
                 model.SetStaticProperty(name);
+
+                textMaximum.Text = model.GetMaxValue().ToString();
+                textMinimum.Text = model.GetMinValue().ToString();
+
                 GLControlOnPaint(null, null);
             }
             if (treeProperties.SelectedNode?.Parent?.Index == 1) // Dynamic property
             {
                 string name = treeProperties.SelectedNode.Text;
                 model.SetDynamicProperty(name);
+
+                textMaximum.Text = model.GetMaxValue().ToString();
+                textMinimum.Text = model.GetMinValue().ToString();
+
                 GLControlOnPaint(null, null);
             }
         }
@@ -288,6 +310,72 @@ namespace mview
             if (suspendEvents) return;
 
             style.stretchFactor = trackStratch.Value * 0.01f;
+            SetMapStyle();
+        }
+
+        private void checkShowGridlines_CheckedChanged(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
+
+            style.showGridLines = checkShowGridlines.Checked;
+            SetMapStyle();
+        }
+
+        private void checkNoFillColor_CheckedChanged(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
+
+            style.showNoFillColor = checkNoFillColor.Checked;
+            SetMapStyle();
+        }
+
+        private void buttonMinDefault_Click(object sender, EventArgs e)
+        {
+            textMinimum.Text = model.GetMinValue().ToString();
+            style.minValue = model.GetMinValue();
+            SetMapStyle();
+        }
+
+        private void buttonMaxDefault_Click(object sender, EventArgs e)
+        {
+            textMaximum.Text = model.GetMaxValue().ToString();
+            style.maxValue = model.GetMaxValue();
+            SetMapStyle();
+        }
+
+        private void textMinimum_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (Single.TryParse(textMinimum.Text, out float value))
+            {
+                style.minValue = value;
+                SetMapStyle();
+            }
+        }
+
+        private void textMaximum_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (Single.TryParse(textMaximum.Text, out float value))
+            {
+                style.maxValue = value;
+                SetMapStyle();
+            }
+        }
+
+        private void boxBubbleMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
+
+            style.bubbleMode = (BubbleMode)(boxBubbleMode.SelectedIndex);
+
+            SetMapStyle();
+        }
+
+        private void numericBubbleScale_ValueChanged(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
+
+            style.scaleFactor = (float)numericBubbleScale.Value;
+
             SetMapStyle();
         }
     }

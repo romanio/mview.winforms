@@ -14,8 +14,7 @@ namespace mview
     public class ViewPosition
     {
         public float scale = 0.01f;
-        public float shiftX = 0.0f;
-        public float shiftY = 0.0f;
+        public Vector2 shift = new Vector2();
         public int XS, YS, ZS;
     }
 
@@ -24,63 +23,23 @@ namespace mview
         X, Y, Z
     }
 
-    public class CoordConverter
+    public class Engine2D
     {
-        private readonly Engine2D engine = null;
+        public Camera2D camera = new Camera2D();
+        public Grid2D grid;
+
+        public ViewPosition viewPositionX = new ViewPosition();
+        public ViewPosition viewPositionY = new ViewPosition();
+        public ViewPosition viewPositionZ = new ViewPosition();
 
         public ViewMode currentViewMode = ViewMode.X;
 
-        public CoordConverter(Engine2D engine)
-        {
-            this.engine = engine;
-        }
-
-     
-        public PointF ConvertWorldToScreen(float XC, float YC)
-        {
-            float X = 0;
-            float Y = 0;
-
-            /*
-            if (currentViewMode == ViewMode.X)
-            {
-                X = (XC - engine.grid.YMINCOORD - 0.5f * (engine.grid.YMAXCOORD - engine.grid.YMINCOORD) + engine.camera.shift_x + engine.camera.shift_end_x - engine.camera.shift_start_x) * engine.camera.scale + 0.5f * engine.width;
-                Y = (-30 / (engine.camera.scale_z * engine.camera.scale) - 0.5f * (engine.grid.ZMAXCOORD - engine.grid.ZMINCOORD) - engine.camera.shift_y + engine.camera.shift_end_y - engine.camera.shift_start_y) * engine.camera.scale * engine.camera.scale_z + 0.5f * engine.height;
-            };
-
-            if (currentViewMode == ViewMode.Y)
-            {
-                X = (XC - engine.grid.XMINCOORD - 0.5f * (engine.grid.XMAXCOORD - engine.grid.XMINCOORD) + engine.camera.shift_x + engine.camera.shift_end_x - engine.camera.shift_start_x) * engine.camera.scale + 0.5f * engine.width;
-                Y = (-30 / (engine.camera.scale_z * engine.camera.scale) - 0.5f * (engine.grid.ZMAXCOORD - engine.grid.ZMINCOORD) - engine.camera.shift_y + engine.camera.shift_end_y - engine.camera.shift_start_y) * engine.camera.scale * engine.camera.scale_z + 0.5f * engine.height;
-            };
-
-            if (currentViewMode == ViewMode.Z)
-            {
-                X = (XC - engine.grid.XMINCOORD - 0.5f * (engine.grid.XMAXCOORD - engine.grid.XMINCOORD) + engine.camera.shift_x + engine.camera.shift_end_x - engine.camera.shift_start_x) * engine.camera.scale + 0.5f * engine.width;
-                Y = (YC - engine.grid.YMINCOORD - 0.5f * (engine.grid.YMAXCOORD - engine.grid.YMINCOORD) - engine.camera.shift_y + engine.camera.shift_end_y - engine.camera.shift_start_y) * engine.camera.scale + 0.5f * engine.height;
-            };
-
-            */
-
-            return new PointF(X, Y);
-        }
-    }
-
-    public class Engine2D
-    {
-        private readonly Camera2D camera = new Camera2D();
-        private Grid2D grid;
-
-        public ViewPosition ViewPositionX = new ViewPosition();
-        public ViewPosition ViewPositionY = new ViewPosition();
-        public ViewPosition ViewPositionZ = new ViewPosition();
-
         double XMIN, XMAX, YMIN, YMAX;
-
-        public ViewMode CurrentViewMode = ViewMode.X;
+        public int width, height; // Параметры окна вывода
+        private int XS, YS, ZS; // Координаты выбранной ячейки
+        private float VS; // Значение выбранной ячейки
 
         MapStyle style = new MapStyle();
-
         BitmapRender render;
 
         public void SetPosition(ViewMode Position)
@@ -89,8 +48,7 @@ namespace mview
 
             if (Position == ViewMode.X)
             {
-                CurrentViewMode = ViewMode.X;
-                camera.CurrentViewMode = ViewMode.X;
+                currentViewMode = ViewMode.X;
                 grid.CurrentViewMode = ViewMode.X;
 
                 RestorePosition();
@@ -98,8 +56,7 @@ namespace mview
 
             if (Position == ViewMode.Y)
             {
-                CurrentViewMode = ViewMode.Y;
-                camera.CurrentViewMode = ViewMode.Y;
+                currentViewMode = ViewMode.Y;
                 grid.CurrentViewMode = ViewMode.Y;
 
                 RestorePosition();
@@ -107,8 +64,7 @@ namespace mview
 
             if (Position == ViewMode.Z)
             {
-                CurrentViewMode = ViewMode.Z;
-                camera.CurrentViewMode = ViewMode.Z;
+                currentViewMode = ViewMode.Z;
                 grid.CurrentViewMode = ViewMode.Z;
 
                 RestorePosition();
@@ -119,51 +75,47 @@ namespace mview
 
         public void SavePosition()
         {
-            if (CurrentViewMode == ViewMode.X)
+            if (currentViewMode == ViewMode.X)
             {
-                ViewPositionX.scale = camera.scale;
-                ViewPositionX.shiftX = camera.shift_x;
-                ViewPositionX.shiftY = camera.shift_y;
+                viewPositionX.scale = camera.Scale;
+                viewPositionX.shift = camera.Shift;
 
-                ViewPositionX.XS = XS;
-                ViewPositionX.YS = YS;
-                ViewPositionX.ZS = ZS;
+                viewPositionX.XS = XS;
+                viewPositionX.YS = YS;
+                viewPositionX.ZS = ZS;
             }
 
-            if (CurrentViewMode == ViewMode.Y)
+            if (currentViewMode == ViewMode.Y)
             {
-                ViewPositionY.scale = camera.scale;
-                ViewPositionY.shiftX = camera.shift_x;
-                ViewPositionY.shiftY = camera.shift_y;
+                viewPositionY.scale = camera.Scale;
+                viewPositionY.shift = camera.Shift;
 
-                ViewPositionY.XS = XS;
-                ViewPositionY.YS = YS;
-                ViewPositionY.ZS = ZS;
+                viewPositionY.XS = XS;
+                viewPositionY.YS = YS;
+                viewPositionY.ZS = ZS;
             }
 
-            if (CurrentViewMode == ViewMode.Z)
+            if (currentViewMode == ViewMode.Z)
             {
-                ViewPositionZ.scale = camera.scale;
-                ViewPositionZ.shiftX = camera.shift_x;
-                ViewPositionZ.shiftY = camera.shift_y;
-
-                ViewPositionZ.XS = XS;
-                ViewPositionZ.YS = YS;
-                ViewPositionZ.ZS = ZS;
+                viewPositionZ.scale = camera.Scale;
+                viewPositionZ.shift = camera.Shift;
+ 
+                viewPositionZ.XS = XS;
+                viewPositionZ.YS = YS;
+                viewPositionZ.ZS = ZS;
             }
         }
 
         public void RestorePosition()
         {
-            if (CurrentViewMode == ViewMode.X)
+            if (currentViewMode == ViewMode.X)
             {
-                camera.scale = ViewPositionX.scale;
-                camera.shift_x = ViewPositionX.shiftX;
-                camera.shift_y = ViewPositionX.shiftY;
+                camera.Scale = viewPositionX.scale;
+                camera.Shift = viewPositionX.shift;
 
-                XS = ViewPositionX.XS;
-                YS = ViewPositionX.YS;
-                ZS = ViewPositionX.ZS;
+                XS = viewPositionX.XS;
+                YS = viewPositionX.YS;
+                ZS = viewPositionX.ZS;
 
                 XMIN = grid.YMINCOORD;
                 XMAX = grid.YMAXCOORD;
@@ -171,15 +123,14 @@ namespace mview
                 YMAX = grid.ZMAXCOORD;
             }
 
-            if (CurrentViewMode == ViewMode.Y)
+            if (currentViewMode == ViewMode.Y)
             {
-                camera.scale = ViewPositionY.scale;
-                camera.shift_x = ViewPositionY.shiftX;
-                camera.shift_y = ViewPositionY.shiftY;
+                camera.Scale = viewPositionY.scale;
+                camera.Shift = viewPositionY.shift;
 
-                XS = ViewPositionY.XS;
-                YS = ViewPositionY.YS;
-                ZS = ViewPositionY.ZS;
+                XS = viewPositionY.XS;
+                YS = viewPositionY.YS;
+                ZS = viewPositionY.ZS;
 
                 XMIN = grid.XMINCOORD;
                 XMAX = grid.XMAXCOORD;
@@ -187,15 +138,14 @@ namespace mview
                 YMAX = grid.ZMAXCOORD;
             }
 
-            if (CurrentViewMode == ViewMode.Z)
+            if (currentViewMode == ViewMode.Z)
             {
-                camera.scale = ViewPositionZ.scale;
-                camera.shift_x = ViewPositionZ.shiftX;
-                camera.shift_y = ViewPositionZ.shiftY;
+                camera.Scale = viewPositionZ.scale;
+                camera.Shift = viewPositionZ.shift;
 
-                XS = ViewPositionZ.XS;
-                YS = ViewPositionZ.YS;
-                ZS = ViewPositionZ.ZS;
+                XS = viewPositionZ.XS;
+                YS = viewPositionZ.YS;
+                ZS = viewPositionZ.ZS;
 
                 XMIN = grid.XMINCOORD;
                 XMAX = grid.XMAXCOORD;
@@ -203,11 +153,18 @@ namespace mview
                 YMAX = grid.YMAXCOORD;
             }
         }
-
         
         public void SetMapStyle(MapStyle style)
         {
-            camera.scalez = style.zscale;
+            this.style = style;
+
+            grid.colorizer.SetMinimum(style.minValue);
+            grid.colorizer.SetMaximum(style.maxValue);
+            grid.StretchFactor = style.stretchFactor;
+
+            grid.RefreshGrid();
+
+            camera.ZScale = style.zscale;
         }
 
         public void OnLoad()
@@ -221,17 +178,6 @@ namespace mview
             GL.ClearColor(Color.White);
             GL.EnableClientState(ArrayCap.VertexArray);
             GL.EnableClientState(ArrayCap.ColorArray);
-            /*
-
-            grid.welsID = GL.GenLists(2);
-            grid.vectorID = grid.welsID + 1;
-
-
-
-
-            grid.Scale = camera.scale;
-            grid.ScaleZ = camera.scale_z;
-            */
         }
 
         public void SetScaleFactors()
@@ -242,30 +188,27 @@ namespace mview
             // Z Scale Default
 
             MC = Math.Max(grid.DX, grid.DY) * 1.1f;
-            ViewPositionZ.scale = SC / MC;
+            viewPositionZ.scale = SC / MC;
 
             // X Scale Default
 
-            MC = Math.Max(grid.DY, grid.DZ * camera.scalez) * 1.1f;
+            MC = Math.Max(grid.DY, grid.DZ * camera.ZScale) * 1.1f;
 
-            ViewPositionX.scale = SC / MC;
+            viewPositionX.scale = SC / MC;
 
             // Y Scale Default
 
-            MC = Math.Max(grid.DX, grid.DZ * camera.scalez) * 1.1f;
+            MC = Math.Max(grid.DX, grid.DZ * camera.ZScale) * 1.1f;
             
-            ViewPositionY.scale = SC / MC;
+            viewPositionY.scale = SC / MC;
 
             RestorePosition();
         }
 
-        
         public void OnUnload()
         {
             
         }
-
-        private int width, height; // Параметры окна вывода
 
         public void OnResize(int width, int height)
         {
@@ -294,8 +237,6 @@ namespace mview
             render = new BitmapRender(width, height); // И объявляем новый
         }
 
-        readonly Font WellsFont = new Font("Segoe Pro Cond", 11, FontStyle.Bold);
-
         public void LinkGrid(Grid2D grid)
         {
             this.grid = grid;
@@ -303,46 +244,54 @@ namespace mview
 
         public void DrawWells()
         {
-            System.Diagnostics.Debug.WriteLine("Engine [DrawWells]");
-
-            /*
-            GL.CallList(grid.welsID);
-
-            CoordConverter cordconv = new CoordConverter(this);
-            cordconv.currentViewMode = CurrentViewMode;
+            GL.CallList(grid.wellsID);
 
             render.Clear(Color.Transparent);
+            render.BeginDraw();
 
-            foreach (ECL.WELLDATA well in grid.ACTIVE_WELLS)
+            foreach (ECL.WELLDATA well in grid.activeWells)
             {
                 if (well.COMPLS.Count > 0)
                 {
-                    render.DrawWell(well, WellsFont, Brushes.Black, cordconv, style, camera.is_mouse_shift);
+                    float XC = well.XC;
+                    float YC = well.YC;
+                    float X = 0;
+                    float Y = 0;
+
+                    // Calculate point
+
+                    if (currentViewMode == ViewMode.X)
+                    {
+                        YC = grid.ZMINCOORD - 30;
+
+                        X = (XC - grid.YMINCOORD - 0.5f * grid.DY + camera.Shift.X) * camera.Scale + 0.5f * width;
+                        Y = (YC - grid.ZMINCOORD - 0.5f * grid.DZ + camera.Shift.Y / camera.ZScale) * (camera.Scale * camera.ZScale) + 0.5f * height;
+                    };
+
+                    if (currentViewMode == ViewMode.Y)
+                    {
+                        YC = grid.ZMINCOORD - 30;
+
+                        X = (XC - grid.XMINCOORD - 0.5f * grid.DX + camera.Shift.X) * camera.Scale + 0.5f * width;
+                        Y = (YC - grid.ZMINCOORD - 0.5f * grid.DZ + camera.Shift.Y / camera.ZScale) * (camera.Scale * camera.ZScale) + 0.5f * height;
+                    };
+
+                    if (currentViewMode == ViewMode.Z)
+                    {
+                        X = (XC - grid.XMINCOORD - 0.5f * grid.DX + camera.Shift.X) * camera.Scale + 0.5f * width;
+                        Y = (YC - grid.YMINCOORD - 0.5f * grid.DY + camera.Shift.Y) * camera.Scale + 0.5f * height;
+                    };
+
+                    render.DrawWell(new Point((int)X, (int)Y), well, style);
                 }
             }
-            */
+
+            render.EndDraw();
         }
 
         public void DrawVectorField()
         {
             //GL.CallList(grid.vectorID);
-        }
-
-
-        public void DrawFrame() // Рамка вокруг модели
-        {
-            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-            GL.Begin(PrimitiveType.Lines);
-            GL.Color3(Color.Black);
-            GL.Vertex3(XMIN, YMIN, 0);
-            GL.Vertex3(XMIN, YMAX, 0);
-            GL.Vertex3(XMIN, YMAX, 0);
-            GL.Vertex3(XMAX, YMAX, 0);
-            GL.Vertex3(XMAX, YMAX, 0);
-            GL.Vertex3(XMAX, YMIN, 0);
-            GL.Vertex3(XMAX, YMIN, 0);
-            GL.Vertex3(XMIN, YMIN, 0);
-            GL.End();
         }
 
         public void OnPaint()
@@ -355,39 +304,38 @@ namespace mview
 
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
-            GL.Scale(camera.scale, camera.scale, 1);
 
-            if (CurrentViewMode != ViewMode.Z)
+            GL.Scale(camera.Scale, camera.Scale, 1);
+
+            if (currentViewMode != ViewMode.Z)
             {
-                GL.Scale(1, camera.scalez, 1);
+                GL.Scale(1, camera.ZScale, 1);
             }
 
-            // Центрирование
-
-            GL.Translate(camera.shift_x + (camera.shift_end_x - camera.shift_start_x), -camera.shift_y + camera.shift_end_y - camera.shift_start_y, 0); // Сдвиг за счет мышки
-
-            if (CurrentViewMode == ViewMode.Z)
+            if (currentViewMode == ViewMode.Z)
             {
                 GL.Translate(-grid.XC, -grid.YC, 0);
+                GL.Translate(camera.Shift.X, camera.Shift.Y, 0);
             }
 
-            if (CurrentViewMode == ViewMode.X)
+            if (currentViewMode == ViewMode.X)
             {
                 GL.Translate(-grid.YC, -grid.ZC, 0);
+                GL.Translate(camera.Shift.X, camera.Shift.Y / (camera.ZScale), 0);
             }
 
-            if (CurrentViewMode == ViewMode.Y)
+            if (currentViewMode == ViewMode.Y)
             {
                 GL.Translate(-grid.XC, -grid.ZC, 0);
+                GL.Translate(camera.Shift.X, camera.Shift.Y / (camera.ZScale), 0);
             }
-
 
             if (grid.element_count > 0)
             {
-
                 render.Clear(Color.Transparent);
 
                 DrawWells();
+
                 DrawVectorField();
 
                 // Отрисовка ячеек
@@ -412,101 +360,7 @@ namespace mview
                 }
             }
 
-            // Отрисовка выбранной ячейки
-
-            if (CurrentViewMode == ViewMode.X && (YS > -1))
-            {
-                var CELL = grid.GetCell(XS, YS, ZS);
-
-                if ((CELL.TNE.X + CELL.TNW.X + CELL.TSE.X) != 0)
-                {
-                    float DY = (grid.YMAXCOORD - grid.YMINCOORD) / grid.NY;
-                    float DZ = (grid.ZMAXCOORD - grid.ZMINCOORD) / grid.NZ;
-
-                    GL.LineWidth(3);
-                    GL.Begin(PrimitiveType.Lines);
-                    GL.Color3(Color.Black);
-
-                    GL.Vertex3(CELL.TSE.Y * (1 - grid.StretchFactor) + (grid.YMINCOORD + DY * YS + DY) * grid.StretchFactor, CELL.TSE.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS) * grid.StretchFactor, 0.3);
-                    GL.Vertex3(CELL.BSE.Y * (1 - grid.StretchFactor) + (grid.YMINCOORD + DY * YS + DY) * grid.StretchFactor, CELL.BSE.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS + DZ) * grid.StretchFactor, 0.3);
-
-                    GL.Vertex3(CELL.BSE.Y * (1 - grid.StretchFactor) + (grid.YMINCOORD + DY * YS + DY) * grid.StretchFactor, CELL.BSE.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS + DZ) * grid.StretchFactor, 0.3);
-                    GL.Vertex3(CELL.BNE.Y * (1 - grid.StretchFactor) + (grid.YMINCOORD + DY * YS) * grid.StretchFactor, CELL.BNE.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS + DZ) * grid.StretchFactor, 0.3);
-
-                    GL.Vertex3(CELL.BNE.Y * (1 - grid.StretchFactor) + (grid.YMINCOORD + DY * YS) * grid.StretchFactor, CELL.BNE.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS + DZ) * grid.StretchFactor, 0.3);
-                    GL.Vertex3(CELL.TNE.Y * (1 - grid.StretchFactor) + (grid.YMINCOORD + DY * YS) * grid.StretchFactor, CELL.TNE.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS) * grid.StretchFactor, 0.3);
-
-                    GL.Vertex3(CELL.TNE.Y * (1 - grid.StretchFactor) + (grid.YMINCOORD + DY * YS) * grid.StretchFactor, CELL.TNE.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS) * grid.StretchFactor, 0.3);
-                    GL.Vertex3(CELL.TSE.Y * (1 - grid.StretchFactor) + (grid.YMINCOORD + DY * YS + DY) * grid.StretchFactor, CELL.TSE.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS) * grid.StretchFactor, 0.3);
-
-
-                    GL.End();
-
-                    GL.LineWidth(1);
-                }
-            }
-
-            if (CurrentViewMode == ViewMode.Y && (XS > -1))
-            {
-                var CELL = grid.GetCell(XS, YS, ZS);
-
-                if ((CELL.TNE.X + CELL.TNW.X + CELL.TSE.X) != 0)
-                {
-                    float DX = (grid.XMAXCOORD - grid.XMINCOORD) / grid.NX;
-                    float DZ = (grid.ZMAXCOORD - grid.ZMINCOORD) / grid.NZ;
-
-                    GL.LineWidth(3);
-                    GL.Begin(PrimitiveType.Lines);
-                    GL.Color3(Color.Black);
-
-                    GL.Vertex3(CELL.TSW.X * (1 - grid.StretchFactor) + (grid.XMINCOORD + DX * XS) * grid.StretchFactor, CELL.TSW.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS) * grid.StretchFactor, 0.3);
-                    GL.Vertex3(CELL.TSE.X * (1 - grid.StretchFactor) + (grid.XMINCOORD + DX * XS + DX) * grid.StretchFactor, CELL.TSE.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS) * grid.StretchFactor, 0.3);
-
-                    GL.Vertex3(CELL.TSE.X * (1 - grid.StretchFactor) + (grid.XMINCOORD + DX * XS + DX) * grid.StretchFactor, CELL.TSE.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS) * grid.StretchFactor, 0.3);
-                    GL.Vertex3(CELL.BSE.X * (1 - grid.StretchFactor) + (grid.XMINCOORD + DX * XS + DX) * grid.StretchFactor, CELL.BSE.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS + DZ) * grid.StretchFactor, 0.3);
-
-                    GL.Vertex3(CELL.BSE.X * (1 - grid.StretchFactor) + (grid.XMINCOORD + DX * XS + DX) * grid.StretchFactor, CELL.BSE.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS + DZ) * grid.StretchFactor, 0.3);
-                    GL.Vertex3(CELL.BSW.X * (1 - grid.StretchFactor) + (grid.XMINCOORD + DX * XS) * grid.StretchFactor, CELL.BSW.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS + DZ) * grid.StretchFactor, 0.3);
-
-                    GL.Vertex3(CELL.BSW.X * (1 - grid.StretchFactor) + (grid.XMINCOORD + DX * XS) * grid.StretchFactor, CELL.BSW.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS + DZ) * grid.StretchFactor, 0.3);
-                    GL.Vertex3(CELL.TSW.X * (1 - grid.StretchFactor) + (grid.XMINCOORD + DX * XS) * grid.StretchFactor, CELL.TSW.Z * (1 - grid.StretchFactor) + (grid.ZMINCOORD + DZ * ZS) * grid.StretchFactor, 0.3);
-
-
-                    GL.End();
-
-                    GL.LineWidth(1);
-                }
-            }
-
-            if (CurrentViewMode == ViewMode.Z && (XS > -1))
-            {
-                var CELL = grid.GetCell(XS, YS, ZS);
-
-                if ((CELL.TNE.X + CELL.TNW.X + CELL.TSE.X) != 0)
-                {
-                    GL.LineWidth(3);
-                    GL.Begin(PrimitiveType.Lines);
-                    GL.Color3(Color.Black);
-
-                    GL.Vertex3(CELL.TNW.X, CELL.TNW.Y, 0.3);
-                    GL.Vertex3(CELL.TNE.X, CELL.TNE.Y, 0.3);
-
-                    GL.Vertex3(CELL.TNE.X, CELL.TNE.Y, 0.3);
-                    GL.Vertex3(CELL.TSE.X, CELL.TSE.Y, 0.3);
-
-                    GL.Vertex3(CELL.TSE.X, CELL.TSE.Y, 0.3);
-                    GL.Vertex3(CELL.TSW.X, CELL.TSW.Y, 0.3);
-
-                    GL.Vertex3(CELL.TSW.X, CELL.TSW.Y, 0.3);
-                    GL.Vertex3(CELL.TNW.X, CELL.TNW.Y, 0.3);
-
-                    GL.End();
-
-                    GL.LineWidth(1);
-                }
-            }
-
-                     
+            DrawSelectedCell();
 
             DrawFrame();
 
@@ -537,6 +391,58 @@ namespace mview
             }
         }
 
+        public void DrawFrame() // Рамка вокруг модели
+        {
+            GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            GL.Begin(PrimitiveType.Lines);
+            GL.Color3(Color.Black);
+            GL.Vertex3(XMIN, YMIN, 0);
+            GL.Vertex3(XMIN, YMAX, 0);
+            GL.Vertex3(XMIN, YMAX, 0);
+            GL.Vertex3(XMAX, YMAX, 0);
+            GL.Vertex3(XMAX, YMAX, 0);
+            GL.Vertex3(XMAX, YMIN, 0);
+            GL.Vertex3(XMAX, YMIN, 0);
+            GL.Vertex3(XMIN, YMIN, 0);
+            GL.End();
+        }
+
+        public void DrawSelectedCell()
+        {
+            // Отрисовка выбранной ячейки
+
+            GL.LineWidth(3);
+            GL.Begin(PrimitiveType.LineLoop);
+            GL.Color3(Color.Black);
+
+            if (currentViewMode == ViewMode.X && (YS > -1))
+            {
+                foreach (Vector2 vec in grid.GetSelectedCell(ZS, YS))
+                {
+                    GL.Vertex3(vec.X, vec.Y, 0.3);
+                }
+            }
+
+            if (currentViewMode == ViewMode.Y && (XS > -1))
+            {
+                foreach (Vector2 vec in grid.GetSelectedCell(ZS, XS))
+                {
+                    GL.Vertex3(vec.X, vec.Y, 0.3);
+                }
+            }
+
+            if (currentViewMode == ViewMode.Z && (XS > -1))
+            {
+                foreach (Vector2 vec in grid.GetSelectedCell(XS, YS))
+                {
+                    GL.Vertex3(vec.X, vec.Y, 0.3);
+                }
+            }
+
+            GL.End();
+            GL.LineWidth(1);
+        }
+
         public void SetStyle(MapStyle style)
         {
             this.style = style;
@@ -547,21 +453,12 @@ namespace mview
         public void MouseWheel(MouseEventArgs e)
         {
             camera.MouseWheel(e);
-
-            // Изменение Scale приводит к изменению масштаба по оси Z.
-            // Приходится перерисовывать стволы
-
-           //grid.Scale = camera.scale;
-           //grid.ScaleZ = camera.scalez;
         }
 
         public void MouseMove(MouseEventArgs e)
         {
             camera.MouseMove(e);
         }
-
-        public int XS, YS, ZS; // Координаты выбранной ячейки
-        public float VS; // Значение выбранной ячейки
 
         byte[] GetPixelRGBColor(int X, int Y)
         {
@@ -574,7 +471,7 @@ namespace mview
 
         public void MouseClick(MouseEventArgs e)
         {
-            if (grid.element_count == 0) return;
+            if (grid == null) return;
 
             if (e.Button == MouseButtons.Left)
             {
@@ -583,46 +480,57 @@ namespace mview
                 float XT;
                 float YT;
 
-                XS = grid.XA;
-                YS = grid.YA;
-                ZS = grid.ZA;
+                
+                //
+                //;
 
-                if (CurrentViewMode == ViewMode.X)
+                XT = (e.X - 0.5f * width) / camera.Scale;
+                YT = (e.Y - 0.5f * height) / camera.Scale;
+
+                if (currentViewMode == ViewMode.X)
                 {
-                    XT = (e.X - 0.5f * width) / camera.scale + grid.YMINCOORD + 0.5f * grid.DY - camera.shift_x - camera.shift_end_x + camera.shift_start_x;
-                    YT = (e.Y - 0.5f * height) / (camera.scale * camera.scalez) + grid.ZMINCOORD + 0.5f * grid.DZ + camera.shift_y - camera.shift_end_y + camera.shift_start_y;
+                    XT = XT + grid.YMINCOORD + 0.5f * grid.DY - camera.Shift.X;
+                    YT = YT / camera.ZScale + grid.ZMINCOORD + 0.5f * grid.DZ - camera.Shift.Y / (camera.ZScale);
 
                     grid.GetCellUnderMouse(new Vector2(XT, YT), pixel);
 
+                    XS = grid.XA;
                     ZS = grid.ZS;
                     YS = grid.YS;
                     VS = grid.VS;
                 }
 
-                if (CurrentViewMode == ViewMode.Y)
+                if (currentViewMode == ViewMode.Y)
                 {
-                    XT = (e.X - 0.5f * width) / camera.scale + grid.XMINCOORD + 0.5f * grid.DX - camera.shift_x - camera.shift_end_x + camera.shift_start_x;
-                    YT = (e.Y - 0.5f * height) / (camera.scale * camera.scalez) + grid.ZMINCOORD + 0.5f * grid.DZ + camera.shift_y - camera.shift_end_y + camera.shift_start_y;
+                    XT = XT + grid.XMINCOORD + 0.5f * grid.DX - camera.Shift.X;
+                    YT = YT / camera.ZScale + grid.ZMINCOORD + 0.5f * grid.DZ - camera.Shift.Y / (camera.ZScale);
 
                     grid.GetCellUnderMouse(new Vector2(XT, YT), pixel);
 
                     ZS = grid.ZS;
+                    YS = grid.YA;
                     XS = grid.XS;
                     VS = grid.VS;
                 }
 
-                if (CurrentViewMode == ViewMode.Z)
+                if (currentViewMode == ViewMode.Z)
                 {
-                    XT = (e.X - 0.5f * width) / camera.scale + grid.XMINCOORD + 0.5f * grid.DX - camera.shift_x - camera.shift_end_x + camera.shift_start_x;
-                    YT = (e.Y - 0.5f * height) / camera.scale + grid.YMINCOORD + 0.5f * grid.DY + camera.shift_y - camera.shift_end_y + camera.shift_start_y;
+                    XT = XT + grid.XMINCOORD + 0.5f * grid.DX - camera.Shift.X;
+                    YT = YT + grid.YMINCOORD + 0.5f * grid.DY - camera.Shift.Y;
 
                     grid.GetCellUnderMouse(new Vector2(XT, YT), pixel);
 
+                    ZS = grid.ZA;
                     YS = grid.YS;
                     XS = grid.XS;
                     VS = grid.VS;
                 }
             }
+        }
+    
+        public Vector4 GetSelectedCellValue()
+        {
+            return new Vector4(XS, YS, ZS, VS);
         }
     }
 }
