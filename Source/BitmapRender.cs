@@ -58,8 +58,8 @@ namespace mview
 
         // Settings
 
-        Font infoFont = new Font("Segoe Pro Cond", 09, FontStyle.Regular);
-        Font wellsFont = new Font("Segoe Pro Cond", 11, FontStyle.Bold);
+        readonly Font infoFont = new Font("Segoe Pro Cond", 09, FontStyle.Regular);
+        readonly Font wellsFont = new Font("Segoe Pro Cond", 11, FontStyle.Bold);
       
         // Text label format
 
@@ -72,8 +72,7 @@ namespace mview
 
         readonly PointF labelPos = new PointF(-8, -32);
         readonly PointF valueLabelPos = new PointF(-16, +16);
-        
-        List<Rectangle> drawList = new List<Rectangle>();
+        readonly List<Rectangle> drawList = new List<Rectangle>();
 
         public void DrawWell(Point point, WELLDATA well, MapStyle style)
         {
@@ -92,16 +91,12 @@ namespace mview
                 wlpr = well.WLPR;
             }
 
-            if (size < minBubbleSize) size = minBubbleSize;
-            if (size > maxBubbleSize) size = maxBubbleSize;
-
-            /*
             if (style.bubbleMode == BubbleMode.Historical)
             {
                 if (well.WLPR < 0)
                 {
                     size = (int)(Math.Abs(well.WWPRH) * style.scaleFactor * scaleRate);
-                    wlpr = Math.Abs(well.WWPRH);
+                    wlpr = -well.WWPRH;
                     wcut = 1;
                 }
                 else
@@ -111,49 +106,109 @@ namespace mview
                     wlpr = well.WLPRH;
                 }
             }
-            */
 
+            if (style.bubbleMode == BubbleMode.DiffOPR)
+            {
+                if (well.WLPR > 0)
+                {
+                    wlpr = well.WOPR - well.WOPRH;
+                    size = (int)(Math.Abs(wlpr) * style.scaleFactor * scaleRate);
+                    
+                    if (wlpr > 0)
+                    {
+                        wcut = 0;
+                    }
 
+                    if (wlpr < 0)
+                    {
+                        wcut = 1;
+                        wlpr = -wlpr;
+                    }
+                }
+            }
+
+            if (style.bubbleMode == BubbleMode.DiffLPR)
+            {
+                if (well.WLPR > 0)
+                {
+                    wlpr = well.WLPR - well.WLPRH;
+                    size = (int)(Math.Abs(wlpr) * style.scaleFactor * scaleRate);
+                    
+                    if (wlpr > 0)
+                    {
+                        wcut = 0;
+                    }
+
+                    if (wlpr < 0)
+                    {
+                        wcut = 1;
+                        wlpr = -wlpr;
+                    }
+                }
+            }
+
+            if (style.bubbleMode == BubbleMode.DiffWCUT)
+            {
+                if (well.WLPR > 0)
+                {
+                    wlpr = (float)(well.WWPR / well.WLPR) - (float)(well.WWPRH / well.WLPRH);
+                    size = (int)(Math.Abs(wlpr) * 100 * style.scaleFactor * scaleRate);
+
+                    if (wlpr > 0)
+                    {
+                        wcut = 0;
+                    }
+
+                    if (wlpr < 0)
+                    {
+                        wcut = 1;
+                        wlpr = -wlpr;
+                    }
+                }
+            }
+
+            if (style.bubbleMode == BubbleMode.DiffBHP)
+            {
+                if (well.WBHPH > 0)
+                {
+                    wlpr = well.WBHP - well.WBHPH;
+                    size = (int)(Math.Abs(wlpr) * style.scaleFactor * scaleRate);
+
+                    if (wlpr > 0)
+                    {
+                        wcut = 0;
+                    }
+
+                    if (wlpr < 0)
+                    {
+                        wcut = 1;
+                        wlpr = -wlpr;
+                    }
+                }
+            }
+            if (size < minBubbleSize) size = minBubbleSize;
+            if (size > maxBubbleSize) size = maxBubbleSize;
 
 
             // Добывающие скважины
 
-            if (well.WLPR >= 0)
+            if (wlpr > 0)
             {
 
-                    drawList.Add(DrawComplicatedBubble(point, size, wcut));
-
-                /*
-                if (wlpr > 0)
-                {
-                    Point valueLabelPoint = new Point((int)(point.X + valueLabelPos.X), (int)(point.Y + valueLabelPos.Y));
-                    string valueLabelText = wlpr.ToString("N1") + " / " + (100 * wcut).ToString("N1") + " %";
-                    SizeF labelSizeText = gfx.MeasureString(valueLabelText, infoFont);
-                    valueLabelRec = new RectangleF(valueLabelPoint, labelSizeText);
-                    gfx.DrawString(valueLabelText, infoFont, Brushes.Black, valueLabelPoint);
-                }
-                */
+                drawList.Add(DrawComplicatedBubble(point, size, wcut));
+                string text = wlpr.ToString("N1") + " / " + (100 * wcut).ToString("N1") + " %";
+                drawList.Add(DrawLabel(point, text));
             }
 
             // Нагнетательные скважины
 
-            if (well.WLPR < 0) // Меньше нуля, это у нас закачка
+            if (wlpr < 0) // Меньше нуля, это у нас закачка
             {
-                if (style.showBubbles)
-                {
-                    DrawSingleBubble(point, size);
-                }
-
-               // wlpr = Math.Abs(wlpr);
-
-               
-                /*
-            string valueLabelText = wlpr.ToString("N1") + " / " + (100 * wcut).ToString("N1");
-
-                DrawComplicatedLabel(valueLabelText, valueLabelPoint);
-                */
+                drawList.Add(DrawSingleBubble(point, size));
+                wlpr = Math.Abs(wlpr);
+                string text = wlpr.ToString("N1");
+                drawList.Add(DrawLabel(point, text));
             }
-
 
             drawList.Add(DrawWellPoint(point));
             drawList.Add(DrawWellName(point, well.WELLNAME));
@@ -237,13 +292,14 @@ namespace mview
             return rectangle;
         }
 
-        void DrawComplicatedLabel(string text, Point point)
+        Rectangle DrawLabel(Point point, string text)
         {
-            Point valueLabelPoint = new Point((int)(point.X + valueLabelPos.X), (int)(point.Y + valueLabelPos.Y));
-
+            Point p = new Point((int)(point.X + valueLabelPos.X), (int)(point.Y + valueLabelPos.Y));
             SizeF size = gfx.MeasureString(text, infoFont);
-            //valueLabelRec = new RectangleF(valueLabelPoint, labelSizeText);
-            //gfx.DrawString(valueLabelText, infoFont, Brushes.Black, valueLabelPoint);
+            Rectangle rectangle = new Rectangle(p, size.ToSize());
+            gfx.DrawString(text, infoFont, Brushes.Black, p);
+            
+            return rectangle;
         }
 
         public int Texture

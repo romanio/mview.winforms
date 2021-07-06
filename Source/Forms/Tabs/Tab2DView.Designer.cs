@@ -30,9 +30,11 @@ namespace mview
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Static ");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Dynamic");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Static ");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Dynamic");
             this.panel1 = new System.Windows.Forms.Panel();
+            this.checkSnapChart = new System.Windows.Forms.CheckBox();
+            this.checkFocusOn = new System.Windows.Forms.CheckBox();
             this.boxBubbleMode = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.numericBubbleScale = new System.Windows.Forms.NumericUpDown();
@@ -49,10 +51,10 @@ namespace mview
             this.label1 = new System.Windows.Forms.Label();
             this.numericZScale = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
             this.labelCellValue = new System.Windows.Forms.Label();
             this.boxRestartDates = new System.Windows.Forms.ComboBox();
             this.panelOpenGL = new System.Windows.Forms.Panel();
+            this.panelSnap = new System.Windows.Forms.Panel();
             this.treeProperties = new System.Windows.Forms.TreeView();
             this.tabSideControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -77,6 +79,8 @@ namespace mview
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.checkSnapChart);
+            this.panel1.Controls.Add(this.checkFocusOn);
             this.panel1.Controls.Add(this.boxBubbleMode);
             this.panel1.Controls.Add(this.label6);
             this.panel1.Controls.Add(this.numericBubbleScale);
@@ -95,9 +99,30 @@ namespace mview
             this.panel1.Controls.Add(this.label4);
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(776, 89);
+            this.panel1.Size = new System.Drawing.Size(880, 89);
             this.panel1.TabIndex = 7;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // checkSnapChart
+            // 
+            this.checkSnapChart.AutoSize = true;
+            this.checkSnapChart.Location = new System.Drawing.Point(709, 48);
+            this.checkSnapChart.Name = "checkSnapChart";
+            this.checkSnapChart.Size = new System.Drawing.Size(81, 17);
+            this.checkSnapChart.TabIndex = 39;
+            this.checkSnapChart.Text = "Snap chart";
+            this.checkSnapChart.UseVisualStyleBackColor = true;
+            this.checkSnapChart.CheckedChanged += new System.EventHandler(this.checkSnapChart_CheckedChanged);
+            // 
+            // checkFocusOn
+            // 
+            this.checkFocusOn.AutoSize = true;
+            this.checkFocusOn.Location = new System.Drawing.Point(709, 13);
+            this.checkFocusOn.Name = "checkFocusOn";
+            this.checkFocusOn.Size = new System.Drawing.Size(82, 17);
+            this.checkFocusOn.TabIndex = 38;
+            this.checkFocusOn.Text = "Auto focus";
+            this.checkFocusOn.UseVisualStyleBackColor = true;
             // 
             // boxBubbleMode
             // 
@@ -135,6 +160,11 @@ namespace mview
             // numericBubbleScale
             // 
             this.numericBubbleScale.Location = new System.Drawing.Point(573, 49);
+            this.numericBubbleScale.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
             this.numericBubbleScale.Minimum = new decimal(new int[] {
             1,
             0,
@@ -289,20 +319,6 @@ namespace mview
             this.label4.TabIndex = 14;
             this.label4.Text = "Z-Scale";
             // 
-            // button2
-            // 
-            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button2.Location = new System.Drawing.Point(107, 19);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 30);
-            this.button2.TabIndex = 11;
-            this.button2.Text = "Load EGRID";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // labelCellValue
             // 
             this.labelCellValue.AutoSize = true;
@@ -331,11 +347,20 @@ namespace mview
             this.panelOpenGL.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelOpenGL.Controls.Add(this.button2);
+            this.panelOpenGL.Controls.Add(this.panelSnap);
             this.panelOpenGL.Location = new System.Drawing.Point(156, 120);
             this.panelOpenGL.Name = "panelOpenGL";
-            this.panelOpenGL.Size = new System.Drawing.Size(623, 560);
+            this.panelOpenGL.Size = new System.Drawing.Size(727, 511);
             this.panelOpenGL.TabIndex = 10;
+            // 
+            // panelSnap
+            // 
+            this.panelSnap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelSnap.Location = new System.Drawing.Point(333, 3);
+            this.panelSnap.Name = "panelSnap";
+            this.panelSnap.Size = new System.Drawing.Size(391, 296);
+            this.panelSnap.TabIndex = 12;
+            this.panelSnap.Visible = false;
             // 
             // treeProperties
             // 
@@ -343,13 +368,13 @@ namespace mview
             this.treeProperties.HideSelection = false;
             this.treeProperties.Location = new System.Drawing.Point(11, 242);
             this.treeProperties.Name = "treeProperties";
-            treeNode3.Name = "Узел0";
-            treeNode3.Text = "Static ";
-            treeNode4.Name = "Узел1";
-            treeNode4.Text = "Dynamic";
+            treeNode1.Name = "Узел0";
+            treeNode1.Text = "Static ";
+            treeNode2.Name = "Узел1";
+            treeNode2.Text = "Dynamic";
             this.treeProperties.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode3,
-            treeNode4});
+            treeNode1,
+            treeNode2});
             this.treeProperties.Size = new System.Drawing.Size(139, 367);
             this.treeProperties.TabIndex = 11;
             this.treeProperties.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreePropertiesOnAfterSelect);
@@ -455,7 +480,7 @@ namespace mview
             this.Controls.Add(this.boxRestartDates);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Name = "Tab2DView";
-            this.Size = new System.Drawing.Size(782, 683);
+            this.Size = new System.Drawing.Size(886, 634);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericBubbleScale)).EndInit();
@@ -475,7 +500,6 @@ namespace mview
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panelOpenGL;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TreeView treeProperties;
         private System.Windows.Forms.ComboBox boxRestartDates;
         private System.Windows.Forms.TabControl tabSideControl;
@@ -502,5 +526,8 @@ namespace mview
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown numericBubbleScale;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Panel panelSnap;
+        private System.Windows.Forms.CheckBox checkSnapChart;
+        private System.Windows.Forms.CheckBox checkFocusOn;
     }
 }

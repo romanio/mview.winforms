@@ -15,13 +15,13 @@ namespace mview
         DiffLPT,
         DiffOPT,
         DiffGPT,
+        DiffWIT,
         DiffOPR,
         DiffLPR,
         DiffGPR,
         DiffWCUT,
         DiffBHP
     }
-
 
 public class MapModel
     {
@@ -43,23 +43,23 @@ public class MapModel
             ecl.ReadEGRID();
             ecl.ReadINIT();
 
-            ecl.INIT.ReadGrid("PERMX");
-
             grid = new Grid2D(ecl);
+            SetStaticProperty("PERMX");
 
-            grid.GenerateGrid(ecl.INIT.GetValue);
-            
             engine.LinkGrid(grid);
             engine.SetScaleFactors();
         }
 
         public void OnLoad()
         {
+            System.Diagnostics.Debug.WriteLine("OnLoad()");
             engine.OnLoad();
+
         }
 
         public void OnResize(int width, int height)
         {
+            System.Diagnostics.Debug.WriteLine("OnResize()");
             engine.OnResize(width, height);
         }
 
@@ -224,9 +224,19 @@ public class MapModel
             engine.SetMapStyle(style);
         }
 
+        public void SetCameraFocusOn(string name)
+        {
+            engine.SetCameraFocusOn(name);
+        }
+
         public Vector4 GetSelectedCellValue()
         {
             return engine.GetSelectedCellValue();
+        }
+
+        public Vector3 GetSlice()
+        {
+            return engine.GetSlice();
         }
     }
 }

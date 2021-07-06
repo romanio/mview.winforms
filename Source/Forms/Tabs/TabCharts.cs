@@ -21,7 +21,7 @@ namespace mview
     public partial class TabCharts : UserControl, ITabObserver
     {
         readonly bool suspendEvents = false;
-        private readonly ChartModel model = null;
+        readonly ChartModel model = null;
         readonly StylesPanel stylesPanel = null;
 
         public TabCharts(EclipseProject ecl)

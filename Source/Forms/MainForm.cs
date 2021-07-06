@@ -349,6 +349,8 @@ namespace mview
             EventUpdateSelectedWells();
 
             tabControl2.TabPages.Add(tabPage);
+
+            tab2DView.AfterInitCall();
         }
 
         private void button9_Click(object sender, EventArgs e)

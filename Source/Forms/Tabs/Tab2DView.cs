@@ -11,6 +11,7 @@ namespace mview
         bool suspendEvents = false;
 
         readonly MapModel model = null;
+        readonly ChartModel chartModel = null;
         readonly GLControl glControl = null;
         readonly MapStyle style = new MapStyle();
 
@@ -19,7 +20,8 @@ namespace mview
             InitializeComponent();
 
             model = new MapModel(ecl);
-            
+            chartModel = new ChartModel(ecl);
+
             suspendEvents = true;
 
             GraphicsMode grx = new GraphicsMode(new ColorFormat(8, 8, 8, 8), 24, 8, 4);
@@ -46,8 +48,22 @@ namespace mview
 
             boxBubbleMode.SelectedIndex = (int)style.bubbleMode;
 
-            suspendEvents = false;
-       }
+            panelSnap.Controls.Add(new ChartControl(chartModel) { Dock = DockStyle.Fill });
+
+            var settings = new ChartSettings();
+            var chartStyle = new StyleSettings();
+
+            chartStyle.LoadSettings();
+
+            settings.StyleSettings = chartStyle;
+
+            foreach (ChartControl item in panelSnap.Controls)
+            {
+                item.UpdateSettings(settings);
+            }
+
+     
+        }
         
         ~Tab2DView()
         {
@@ -82,7 +98,40 @@ namespace mview
 
         public void UpdateSelectedWells(TabSelectedWellsData data)
         {
-            // None
+            foreach (ChartControl item in panelSnap.Controls)
+            {
+                item.UpdateNames(data.selectedNames, data.type);
+            }
+
+            if (checkFocusOn.Checked)
+            {
+
+                if (data.selectedNames.Count > 0)
+                {
+                    model.SetCameraFocusOn(data.selectedNames[0]);
+
+                    var slice = model.GetSlice();
+
+                    if (tabSideControl.SelectedIndex == 0)
+                    {
+                        boxSlideX.SelectedIndex = (int)slice.X;
+                    }
+
+                    if (tabSideControl.SelectedIndex == 1)
+                    {
+                        boxSlideY.SelectedIndex = (int)slice.Y;
+                    }
+
+                    if (tabSideControl.SelectedIndex == 2)
+                    {
+                        boxSlideZ.SelectedIndex = (int)slice.Z;
+                    }
+
+                    model.OnPaint();
+                    glControl.SwapBuffers();
+                }
+            }
+
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -117,22 +166,9 @@ namespace mview
 
         public void UpdateSelectedProjects(EclipseProject ecl)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            model.ReadGrid();
-
-            SetMapStyle();
-
-            UpdateFormData();
-
-            GLControlOnPaint(null, null);
-
-            button2.Visible = false;
-        }
-            
         void UpdateFormData()
         {
             suspendEvents = true;
@@ -378,5 +414,18 @@ namespace mview
 
             SetMapStyle();
         }
+
+        private void checkSnapChart_CheckedChanged(object sender, EventArgs e)
+        {
+            panelSnap.Visible = checkSnapChart.Checked;
+        }
+
+        public void AfterInitCall()
+        {
+            model.ReadGrid();
+            UpdateFormData();
+            SetMapStyle();
+        }
+
     }
 }

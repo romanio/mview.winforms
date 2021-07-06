@@ -178,6 +178,8 @@ namespace mview
             GL.ClearColor(Color.White);
             GL.EnableClientState(ArrayCap.VertexArray);
             GL.EnableClientState(ArrayCap.ColorArray);
+
+            render = new BitmapRender(width, height);
         }
 
         public void SetScaleFactors()
@@ -332,7 +334,7 @@ namespace mview
 
             if (grid.element_count > 0)
             {
-                render.Clear(Color.Transparent);
+                //render.Clear(Color.Transparent);
 
                 DrawWells();
 
@@ -480,10 +482,6 @@ namespace mview
                 float XT;
                 float YT;
 
-                
-                //
-                //;
-
                 XT = (e.X - 0.5f * width) / camera.Scale;
                 YT = (e.Y - 0.5f * height) / camera.Scale;
 
@@ -531,6 +529,41 @@ namespace mview
         public Vector4 GetSelectedCellValue()
         {
             return new Vector4(XS, YS, ZS, VS);
+        }
+
+        public Vector3 GetSlice()
+        {
+            return new Vector3(grid.XA, grid.YA, grid.ZA);
+
+        }
+
+        public void SetCameraFocusOn(string name)
+        {
+            var well = grid.FindWell(name);
+            
+            if (well == null) return;
+
+            if (currentViewMode == ViewMode.X)
+            {
+                grid.XA = well.COMPLS[well.FIRSTCOMP].I;
+
+                camera.Shift = new Vector2(-(well.COMPLS[well.FIRSTCOMP].Xw - grid.YC), (well.COMPLS[well.FIRSTCOMP].Yw - grid.ZC) * camera.ZScale);
+            }
+
+
+            if (currentViewMode == ViewMode.Y)
+            {
+                grid.YA = well.COMPLS[well.FIRSTCOMP].J;
+
+                camera.Shift = new Vector2(-(well.COMPLS[well.FIRSTCOMP].Xw - grid.XC), (well.COMPLS[well.FIRSTCOMP].Yw - grid.ZC) * camera.ZScale);
+            }
+
+            if (currentViewMode == ViewMode.Z)
+            {
+                grid.ZA = well.COMPLS[well.FIRSTCOMP].K;
+
+                camera.Shift = new Vector2(-(well.COMPLS[well.FIRSTCOMP].Xw - grid.XC), well.COMPLS[well.FIRSTCOMP].Yw - grid.YC);
+            }
         }
     }
 }

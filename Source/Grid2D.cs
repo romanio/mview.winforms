@@ -701,5 +701,61 @@ namespace mview
 
             GL.EndList();
         }
+
+        public WELLDATA FindWell(string name)
+        {
+            var well = ecl.RESTART.WELLS.FirstOrDefault(c => c.WELLNAME == name);
+
+            if (well != null)
+            {
+                ICellStrategy cell = SelectCellStrategy();
+
+                cell.SetEclipse(ecl);
+
+                if (well.LGR == 0)
+                {
+                    well.FIRSTCOMP = -1;
+
+                    for (int ic = 0; ic < well.COMPLNUM; ++ic)
+                    {
+                        if (ecl.INIT.GetActive(well.COMPLS[ic].I, well.COMPLS[ic].J, well.COMPLS[ic].K) > 0)
+                        {
+                            well.FIRSTCOMP = ic;
+                            break;
+                        }
+                    }
+
+                    if (CurrentViewMode == ViewMode.X)
+                    {
+                        cell.Slice = well.COMPLS[well.FIRSTCOMP].I;
+
+                        cell.Extract(well.COMPLS[well.FIRSTCOMP].K, well.COMPLS[well.FIRSTCOMP].J);
+                        well.COMPLS[well.FIRSTCOMP].Xw = cell.Points.Average(c => c.X);
+                        well.COMPLS[well.FIRSTCOMP].Yw = cell.Points.Average(c => c.Y);
+                    }
+
+                    if (CurrentViewMode == ViewMode.Y)
+                    {
+                        cell.Slice = well.COMPLS[well.FIRSTCOMP].J;
+
+                        cell.Extract(well.COMPLS[well.FIRSTCOMP].K, well.COMPLS[well.FIRSTCOMP].I);
+                        well.COMPLS[well.FIRSTCOMP].Xw = cell.Points.Average(c => c.X);
+                        well.COMPLS[well.FIRSTCOMP].Yw = cell.Points.Average(c => c.Y);
+                    }
+
+                    if (CurrentViewMode == ViewMode.Z)
+                    {
+                        cell.Slice = well.COMPLS[well.FIRSTCOMP].K;
+
+                        cell.Extract(well.COMPLS[well.FIRSTCOMP].I, well.COMPLS[well.FIRSTCOMP].J);
+                        well.COMPLS[well.FIRSTCOMP].Xw = cell.Points.Average(c => c.X);
+                        well.COMPLS[well.FIRSTCOMP].Yw = cell.Points.Average(c => c.Y);
+                    }
+                }
+            }
+
+            return well;
+        }
+        
     }
 }

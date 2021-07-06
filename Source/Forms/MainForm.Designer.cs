@@ -38,8 +38,6 @@ namespace mview
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.button8 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
@@ -89,8 +87,6 @@ namespace mview
             this.tabPageControl.Controls.Add(this.label5);
             this.tabPageControl.Controls.Add(this.label3);
             this.tabPageControl.Controls.Add(this.button8);
-            this.tabPageControl.Controls.Add(this.button7);
-            this.tabPageControl.Controls.Add(this.button6);
             this.tabPageControl.Controls.Add(this.button5);
             this.tabPageControl.Controls.Add(this.label2);
             this.tabPageControl.Controls.Add(this.button4);
@@ -162,32 +158,7 @@ namespace mview
             this.button8.TabIndex = 23;
             this.button8.Text = "3D View";
             this.button8.UseVisualStyleBackColor = true;
-            // 
-            // button7
-            // 
-            this.button7.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
-            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button7.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
-            this.button7.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button7.Location = new System.Drawing.Point(299, 465);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(100, 30);
-            this.button7.TabIndex = 22;
-            this.button7.Text = "Restore Project";
-            this.button7.UseVisualStyleBackColor = true;
-            // 
-            // button6
-            // 
-            this.button6.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
-            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button6.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
-            this.button6.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button6.Location = new System.Drawing.Point(172, 465);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(100, 30);
-            this.button6.TabIndex = 21;
-            this.button6.Text = "Save Project";
-            this.button6.UseVisualStyleBackColor = true;
+            this.button8.Visible = false;
             // 
             // button5
             // 
@@ -421,8 +392,6 @@ namespace mview
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label5;

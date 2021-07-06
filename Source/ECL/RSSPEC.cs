@@ -94,6 +94,7 @@ namespace mview.ECL
         public float XC;
         public float YC;
         public float ZC;
+        public int FIRSTCOMP = -1;
         public List<COMPLDATA> COMPLS = new List<COMPLDATA>();
     }
 
