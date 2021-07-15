@@ -52,6 +52,7 @@ namespace mview
             this.boxNameType = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.buttonWellFilter = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
             this.tabControl2.SuspendLayout();
             this.tabPageControl.SuspendLayout();
             this.SuspendLayout();
@@ -346,12 +347,27 @@ namespace mview
             this.buttonWellFilter.UseVisualStyleBackColor = true;
             this.buttonWellFilter.Click += new System.EventHandler(this.button2_Click);
             // 
+            // button6
+            // 
+            this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button6.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
+            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button6.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button6.Location = new System.Drawing.Point(14, 625);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(104, 29);
+            this.button6.TabIndex = 15;
+            this.button6.Text = "Update";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(888, 695);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.buttonWellFilter);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.tabControl2);
@@ -397,6 +413,7 @@ namespace mview
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.Button button6;
     }
 }
 

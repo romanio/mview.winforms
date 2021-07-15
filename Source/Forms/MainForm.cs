@@ -358,5 +358,12 @@ namespace mview
             filterPanel.LoadVirtualGroups();
             label6.Text = filterPanel.GetFilename();
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            pm.UpdateSelectedProject();
+            
+            EventUpdateSelectedWells();
+        }
     }
 }
