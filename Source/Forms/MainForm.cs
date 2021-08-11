@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Krypton.Toolkit;
 
 namespace mview
 {
@@ -29,7 +30,7 @@ namespace mview
         Other
     }
 
-    public partial class MainForm : Form
+    public partial class MainForm : KryptonForm
     {
         readonly ProjectManager pm = new ProjectManager();
         readonly ControlPanel controlPanel = null;
@@ -164,7 +165,7 @@ namespace mview
                     }
                 }
 
-                label5.Text = pm.ECL.userAnnotations.filename;
+                labelAnnotations.Text = pm.ECL.userAnnotations.filename;
             }
 
             listNames.ResumeLayout();
@@ -238,9 +239,7 @@ namespace mview
 
         private void button1_Click(object sender, EventArgs e)
         {
-            controlPanel.UpdateFormData();
-            controlPanel.Show();
-            controlPanel.Focus();
+
         }
 
         private void ButtonNewChartsOnClick(object sender, EventArgs e)
@@ -261,7 +260,7 @@ namespace mview
             EventUpdateSelectedWells();
 
 
-            tabControl2.TabPages.Add(tabPage);
+            //tabControl2.TabPages.Add(tabPage);
         }
 
         
@@ -297,7 +296,7 @@ namespace mview
             tabCrossplot.UpdateSelectedProjects(); // NTR
             EventUpdateSelectedWells();
 
-            tabControl2.TabPages.Add(tabPage);
+            //tabControl2.TabPages.Add(tabPage);
         }
 
         private void button2_Click_1(object sender, EventArgs e)
@@ -319,14 +318,14 @@ namespace mview
             tabWaterPlot.UpdateSelectedProjects(); // NTR
             EventUpdateSelectedWells();
 
-            tabControl2.TabPages.Add(tabPage);
+            //tabControl2.TabPages.Add(tabPage);
         }
 
         
         private void button4_Click(object sender, EventArgs e)
         {
             pm.ECL.userAnnotations.LoadUserFunctions();
-            label5.Text = pm.ECL.userAnnotations.filename;
+            labelAnnotations.Text = pm.ECL.userAnnotations.filename;
         }
        
 
@@ -348,7 +347,7 @@ namespace mview
 
             EventUpdateSelectedWells();
 
-            tabControl2.TabPages.Add(tabPage);
+            //tabControl2.TabPages.Add(tabPage);
 
             tab2DView.AfterInitCall();
         }
@@ -356,14 +355,34 @@ namespace mview
         private void button9_Click(object sender, EventArgs e)
         {
             filterPanel.LoadVirtualGroups();
-            label6.Text = filterPanel.GetFilename();
+            labelWellgroups.Text = filterPanel.GetFilename();
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
+
+            /*
             pm.UpdateSelectedProject();
             
             EventUpdateSelectedWells();
+        */
+        }
+
+        private void OnButtonProjectClick(object sender, EventArgs e)
+        {
+            controlPanel.UpdateFormData();
+            controlPanel.Show();
+            controlPanel.Focus();
+        }
+
+        private void kryptonNavigator_SelectedPageChanged(object sender, EventArgs e)
+        {
+            if (kryptonNavigator.SelectedIndex == 0)
+            {
+                kryptonNavigator.Button.CloseButtonDisplay = Krypton.Navigator.ButtonDisplay.ShowDisabled;
+            }
+            else
+                kryptonNavigator.Button.CloseButtonDisplay = Krypton.Navigator.ButtonDisplay.ShowEnabled;
         }
     }
 }
