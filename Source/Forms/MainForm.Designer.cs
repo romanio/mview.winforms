@@ -30,7 +30,6 @@ namespace mview
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.kryptonPalette1 = new Krypton.Toolkit.KryptonPalette(this.components);
             this.buttonProjects = new Krypton.Toolkit.KryptonButton();
             this.kryptonNavigator = new Krypton.Navigator.KryptonNavigator();
@@ -39,15 +38,14 @@ namespace mview
             this.labelAnnotations = new Krypton.Toolkit.KryptonLabel();
             this.kryptonButton8 = new Krypton.Toolkit.KryptonButton();
             this.kryptonButton7 = new Krypton.Toolkit.KryptonButton();
-            this.kryptonButton6 = new Krypton.Toolkit.KryptonButton();
+            this.buttonExcelExport = new Krypton.Toolkit.KryptonButton();
             this.kryptonButton5 = new Krypton.Toolkit.KryptonButton();
             this.kryptonButton4 = new Krypton.Toolkit.KryptonButton();
             this.kryptonButton3 = new Krypton.Toolkit.KryptonButton();
             this.kryptonButton2 = new Krypton.Toolkit.KryptonButton();
-            this.kryptonButton1 = new Krypton.Toolkit.KryptonButton();
+            this.buttonCharts = new Krypton.Toolkit.KryptonButton();
             this.kryptonLabel2 = new Krypton.Toolkit.KryptonLabel();
             this.kryptonLabel1 = new Krypton.Toolkit.KryptonLabel();
-            this.kryptonPage4 = new Krypton.Navigator.KryptonPage();
             this.listNames = new Krypton.Toolkit.KryptonListBox();
             this.buttonWellFilter = new Krypton.Toolkit.KryptonButton();
             this.kryptonButton10 = new Krypton.Toolkit.KryptonButton();
@@ -58,25 +56,13 @@ namespace mview
             this.kryptonNavigator.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPage3)).BeginInit();
             this.kryptonPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonPage4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxNameType)).BeginInit();
             this.SuspendLayout();
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 673);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(888, 22);
-            this.statusStrip1.TabIndex = 1;
-            this.statusStrip1.Text = "statusStrip1";
             // 
             // kryptonPalette1
             // 
             this.kryptonPalette1.AllowFormChrome = Krypton.Toolkit.InheritBool.False;
-            this.kryptonPalette1.BasePaletteMode = Krypton.Toolkit.PaletteMode.Office2010Blue;
-            this.kryptonPalette1.Common.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.kryptonPalette1.Common.StateCommon.Content.ShortText.ImageStyle = Krypton.Toolkit.PaletteImageStyle.Inherit;
-            this.kryptonPalette1.Common.StateCommon.Content.ShortText.Trim = Krypton.Toolkit.PaletteTextTrim.Inherit;
+            this.kryptonPalette1.BasePaletteMode = Krypton.Toolkit.PaletteMode.Office2010Silver;
             this.kryptonPalette1.CustomisedKryptonPaletteFilePath = null;
             // 
             // buttonProjects
@@ -95,32 +81,18 @@ namespace mview
             this.kryptonNavigator.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.kryptonNavigator.Bar.BarMapExtraText = Krypton.Navigator.MapKryptonPageText.None;
-            this.kryptonNavigator.Bar.BarMapImage = Krypton.Navigator.MapKryptonPageImage.Small;
-            this.kryptonNavigator.Bar.BarMapText = Krypton.Navigator.MapKryptonPageText.TextTitle;
             this.kryptonNavigator.Bar.ItemMinimumSize = new System.Drawing.Size(80, 20);
             this.kryptonNavigator.Bar.ItemSizing = Krypton.Navigator.BarItemSizing.SameWidthAndHeight;
             this.kryptonNavigator.Bar.TabBorderStyle = Krypton.Toolkit.TabBorderStyle.DockEqual;
             this.kryptonNavigator.Bar.TabStyle = Krypton.Toolkit.TabStyle.StandardProfile;
-            this.kryptonNavigator.Button.ButtonDisplayLogic = Krypton.Navigator.ButtonDisplayLogic.Context;
-            this.kryptonNavigator.Button.CloseButtonAction = Krypton.Navigator.CloseButtonAction.RemovePageAndDispose;
-            this.kryptonNavigator.Button.CloseButtonDisplay = Krypton.Navigator.ButtonDisplay.Logic;
-            this.kryptonNavigator.Button.ContextButtonAction = Krypton.Navigator.ContextButtonAction.SelectPage;
-            this.kryptonNavigator.Button.ContextButtonDisplay = Krypton.Navigator.ButtonDisplay.Logic;
-            this.kryptonNavigator.Button.ContextMenuMapImage = Krypton.Navigator.MapKryptonPageImage.Small;
-            this.kryptonNavigator.Button.ContextMenuMapText = Krypton.Navigator.MapKryptonPageText.TextTitle;
-            this.kryptonNavigator.Button.NextButtonAction = Krypton.Navigator.DirectionButtonAction.ModeAppropriateAction;
-            this.kryptonNavigator.Button.NextButtonDisplay = Krypton.Navigator.ButtonDisplay.Logic;
-            this.kryptonNavigator.Button.PreviousButtonAction = Krypton.Navigator.DirectionButtonAction.ModeAppropriateAction;
-            this.kryptonNavigator.Button.PreviousButtonDisplay = Krypton.Navigator.ButtonDisplay.Logic;
             this.kryptonNavigator.Location = new System.Drawing.Point(136, 12);
             this.kryptonNavigator.Name = "kryptonNavigator";
-            this.kryptonNavigator.NavigatorMode = Krypton.Navigator.NavigatorMode.BarTabGroup;
             this.kryptonNavigator.Pages.AddRange(new Krypton.Navigator.KryptonPage[] {
-            this.kryptonPage3,
-            this.kryptonPage4});
+            this.kryptonPage3});
+            this.kryptonNavigator.Palette = this.kryptonPalette1;
+            this.kryptonNavigator.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
             this.kryptonNavigator.SelectedIndex = 0;
-            this.kryptonNavigator.Size = new System.Drawing.Size(740, 642);
+            this.kryptonNavigator.Size = new System.Drawing.Size(740, 671);
             this.kryptonNavigator.TabIndex = 18;
             this.kryptonNavigator.Text = "kryptonNavigator";
             this.kryptonNavigator.SelectedPageChanged += new System.EventHandler(this.kryptonNavigator_SelectedPageChanged);
@@ -132,42 +104,40 @@ namespace mview
             this.kryptonPage3.Controls.Add(this.labelAnnotations);
             this.kryptonPage3.Controls.Add(this.kryptonButton8);
             this.kryptonPage3.Controls.Add(this.kryptonButton7);
-            this.kryptonPage3.Controls.Add(this.kryptonButton6);
+            this.kryptonPage3.Controls.Add(this.buttonExcelExport);
             this.kryptonPage3.Controls.Add(this.kryptonButton5);
             this.kryptonPage3.Controls.Add(this.kryptonButton4);
             this.kryptonPage3.Controls.Add(this.kryptonButton3);
             this.kryptonPage3.Controls.Add(this.kryptonButton2);
-            this.kryptonPage3.Controls.Add(this.kryptonButton1);
+            this.kryptonPage3.Controls.Add(this.buttonCharts);
             this.kryptonPage3.Controls.Add(this.kryptonLabel2);
             this.kryptonPage3.Controls.Add(this.kryptonLabel1);
             this.kryptonPage3.Flags = 65534;
             this.kryptonPage3.LastVisibleSet = true;
             this.kryptonPage3.MinimumSize = new System.Drawing.Size(50, 50);
             this.kryptonPage3.Name = "kryptonPage3";
-            this.kryptonPage3.Size = new System.Drawing.Size(738, 616);
+            this.kryptonPage3.Size = new System.Drawing.Size(738, 645);
             this.kryptonPage3.Text = "Main";
             this.kryptonPage3.ToolTipTitle = "Page ToolTip";
             this.kryptonPage3.UniqueName = "946e6ac3a55643f3a8c7e5bb40ce3ccb";
             // 
             // labelWellgroups
             // 
-            this.labelWellgroups.LabelStyle = Krypton.Toolkit.LabelStyle.ItalicControl;
             this.labelWellgroups.Location = new System.Drawing.Point(313, 342);
             this.labelWellgroups.Name = "labelWellgroups";
             this.labelWellgroups.Palette = this.kryptonPalette1;
             this.labelWellgroups.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
-            this.labelWellgroups.Size = new System.Drawing.Size(67, 19);
+            this.labelWellgroups.Size = new System.Drawing.Size(72, 20);
             this.labelWellgroups.TabIndex = 27;
             this.labelWellgroups.Values.Text = "Path : none";
             // 
             // labelAnnotations
             // 
-            this.labelAnnotations.LabelStyle = Krypton.Toolkit.LabelStyle.ItalicControl;
             this.labelAnnotations.Location = new System.Drawing.Point(313, 286);
             this.labelAnnotations.Name = "labelAnnotations";
             this.labelAnnotations.Palette = this.kryptonPalette1;
             this.labelAnnotations.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
-            this.labelAnnotations.Size = new System.Drawing.Size(67, 19);
+            this.labelAnnotations.Size = new System.Drawing.Size(72, 20);
             this.labelAnnotations.TabIndex = 26;
             this.labelAnnotations.Values.Text = "Path : none";
             // 
@@ -191,15 +161,16 @@ namespace mview
             this.kryptonButton7.TabIndex = 24;
             this.kryptonButton7.Values.Text = "Annotations";
             // 
-            // kryptonButton6
+            // buttonExcelExport
             // 
-            this.kryptonButton6.Location = new System.Drawing.Point(175, 203);
-            this.kryptonButton6.Name = "kryptonButton6";
-            this.kryptonButton6.Palette = this.kryptonPalette1;
-            this.kryptonButton6.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
-            this.kryptonButton6.Size = new System.Drawing.Size(104, 29);
-            this.kryptonButton6.TabIndex = 23;
-            this.kryptonButton6.Values.Text = "Export Excel";
+            this.buttonExcelExport.Location = new System.Drawing.Point(175, 203);
+            this.buttonExcelExport.Name = "buttonExcelExport";
+            this.buttonExcelExport.Palette = this.kryptonPalette1;
+            this.buttonExcelExport.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
+            this.buttonExcelExport.Size = new System.Drawing.Size(104, 29);
+            this.buttonExcelExport.TabIndex = 23;
+            this.buttonExcelExport.Values.Text = "Export Excel";
+            this.buttonExcelExport.Click += new System.EventHandler(this.buttonExcelExportOnClick);
             // 
             // kryptonButton5
             // 
@@ -241,15 +212,16 @@ namespace mview
             this.kryptonButton2.TabIndex = 19;
             this.kryptonButton2.Values.Text = "2D View";
             // 
-            // kryptonButton1
+            // buttonCharts
             // 
-            this.kryptonButton1.Location = new System.Drawing.Point(175, 51);
-            this.kryptonButton1.Name = "kryptonButton1";
-            this.kryptonButton1.Palette = this.kryptonPalette1;
-            this.kryptonButton1.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
-            this.kryptonButton1.Size = new System.Drawing.Size(104, 29);
-            this.kryptonButton1.TabIndex = 18;
-            this.kryptonButton1.Values.Text = "Charts";
+            this.buttonCharts.Location = new System.Drawing.Point(175, 51);
+            this.buttonCharts.Name = "buttonCharts";
+            this.buttonCharts.Palette = this.kryptonPalette1;
+            this.buttonCharts.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
+            this.buttonCharts.Size = new System.Drawing.Size(104, 29);
+            this.buttonCharts.TabIndex = 18;
+            this.buttonCharts.Values.Text = "Charts";
+            this.buttonCharts.Click += new System.EventHandler(this.buttonCharts_Click);
             // 
             // kryptonLabel2
             // 
@@ -257,7 +229,7 @@ namespace mview
             this.kryptonLabel2.Name = "kryptonLabel2";
             this.kryptonLabel2.Palette = this.kryptonPalette1;
             this.kryptonLabel2.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
-            this.kryptonLabel2.Size = new System.Drawing.Size(96, 19);
+            this.kryptonLabel2.Size = new System.Drawing.Size(104, 20);
             this.kryptonLabel2.TabIndex = 7;
             this.kryptonLabel2.Values.Text = "History Matching";
             // 
@@ -267,21 +239,9 @@ namespace mview
             this.kryptonLabel1.Name = "kryptonLabel1";
             this.kryptonLabel1.Palette = this.kryptonPalette1;
             this.kryptonLabel1.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
-            this.kryptonLabel1.Size = new System.Drawing.Size(106, 19);
+            this.kryptonLabel1.Size = new System.Drawing.Size(115, 20);
             this.kryptonLabel1.TabIndex = 6;
             this.kryptonLabel1.Values.Text = "Common functions";
-            // 
-            // kryptonPage4
-            // 
-            this.kryptonPage4.AutoHiddenSlideSize = new System.Drawing.Size(200, 200);
-            this.kryptonPage4.Flags = 65534;
-            this.kryptonPage4.LastVisibleSet = true;
-            this.kryptonPage4.MinimumSize = new System.Drawing.Size(50, 50);
-            this.kryptonPage4.Name = "kryptonPage4";
-            this.kryptonPage4.Size = new System.Drawing.Size(738, 425);
-            this.kryptonPage4.Text = "Chart";
-            this.kryptonPage4.ToolTipTitle = "Page ToolTip";
-            this.kryptonPage4.UniqueName = "f4d06dfaa7804b8ca483bbbede96e2b1";
             // 
             // listNames
             // 
@@ -292,6 +252,7 @@ namespace mview
             this.listNames.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listNames.Size = new System.Drawing.Size(104, 381);
             this.listNames.TabIndex = 19;
+            this.listNames.SelectedIndexChanged += new System.EventHandler(this.listNames_SelectedIndexChanged);
             // 
             // buttonWellFilter
             // 
@@ -317,9 +278,10 @@ namespace mview
             // 
             // boxNameType
             // 
-            this.boxNameType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.boxNameType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
             this.boxNameType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.boxNameType.DropDownWidth = 104;
+            this.boxNameType.IntegralHeight = false;
             this.boxNameType.Items.AddRange(new object[] {
             "Field",
             "Group",
@@ -332,9 +294,10 @@ namespace mview
             this.boxNameType.Name = "boxNameType";
             this.boxNameType.Palette = this.kryptonPalette1;
             this.boxNameType.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
-            this.boxNameType.Size = new System.Drawing.Size(104, 20);
+            this.boxNameType.Size = new System.Drawing.Size(104, 21);
             this.boxNameType.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
             this.boxNameType.TabIndex = 30;
+            this.boxNameType.SelectedIndexChanged += new System.EventHandler(this.boxNameType_SelectedIndexChanged);
             // 
             // kryptonLabel3
             // 
@@ -342,7 +305,7 @@ namespace mview
             this.kryptonLabel3.Name = "kryptonLabel3";
             this.kryptonLabel3.Palette = this.kryptonPalette1;
             this.kryptonLabel3.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
-            this.kryptonLabel3.Size = new System.Drawing.Size(34, 19);
+            this.kryptonLabel3.Size = new System.Drawing.Size(37, 20);
             this.kryptonLabel3.TabIndex = 31;
             this.kryptonLabel3.Values.Text = "Type";
             // 
@@ -354,9 +317,10 @@ namespace mview
             this.checkSorted.Name = "checkSorted";
             this.checkSorted.Palette = this.kryptonPalette1;
             this.checkSorted.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
-            this.checkSorted.Size = new System.Drawing.Size(92, 19);
+            this.checkSorted.Size = new System.Drawing.Size(99, 20);
             this.checkSorted.TabIndex = 32;
             this.checkSorted.Values.Text = "Sorted names";
+            this.checkSorted.CheckedChanged += new System.EventHandler(this.checkSorted_CheckedChanged);
             // 
             // MainForm
             // 
@@ -371,11 +335,10 @@ namespace mview
             this.Controls.Add(this.listNames);
             this.Controls.Add(this.kryptonNavigator);
             this.Controls.Add(this.buttonProjects);
-            this.Controls.Add(this.statusStrip1);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Name = "MainForm";
-            this.PaletteMode = Krypton.Toolkit.PaletteMode.Office2010Blue;
+            this.PaletteMode = Krypton.Toolkit.PaletteMode.Office2010Silver;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "mView";
             ((System.ComponentModel.ISupportInitialize)(this.kryptonNavigator)).EndInit();
@@ -383,7 +346,6 @@ namespace mview
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPage3)).EndInit();
             this.kryptonPage3.ResumeLayout(false);
             this.kryptonPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.kryptonPage4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.boxNameType)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -391,22 +353,20 @@ namespace mview
         }
 
         #endregion
-        private System.Windows.Forms.StatusStrip statusStrip1;
         private Krypton.Toolkit.KryptonButton buttonProjects;
         private Krypton.Toolkit.KryptonPalette kryptonPalette1;
         private Krypton.Navigator.KryptonNavigator kryptonNavigator;
         private Krypton.Navigator.KryptonPage kryptonPage3;
-        private Krypton.Navigator.KryptonPage kryptonPage4;
         private Krypton.Toolkit.KryptonLabel labelWellgroups;
         private Krypton.Toolkit.KryptonLabel labelAnnotations;
         private Krypton.Toolkit.KryptonButton kryptonButton8;
         private Krypton.Toolkit.KryptonButton kryptonButton7;
-        private Krypton.Toolkit.KryptonButton kryptonButton6;
+        private Krypton.Toolkit.KryptonButton buttonExcelExport;
         private Krypton.Toolkit.KryptonButton kryptonButton5;
         private Krypton.Toolkit.KryptonButton kryptonButton4;
         private Krypton.Toolkit.KryptonButton kryptonButton3;
         private Krypton.Toolkit.KryptonButton kryptonButton2;
-        private Krypton.Toolkit.KryptonButton kryptonButton1;
+        private Krypton.Toolkit.KryptonButton buttonCharts;
         private Krypton.Toolkit.KryptonLabel kryptonLabel2;
         private Krypton.Toolkit.KryptonLabel kryptonLabel1;
         private Krypton.Toolkit.KryptonListBox listNames;

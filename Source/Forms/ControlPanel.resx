@@ -117,22 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        AAABAAEAICAQcwAAAADoAgAAFgAAACgAAAAgAAAAQAAAAAEABAAAAAAAgAIAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAACAAACAAAAAgIAAgAAAAIAAgACAgAAAgICAAMDAwAAAAP8AAP8AAAD//wD/AAAA/wD/AP//
-        AAD///8A///////wAAAAAAD////////////wAAAAAAAAAP/////////wAAD/////8AAA////////AAD/
-        ///////wAA//////8AD///////////AA/////wAP////////////AA////AA//////////////AA///w
-        D///////////////AP//AA///////////////wAP/wD//wD///8P///w///wD/AA///wD///D///AP//
-        8ADwD///8A//8A///wD///8A8A////8P//AA//AP////APAP////AP/wgP/wD////wBwD////wD/APAP
-        8A////8AAA/////wDwDwDwD/////AHAP////8A8P/w8A/////wDwD/////AAD/8AB/////8A8A//////
-        AP//gA//////APAP/////wD///AP/////wDwAP////+A///w//////AA/wD////////////////wD/8A
-        D///////////////AA//8A///////////////wD///AA//////////////AA////AA////////////8A
-        D/////AA///////////wAP//////AAD////////wAA////////AAAP/////wAAD/////////8AAAAAAA
-        AAD////////////wAAAAAAD///////////////+AAP////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
-</value>
-  </data>
+  <metadata name="kryptonPalette1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>

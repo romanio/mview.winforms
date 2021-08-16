@@ -35,10 +35,9 @@ namespace mview
         readonly ProjectManager pm = new ProjectManager();
         readonly ControlPanel controlPanel = null;
         readonly FilterPanel filterPanel = null;
-        
-        readonly List<ITabObserver> tabObservers = new List<ITabObserver>();
 
         NameOptions namesType = NameOptions.Well;
+
         bool suspendEvents = false;
 
         public MainForm()
@@ -54,6 +53,8 @@ namespace mview
             filterPanel.UpdateData += FilterPanelOnUpdateData;
 
             boxNameType.SelectedIndex = 2;
+
+            kryptonNavigator.Button.CloseButtonDisplay = Krypton.Navigator.ButtonDisplay.ShowDisabled;
 
             suspendEvents = false;
         }
@@ -179,18 +180,16 @@ namespace mview
             return pm.ECL.VECTORS.Where(c => c.Type == type).Select(c => c.Name).ToArray();
         }
 
-        private void ListNamesOnSelectedIndexChanged(object sender, EventArgs e)
-        {
-            EventUpdateSelectedWells();
-        }
-
         void EventUpdateSelectedProject()
         {
             // Update Tabs
 
-            foreach (ITabObserver item in tabObservers)
+            foreach (Krypton.Navigator.KryptonPage item in kryptonNavigator.Pages)
             {
-                item.UpdateSelectedProjects(pm.ECL);
+                if (item.Controls[0] is ITabObserver)
+                {
+                    (item.Controls[0] as ITabObserver).UpdateSelectedProjects(pm.ECL);
+                }
             }
         }
 
@@ -211,65 +210,22 @@ namespace mview
 
             // Update Tabs
 
-            foreach (ITabObserver item in tabObservers)
+            foreach(Krypton.Navigator.KryptonPage item in kryptonNavigator.Pages)
             {
-                var data = new TabSelectedWellsData
+                if (item.Controls[0] is ITabObserver)
                 {
-                    selectedNames = selectedNames,
-                    type = namesType,
-                    names = names
-                };
+                    var data = new TabSelectedWellsData
+                    {
+                        selectedNames = selectedNames,
+                        type = namesType,
+                        names = names
+                    };
 
-                item.UpdateSelectedWells(data);
+                    (item.Controls[0] as ITabObserver).UpdateSelectedWells(data);
+                }
             }
         }
-
-        private void CheckSortedOnCheckedChanged(object sender, EventArgs e)
-        {
-            UpdateFormData();
-        }
-
-        private void BoxNameTypeOnSelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (suspendEvents) return;
-
-            UpdateFormData();
-        }
-
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ButtonNewChartsOnClick(object sender, EventArgs e)
-        {
-            var tabCharts = new TabCharts(pm.ECL)
-            {
-                Dock = DockStyle.Fill
-            };
-
-            var tabPage = new TabPage
-            {
-                Text = "Charts"
-            };
-
-            tabObservers.Add(tabCharts);
-            tabPage.Controls.Add(tabCharts);
-
-            EventUpdateSelectedWells();
-
-
-            //tabControl2.TabPages.Add(tabPage);
-        }
-
-        
-        private void ButtonExportExcelOnClick(object sender, EventArgs e)
-        {
-            ExcelWork excel = new ExcelWork();
-            excel.ExportToExcel(pm.ECL);
-        }
-        
+       
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -290,7 +246,6 @@ namespace mview
                 Text = "Crossplots"
             };
 
-            tabObservers.Add(tabCrossplot);
             tabPage.Controls.Add(tabCrossplot);
 
             tabCrossplot.UpdateSelectedProjects(); // NTR
@@ -312,7 +267,6 @@ namespace mview
                 Text = "Water Plot"
             };
 
-            tabObservers.Add(tabWaterPlot);
             tabPage.Controls.Add(tabWaterPlot);
 
             tabWaterPlot.UpdateSelectedProjects(); // NTR
@@ -342,7 +296,6 @@ namespace mview
                 Text = "2D View"
             };
 
-            tabObservers.Add(tab2DView);
             tabPage.Controls.Add(tab2DView);
 
             EventUpdateSelectedWells();
@@ -382,7 +335,51 @@ namespace mview
                 kryptonNavigator.Button.CloseButtonDisplay = Krypton.Navigator.ButtonDisplay.ShowDisabled;
             }
             else
+            {
                 kryptonNavigator.Button.CloseButtonDisplay = Krypton.Navigator.ButtonDisplay.ShowEnabled;
+            }
+        }
+
+        private void listNames_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            EventUpdateSelectedWells();
+        }
+
+        private void checkSorted_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateFormData();
+        }
+
+        private void boxNameType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
+
+            UpdateFormData();
+        }
+
+        private void buttonExcelExportOnClick(object sender, EventArgs e)
+        {
+            ExcelWork excel = new ExcelWork();
+            excel.ExportToExcel(pm.ECL);
+        }
+
+        void CreatePage(Control item, string caption)
+        {
+            var tabPage = new Krypton.Navigator.KryptonPage
+            {
+                Text = caption
+            };
+
+            tabPage.Controls.Add(item);
+
+            kryptonNavigator.Pages.Add(tabPage);
+
+            EventUpdateSelectedWells();
+        }
+
+        private void buttonCharts_Click(object sender, EventArgs e)
+        {
+            CreatePage(new TabCharts(pm.ECL) { Dock = DockStyle.Fill}, "Charts");
         }
     }
 }

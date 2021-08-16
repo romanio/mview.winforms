@@ -33,13 +33,14 @@ namespace mview
             stylesPanel = new StylesPanel();
             stylesPanel.UpdateData += StylesPanelOnUpdateData;
 
-
             suspendEvents = true;
 
             boxGroupMode.SelectedIndex = 0;
             boxChartsPositions.SelectedIndex = 1;
 
             UpdateChartPositions();
+
+            kryptonWorkspace1.ApplyGridPages(true, Orientation.Horizontal);
 
             suspendEvents = false;
         }
@@ -142,11 +143,6 @@ namespace mview
             stylesPanel.UpdateFormData(model.GetAllKeywords());
             stylesPanel.Show();
             stylesPanel.Focus();
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            ControlPaint.DrawBorder(e.Graphics, this.panel1.ClientRectangle, Color.LightSteelBlue, ButtonBorderStyle.Solid);
         }
 
         private void CheckShowAnnoOnCheckedChanged(object sender, EventArgs e)
