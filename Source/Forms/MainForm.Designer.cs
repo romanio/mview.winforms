@@ -61,8 +61,8 @@ namespace mview
             // 
             // kryptonPalette1
             // 
-            this.kryptonPalette1.AllowFormChrome = Krypton.Toolkit.InheritBool.False;
-            this.kryptonPalette1.BasePaletteMode = Krypton.Toolkit.PaletteMode.Office2010Silver;
+            this.kryptonPalette1.Common.StateCommon.Content.LongText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.kryptonPalette1.Common.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.kryptonPalette1.CustomisedKryptonPaletteFilePath = null;
             // 
             // buttonProjects
@@ -81,10 +81,11 @@ namespace mview
             this.kryptonNavigator.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.kryptonNavigator.Bar.BarMapText = Krypton.Navigator.MapKryptonPageText.Text;
             this.kryptonNavigator.Bar.ItemMinimumSize = new System.Drawing.Size(80, 20);
             this.kryptonNavigator.Bar.ItemSizing = Krypton.Navigator.BarItemSizing.SameWidthAndHeight;
             this.kryptonNavigator.Bar.TabBorderStyle = Krypton.Toolkit.TabBorderStyle.DockEqual;
-            this.kryptonNavigator.Bar.TabStyle = Krypton.Toolkit.TabStyle.StandardProfile;
+            this.kryptonNavigator.Bar.TabStyle = Krypton.Toolkit.TabStyle.LowProfile;
             this.kryptonNavigator.Location = new System.Drawing.Point(136, 12);
             this.kryptonNavigator.Name = "kryptonNavigator";
             this.kryptonNavigator.Pages.AddRange(new Krypton.Navigator.KryptonPage[] {
@@ -301,7 +302,7 @@ namespace mview
             // 
             // kryptonLabel3
             // 
-            this.kryptonLabel3.Location = new System.Drawing.Point(14, 495);
+            this.kryptonLabel3.Location = new System.Drawing.Point(12, 494);
             this.kryptonLabel3.Name = "kryptonLabel3";
             this.kryptonLabel3.Palette = this.kryptonPalette1;
             this.kryptonLabel3.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
@@ -326,6 +327,7 @@ namespace mview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(888, 695);
             this.Controls.Add(this.checkSorted);
             this.Controls.Add(this.kryptonLabel3);
@@ -338,7 +340,8 @@ namespace mview
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Name = "MainForm";
-            this.PaletteMode = Krypton.Toolkit.PaletteMode.Office2010Silver;
+            this.Palette = this.kryptonPalette1;
+            this.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "mView";
             ((System.ComponentModel.ISupportInitialize)(this.kryptonNavigator)).EndInit();

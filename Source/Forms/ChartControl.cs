@@ -30,10 +30,6 @@ namespace mview
         {
             InitializeComponent();
 
-            typeof(Control).InvokeMember("DoubleBuffered",
-                BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
-                null, gridData, new object[] { true });
-
             this.model = model;
 
             plotModel = new PlotModel

@@ -40,8 +40,7 @@ namespace mview
 
             UpdateChartPositions();
 
-            kryptonWorkspace1.ApplyGridPages(true, Orientation.Horizontal);
-
+            
             suspendEvents = false;
         }
 
@@ -49,10 +48,19 @@ namespace mview
         {
             // Update Tabs
 
-            foreach (ChartControl item in tableLayoutPanel1.Controls)
+            foreach (Krypton.Navigator.KryptonPage item in kryptonWorkspace1.AllPages())
             {
-                item.UpdateNames(data.selectedNames, data.type);
+                if (item.Controls[0] is ChartControl)
+                {
+                    (item.Controls[0] as ChartControl).UpdateNames(data.selectedNames, data.type);
+
+                }
             }
+
+            //foreach (ChartControl item in tableLayoutPanel1.Controls)
+            //{
+            //    item.UpdateNames(data.selectedNames, data.type);
+           // }
         }
 
         private void StylesPanelOnUpdateData(object sender, StyleSettings e)
@@ -62,36 +70,20 @@ namespace mview
 
         void UpdateChartPositions()
         {
-            tableLayoutPanel1.Controls.Clear();
-            tableLayoutPanel1.RowStyles.Clear();
-            tableLayoutPanel1.ColumnStyles.Clear();
+            kryptonWorkspaceCell1.Pages.Clear();
 
-
-            switch (boxChartsPositions.SelectedIndex)
+            for (int iw = 0; iw < 4; ++iw)
             {
-                case 0:
-                    tableLayoutPanel1.RowCount = 1;
-                    tableLayoutPanel1.ColumnCount = 1;
-                    tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-                    tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
-                    break;
-                case 1:
-                    tableLayoutPanel1.RowCount = 2;
-                    tableLayoutPanel1.ColumnCount = 2;
-                    tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-                    tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-                    tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                    tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+                var page = new Krypton.Navigator.KryptonPage();
+                page.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
 
-                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
-                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
-                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
-                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
-                    break;
+                kryptonWorkspaceCell1.Pages.Add(page);
             }
 
             UpdateChartSettings(stylesPanel.GetStyleSettings());
+
+            kryptonWorkspace1.ApplyGridPages(true, Orientation.Horizontal);
+
         }
 
         void UpdateChartSettings(StyleSettings style)
@@ -118,10 +110,13 @@ namespace mview
 
             data.StyleSettings = style;
 
-            foreach (ChartControl item in tableLayoutPanel1.Controls)
-            {
-                item.UpdateSettings(data);
-            }
+
+            
+
+            // foreach (ChartControl item in tableLayoutPanel1.Controls)
+            // {
+            //     item
+            // }
         }
 
         private void BoxGroupModeOnSelectedIndexChanged(object sender, EventArgs e)

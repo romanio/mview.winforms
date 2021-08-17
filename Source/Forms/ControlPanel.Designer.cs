@@ -31,10 +31,10 @@ namespace mview
         {
             this.components = new System.ComponentModel.Container();
             this.buttonOpen = new Krypton.Toolkit.KryptonButton();
-            this.kryptonPalette1 = new Krypton.Toolkit.KryptonPalette(this.components);
             this.buttonDelete = new Krypton.Toolkit.KryptonButton();
             this.listBoxProjectNames = new Krypton.Toolkit.KryptonListBox();
             this.listBoxLog = new Krypton.Toolkit.KryptonListBox();
+            this.kryptonPalette1 = new Krypton.Toolkit.KryptonPalette(this.components);
             this.SuspendLayout();
             // 
             // buttonOpen
@@ -47,11 +47,6 @@ namespace mview
             this.buttonOpen.TabIndex = 19;
             this.buttonOpen.Values.Text = "Open";
             this.buttonOpen.Click += new System.EventHandler(this.buttonOpen_Click);
-            // 
-            // kryptonPalette1
-            // 
-            this.kryptonPalette1.BasePaletteMode = Krypton.Toolkit.PaletteMode.Office2010Silver;
-            this.kryptonPalette1.CustomisedKryptonPaletteFilePath = null;
             // 
             // buttonDelete
             // 
@@ -82,6 +77,11 @@ namespace mview
             this.listBoxLog.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
             this.listBoxLog.Size = new System.Drawing.Size(390, 235);
             this.listBoxLog.TabIndex = 22;
+            // 
+            // kryptonPalette1
+            // 
+            this.kryptonPalette1.Common.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.kryptonPalette1.CustomisedKryptonPaletteFilePath = null;
             // 
             // ControlPanel
             // 

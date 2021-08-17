@@ -379,7 +379,7 @@ namespace mview
 
         private void buttonCharts_Click(object sender, EventArgs e)
         {
-            CreatePage(new TabCharts(pm.ECL) { Dock = DockStyle.Fill}, "Charts");
+            CreatePage(new TabCharts(pm.ECL) { Dock = DockStyle.Fill }, "Charts");
         }
     }
 }
