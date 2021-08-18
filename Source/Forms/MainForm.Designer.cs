@@ -52,6 +52,7 @@ namespace mview
             this.boxNameType = new Krypton.Toolkit.KryptonComboBox();
             this.kryptonLabel3 = new Krypton.Toolkit.KryptonLabel();
             this.checkSorted = new Krypton.Toolkit.KryptonCheckBox();
+            this.kryptonManager1 = new Krypton.Toolkit.KryptonManager(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.kryptonNavigator)).BeginInit();
             this.kryptonNavigator.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonPage3)).BeginInit();
@@ -61,6 +62,7 @@ namespace mview
             // 
             // kryptonPalette1
             // 
+            this.kryptonPalette1.BasePaletteMode = Krypton.Toolkit.PaletteMode.Office365Blue;
             this.kryptonPalette1.Common.StateCommon.Content.LongText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.kryptonPalette1.Common.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.kryptonPalette1.CustomisedKryptonPaletteFilePath = null;
@@ -323,6 +325,11 @@ namespace mview
             this.checkSorted.Values.Text = "Sorted names";
             this.checkSorted.CheckedChanged += new System.EventHandler(this.checkSorted_CheckedChanged);
             // 
+            // kryptonManager1
+            // 
+            this.kryptonManager1.GlobalPalette = this.kryptonPalette1;
+            this.kryptonManager1.GlobalPaletteMode = Krypton.Toolkit.PaletteModeManager.Custom;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -378,6 +385,7 @@ namespace mview
         private Krypton.Toolkit.KryptonComboBox boxNameType;
         private Krypton.Toolkit.KryptonLabel kryptonLabel3;
         private Krypton.Toolkit.KryptonCheckBox checkSorted;
+        private Krypton.Toolkit.KryptonManager kryptonManager1;
     }
 }
 

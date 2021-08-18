@@ -34,15 +34,13 @@ namespace mview
             this.buttonDelete = new Krypton.Toolkit.KryptonButton();
             this.listBoxProjectNames = new Krypton.Toolkit.KryptonListBox();
             this.listBoxLog = new Krypton.Toolkit.KryptonListBox();
-            this.kryptonPalette1 = new Krypton.Toolkit.KryptonPalette(this.components);
+            this.kryptonManager1 = new Krypton.Toolkit.KryptonManager(this.components);
             this.SuspendLayout();
             // 
             // buttonOpen
             // 
             this.buttonOpen.Location = new System.Drawing.Point(12, 12);
             this.buttonOpen.Name = "buttonOpen";
-            this.buttonOpen.Palette = this.kryptonPalette1;
-            this.buttonOpen.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
             this.buttonOpen.Size = new System.Drawing.Size(104, 29);
             this.buttonOpen.TabIndex = 19;
             this.buttonOpen.Values.Text = "Open";
@@ -52,8 +50,6 @@ namespace mview
             // 
             this.buttonDelete.Location = new System.Drawing.Point(12, 111);
             this.buttonDelete.Name = "buttonDelete";
-            this.buttonDelete.Palette = this.kryptonPalette1;
-            this.buttonDelete.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
             this.buttonDelete.Size = new System.Drawing.Size(104, 29);
             this.buttonDelete.TabIndex = 20;
             this.buttonDelete.Values.Text = "Delete";
@@ -63,8 +59,6 @@ namespace mview
             // 
             this.listBoxProjectNames.Location = new System.Drawing.Point(132, 12);
             this.listBoxProjectNames.Name = "listBoxProjectNames";
-            this.listBoxProjectNames.Palette = this.kryptonPalette1;
-            this.listBoxProjectNames.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
             this.listBoxProjectNames.Size = new System.Drawing.Size(272, 128);
             this.listBoxProjectNames.TabIndex = 21;
             this.listBoxProjectNames.SelectedIndexChanged += new System.EventHandler(this.listBoxProjectNames_SelectedIndexChanged);
@@ -73,15 +67,8 @@ namespace mview
             // 
             this.listBoxLog.Location = new System.Drawing.Point(12, 164);
             this.listBoxLog.Name = "listBoxLog";
-            this.listBoxLog.Palette = this.kryptonPalette1;
-            this.listBoxLog.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
             this.listBoxLog.Size = new System.Drawing.Size(390, 235);
             this.listBoxLog.TabIndex = 22;
-            // 
-            // kryptonPalette1
-            // 
-            this.kryptonPalette1.Common.StateCommon.Content.ShortText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.kryptonPalette1.CustomisedKryptonPaletteFilePath = null;
             // 
             // ControlPanel
             // 
@@ -97,8 +84,6 @@ namespace mview
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "ControlPanel";
-            this.Palette = this.kryptonPalette1;
-            this.PaletteMode = Krypton.Toolkit.PaletteMode.Custom;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Project";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ControlPanelOnFormClosing);
@@ -112,5 +97,6 @@ namespace mview
         private Krypton.Toolkit.KryptonListBox listBoxProjectNames;
         private Krypton.Toolkit.KryptonListBox listBoxLog;
         private Krypton.Toolkit.KryptonPalette kryptonPalette1;
+        private Krypton.Toolkit.KryptonManager kryptonManager1;
     }
 }

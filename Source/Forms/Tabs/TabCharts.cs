@@ -48,6 +48,7 @@ namespace mview
         {
             // Update Tabs
 
+            /*
             foreach (Krypton.Navigator.KryptonPage item in kryptonWorkspace1.AllPages())
             {
                 if (item.Controls[0] is ChartControl)
@@ -56,6 +57,7 @@ namespace mview
 
                 }
             }
+            */
 
             //foreach (ChartControl item in tableLayoutPanel1.Controls)
             //{
@@ -70,6 +72,10 @@ namespace mview
 
         void UpdateChartPositions()
         {
+
+
+
+            /*
             kryptonWorkspaceCell1.Pages.Clear();
 
             for (int iw = 0; iw < 4; ++iw)
@@ -82,8 +88,8 @@ namespace mview
 
             UpdateChartSettings(stylesPanel.GetStyleSettings());
 
-            kryptonWorkspace1.ApplyGridPages(true, Orientation.Horizontal);
-
+         
+            */
         }
 
         void UpdateChartSettings(StyleSettings style)
@@ -135,6 +141,16 @@ namespace mview
 
         private void ButtonSeriesSettingsOnClick(object sender, EventArgs e)
         {
+            kryptonWorkspace1.ApplyGridPages();
+
+            for (int iw = 0; iw < kryptonWorkspace1.Root.Children.Count; ++iw)
+            {
+                kryptonWorkspace1.Root.Children[iw].
+            
+                           cell.NavigatorMode = Krypton.Navigator.NavigatorMode.BarRibbonTabGroup;
+
+            }
+
             stylesPanel.UpdateFormData(model.GetAllKeywords());
             stylesPanel.Show();
             stylesPanel.Focus();
