@@ -34,7 +34,7 @@ namespace mview
             this.buttonDelete = new Krypton.Toolkit.KryptonButton();
             this.listBoxProjectNames = new Krypton.Toolkit.KryptonListBox();
             this.listBoxLog = new Krypton.Toolkit.KryptonListBox();
-            this.kryptonManager1 = new Krypton.Toolkit.KryptonManager(this.components);
+
             this.SuspendLayout();
             // 
             // buttonOpen
@@ -96,7 +96,7 @@ namespace mview
         private Krypton.Toolkit.KryptonButton buttonDelete;
         private Krypton.Toolkit.KryptonListBox listBoxProjectNames;
         private Krypton.Toolkit.KryptonListBox listBoxLog;
-        private Krypton.Toolkit.KryptonPalette kryptonPalette1;
-        private Krypton.Toolkit.KryptonManager kryptonManager1;
+
+
     }
 }

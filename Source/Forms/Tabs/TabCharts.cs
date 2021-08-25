@@ -40,6 +40,7 @@ namespace mview
 
             UpdateChartPositions();
 
+            kryptonWorkspace1.ApplyGridPages(false, Orientation.Horizontal, 2);
             
             suspendEvents = false;
         }
@@ -141,16 +142,6 @@ namespace mview
 
         private void ButtonSeriesSettingsOnClick(object sender, EventArgs e)
         {
-            kryptonWorkspace1.ApplyGridPages();
-
-            for (int iw = 0; iw < kryptonWorkspace1.Root.Children.Count; ++iw)
-            {
-                kryptonWorkspace1.Root.Children[iw].
-            
-                           cell.NavigatorMode = Krypton.Navigator.NavigatorMode.BarRibbonTabGroup;
-
-            }
-
             stylesPanel.UpdateFormData(model.GetAllKeywords());
             stylesPanel.Show();
             stylesPanel.Focus();
@@ -164,6 +155,12 @@ namespace mview
         public void UpdateSelectedProjects(EclipseProject ecl)
         {
             model.UpdateECL(ecl);
+        }
+
+        private void kryptonWorkspace1_WorkspaceCellAdding(object sender, Krypton.Workspace.WorkspaceCellEventArgs e)
+        {
+            e.Cell.Button.ContextButtonDisplay = Krypton.Navigator.ButtonDisplay.Hide;
+            e.Cell.NavigatorMode = Krypton.Navigator.NavigatorMode.BarRibbonTabGroup;
         }
     }
 }
