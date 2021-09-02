@@ -29,7 +29,6 @@ namespace mview
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPageControl = new System.Windows.Forms.TabPage();
@@ -53,6 +52,7 @@ namespace mview
             this.button1 = new System.Windows.Forms.Button();
             this.buttonWellFilter = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             this.tabControl2.SuspendLayout();
             this.tabPageControl.SuspendLayout();
             this.SuspendLayout();
@@ -83,6 +83,7 @@ namespace mview
             // tabPageControl
             // 
             this.tabPageControl.BackColor = System.Drawing.SystemColors.Window;
+            this.tabPageControl.Controls.Add(this.button7);
             this.tabPageControl.Controls.Add(this.label6);
             this.tabPageControl.Controls.Add(this.button9);
             this.tabPageControl.Controls.Add(this.label5);
@@ -361,11 +362,24 @@ namespace mview
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
+            // button7
+            // 
+            this.button7.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
+            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button7.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
+            this.button7.Location = new System.Drawing.Point(432, 95);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(104, 29);
+            this.button7.TabIndex = 28;
+            this.button7.Text = "Well Model";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Window;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(888, 695);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.buttonWellFilter);
@@ -378,7 +392,6 @@ namespace mview
             this.Controls.Add(this.statusStrip1);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "mView";
@@ -414,6 +427,7 @@ namespace mview
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button button7;
     }
 }
 

@@ -22,8 +22,6 @@ namespace mview
             model = new MapModel(ecl);
             chartModel = new ChartModel(ecl);
 
-            suspendEvents = true;
-
             GraphicsMode grx = new GraphicsMode(new ColorFormat(8, 8, 8, 8), 24, 8, 4);
             glControl = new GLControl(grx, 1, 5, GraphicsContextFlags.Default);
 
@@ -40,7 +38,13 @@ namespace mview
             
             panelOpenGL.Controls.Add(glControl);
 
-            // Default settings
+            DefaultSetting();
+     
+        }
+        
+        void DefaultSetting()
+        {
+            suspendEvents = true;
 
             numericZScale.Value = (decimal)style.zscale;
             checkShowGridlines.Checked = style.showGridLines;
@@ -62,9 +66,9 @@ namespace mview
                 item.UpdateSettings(settings);
             }
 
-     
         }
-        
+
+
         ~Tab2DView()
         {
             model.OnUnload();
@@ -305,6 +309,9 @@ namespace mview
                 textMaximum.Text = model.GetMaxValue().ToString();
                 textMinimum.Text = model.GetMinValue().ToString();
 
+                style.minValue = model.GetMinValue();
+                style.maxValue = model.GetMaxValue();
+
                 GLControlOnPaint(null, null);
             }
             if (treeProperties.SelectedNode?.Parent?.Index == 1) // Dynamic property
@@ -314,6 +321,9 @@ namespace mview
 
                 textMaximum.Text = model.GetMaxValue().ToString();
                 textMinimum.Text = model.GetMinValue().ToString();
+
+                style.minValue = model.GetMinValue();
+                style.maxValue = model.GetMaxValue();
 
                 GLControlOnPaint(null, null);
             }
@@ -426,6 +436,5 @@ namespace mview
             UpdateFormData();
             SetMapStyle();
         }
-
     }
 }

@@ -29,7 +29,6 @@ namespace mview
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StylesPanel));
             this.label1 = new System.Windows.Forms.Label();
             this.listKeywords = new System.Windows.Forms.ListBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -564,6 +563,7 @@ namespace mview
             // 
             this.buttonSeriesSettings.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
             this.buttonSeriesSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSeriesSettings.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonSeriesSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonSeriesSettings.Location = new System.Drawing.Point(260, 479);
             this.buttonSeriesSettings.Name = "buttonSeriesSettings";
@@ -577,14 +577,13 @@ namespace mview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Window;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(382, 530);
             this.Controls.Add(this.buttonSeriesSettings);
             this.Controls.Add(this.tabControl1);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "StylesPanel";

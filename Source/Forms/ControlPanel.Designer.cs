@@ -29,7 +29,6 @@ namespace mview
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ControlPanel));
             this.listBoxProjectNames = new System.Windows.Forms.ListBox();
             this.buttonSeriesSettings = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -95,7 +94,7 @@ namespace mview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Window;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(414, 411);
             this.Controls.Add(this.listBoxLog);
             this.Controls.Add(this.button1);
@@ -103,7 +102,6 @@ namespace mview
             this.Controls.Add(this.listBoxProjectNames);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "ControlPanel";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

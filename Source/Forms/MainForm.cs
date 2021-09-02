@@ -365,5 +365,27 @@ namespace mview
             
             EventUpdateSelectedWells();
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            var tabWellModel = new TabWellModel(pm.ECL)
+            {
+                Dock = DockStyle.Fill
+            };
+
+
+            var tabPage = new TabPage
+            {
+                Text = "Well Model"
+            };
+
+            tabObservers.Add(tabWellModel);
+            tabPage.Controls.Add(tabWellModel);
+
+            tabWellModel.UpdateSelectedProjects(); // NTR
+            EventUpdateSelectedWells();
+
+            tabControl2.TabPages.Add(tabPage);
+        }
     }
 }

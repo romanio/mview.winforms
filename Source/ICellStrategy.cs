@@ -7,11 +7,26 @@ namespace mview
 {
     public interface ICellStrategy
     {
-        int NX { get; }
-        int NY { get; }
-        int Slice { set; }
-        Vector2 DxDy { set; }
-        Vector2 MinPoint { set; }
+        int NX
+        {
+            get;
+        }
+        int NY
+        {
+            get;
+        }
+        int Slice
+        {
+            set;
+        }
+        Vector2 DxDy 
+        {
+            set;
+        }
+        Vector2 MinPoint
+        {
+            set;
+        }
 
         float StretchFactor { set; }
         List<Vector2> Points { get; }

@@ -125,6 +125,12 @@
     <Compile Include="Source\Forms\Tabs\Tab2DView.Designer.cs">
       <DependentUpon>Tab2DView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Forms\Tabs\TabWellModel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\Forms\Tabs\TabWellModel.Designer.cs">
+      <DependentUpon>TabWellModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Forms\Tabs\TabReservedForModernOpenGL.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -197,6 +203,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Forms\Tabs\Tab2DView.resx">
       <DependentUpon>Tab2DView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Forms\Tabs\TabWellModel.resx">
+      <DependentUpon>TabWellModel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Forms\Tabs\TabReservedForModernOpenGL.resx">
       <DependentUpon>TabReservedForModernOpenGL.cs</DependentUpon>
