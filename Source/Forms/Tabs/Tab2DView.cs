@@ -66,6 +66,7 @@ namespace mview
                 item.UpdateSettings(settings);
             }
 
+            suspendEvents = false;
         }
 
 

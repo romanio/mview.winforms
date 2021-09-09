@@ -29,24 +29,26 @@ namespace mview
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.boxRestartDates = new System.Windows.Forms.ComboBox();
+            this.checkShowValue = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.boxCriteriaType = new System.Windows.Forms.ComboBox();
+            this.boxLumping = new System.Windows.Forms.ComboBox();
             this.boxDepthMode = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.boxChartMode = new System.Windows.Forms.ComboBox();
             this.gridData = new System.Windows.Forms.DataGridView();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.checkShowValue = new System.Windows.Forms.CheckBox();
             this.plotView = new OxyPlot.WindowsForms.PlotView();
+            this.label2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridData)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -54,8 +56,8 @@ namespace mview
             // 
             // Column1
             // 
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle1;
             this.Column1.HeaderText = "Wellname";
             this.Column1.Name = "Column1";
             this.Column1.Width = 80;
@@ -74,8 +76,8 @@ namespace mview
             // 
             // Column4
             // 
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Column4.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.Column4.DefaultCellStyle = dataGridViewCellStyle2;
             this.Column4.HeaderText = "Difference";
             this.Column4.Name = "Column4";
             this.Column4.Width = 80;
@@ -91,10 +93,12 @@ namespace mview
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.boxRestartDates);
             this.panel1.Controls.Add(this.checkShowValue);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.boxCriteriaType);
+            this.panel1.Controls.Add(this.boxLumping);
             this.panel1.Controls.Add(this.boxDepthMode);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.boxChartMode);
@@ -103,6 +107,29 @@ namespace mview
             this.panel1.Size = new System.Drawing.Size(791, 89);
             this.panel1.TabIndex = 7;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.Panel1OnPaint);
+            // 
+            // boxRestartDates
+            // 
+            this.boxRestartDates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.boxRestartDates.FormattingEnabled = true;
+            this.boxRestartDates.IntegralHeight = false;
+            this.boxRestartDates.Items.AddRange(new object[] {
+            "1 Chart",
+            "4 Charts"});
+            this.boxRestartDates.Location = new System.Drawing.Point(350, 51);
+            this.boxRestartDates.Name = "boxRestartDates";
+            this.boxRestartDates.Size = new System.Drawing.Size(135, 21);
+            this.boxRestartDates.TabIndex = 41;
+            // 
+            // checkShowValue
+            // 
+            this.checkShowValue.AutoSize = true;
+            this.checkShowValue.Location = new System.Drawing.Point(521, 15);
+            this.checkShowValue.Name = "checkShowValue";
+            this.checkShowValue.Size = new System.Drawing.Size(85, 17);
+            this.checkShowValue.TabIndex = 40;
+            this.checkShowValue.Text = "Show value";
+            this.checkShowValue.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -122,23 +149,23 @@ namespace mview
             this.label3.TabIndex = 4;
             this.label3.Text = "Lumping by";
             // 
-            // boxCriteriaType
+            // boxLumping
             // 
-            this.boxCriteriaType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.boxCriteriaType.FormattingEnabled = true;
-            this.boxCriteriaType.IntegralHeight = false;
-            this.boxCriteriaType.Items.AddRange(new object[] {
+            this.boxLumping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.boxLumping.FormattingEnabled = true;
+            this.boxLumping.IntegralHeight = false;
+            this.boxLumping.Items.AddRange(new object[] {
             "None",
             "K-VALUE",
             "EQLNUM",
             "PVTNUM",
             "SATNUM",
             "FIPNUM"});
-            this.boxCriteriaType.Location = new System.Drawing.Point(112, 48);
-            this.boxCriteriaType.Name = "boxCriteriaType";
-            this.boxCriteriaType.Size = new System.Drawing.Size(123, 21);
-            this.boxCriteriaType.TabIndex = 5;
-            this.boxCriteriaType.SelectedIndexChanged += new System.EventHandler(this.BoxCriteriaTypeOnSelectedIndexChanged);
+            this.boxLumping.Location = new System.Drawing.Point(112, 48);
+            this.boxLumping.Name = "boxLumping";
+            this.boxLumping.Size = new System.Drawing.Size(123, 21);
+            this.boxLumping.TabIndex = 5;
+            this.boxLumping.SelectedIndexChanged += new System.EventHandler(this.BoxCriteriaTypeOnSelectedIndexChanged);
             // 
             // boxDepthMode
             // 
@@ -228,16 +255,6 @@ namespace mview
             this.tableLayoutPanel1.Size = new System.Drawing.Size(791, 537);
             this.tableLayoutPanel1.TabIndex = 8;
             // 
-            // checkShowValue
-            // 
-            this.checkShowValue.AutoSize = true;
-            this.checkShowValue.Location = new System.Drawing.Point(521, 15);
-            this.checkShowValue.Name = "checkShowValue";
-            this.checkShowValue.Size = new System.Drawing.Size(85, 17);
-            this.checkShowValue.TabIndex = 40;
-            this.checkShowValue.Text = "Show value";
-            this.checkShowValue.UseVisualStyleBackColor = true;
-            // 
             // plotView
             // 
             this.plotView.BackColor = System.Drawing.SystemColors.ControlLightLight;
@@ -253,6 +270,15 @@ namespace mview
             this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(301, 51);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(31, 13);
+            this.label2.TabIndex = 42;
+            this.label2.Text = "Date";
             // 
             // TabWellModel
             // 
@@ -286,9 +312,11 @@ namespace mview
         private System.Windows.Forms.DataGridView gridData;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox boxCriteriaType;
+        private System.Windows.Forms.ComboBox boxLumping;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox checkShowValue;
         private OxyPlot.WindowsForms.PlotView plotView;
+        private System.Windows.Forms.ComboBox boxRestartDates;
+        private System.Windows.Forms.Label label2;
     }
 }
