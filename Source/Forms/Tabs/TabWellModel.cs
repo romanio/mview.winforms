@@ -57,7 +57,7 @@ namespace mview
             plotModel = new PlotModel
             {
                 DefaultFont = "Segoe UI",
-                DefaultFontSize = 11,
+                DefaultFontSize = 10,
             };
 
             plotModel.Legends.Add(new OxyPlot.Legends.Legend
@@ -89,7 +89,6 @@ namespace mview
 
 
             plotView.Model = plotModel;
-
 
             suspendEvents = false;
         }
@@ -127,19 +126,27 @@ namespace mview
 
         void UpdateChart()
         {
+            if (model.WELL == null) return;
+
             plotModel.Series.Clear();
+
+            // 0 Series Fill Rectangle
 
             plotModel.Series.Add(new RectangleBarSeries
             {
                 StrokeThickness = 0,
             });
 
+            // 1 Series Border Rectangle
+
             plotModel.Series.Add(new RectangleBarSeries
             {
                 StrokeThickness = 1,
                 StrokeColor = OxyColors.Black,
                 FillColor = OxyColors.Transparent
-            }); ; ;
+            });
+
+            // 2 Selected Rectangle
 
             plotModel.Series.Add(new RectangleBarSeries
             {
@@ -153,17 +160,7 @@ namespace mview
             {
                 switch (boxChartMode.SelectedIndex)
                 {
-                    case 0: // Pressure drop 
-
-                        plotModel.Axes[0].Title = "(P - Pw), bar";
-                        plotModel.Axes[1].Title = "Depth, m";
-
-                        ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.OrangeRed;
-                        DrawGraph((x) => x.PRESS - x.Hw - model.WELL.WBHP, model.MODI.PDD_LIST);
-
-                        break;
-
-                    case 1: // Liquid production
+                    case 0: // Liquid production
 
                         plotModel.Axes[0].Title = "Liquid, m3/day";
                         plotModel.Axes[1].Title = "Depth, m";
@@ -172,7 +169,7 @@ namespace mview
                         DrawGraph((x) => x.WPR + x.OPR, model.MODI.LIQ_LIST);
                         break;
 
-                    case 2: // Oil production
+                    case 1: // Oil production
                         plotModel.Axes[0].Title = "Oil, m3/day";
                         plotModel.Axes[1].Title = "Depth, m";
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Orange;
@@ -180,14 +177,14 @@ namespace mview
                         DrawGraph((x) => x.OPR, model.MODI.OIL_LIST);
                         break;
 
-                    case 3: // Water production
+                    case 2: // Water production
                         plotModel.Axes[0].Title = "Water, m3/day";
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.BlueViolet;
 
                         DrawGraph((x) => x.WPR, model.MODI.WATER_LIST);
                         break;
 
-                    case 4: // Water Cut
+                    case 3: // Water Cut
                         plotModel.Axes[0].Title = "Water Cut";
                         plotModel.Axes[1].Title = "Depth, m";
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.CadetBlue;
@@ -195,7 +192,7 @@ namespace mview
                         DrawGraph((x) => x.WPR / (x.WPR + x.OPR), model.MODI.WCUT_LIST);
                         break;
 
-                    case 5: // Connection Factor
+                    case 4: // Connection Factor
                         plotModel.Axes[0].Title = "PI, m3/day/bar";
                         plotModel.Axes[1].Title = "Depth, m";
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Orange;
@@ -280,6 +277,8 @@ else
 
             for (int iw = 0; iw < model.WELL.COMPLNUM; ++iw)
             {
+                if (model.WELL.COMPLS[iw].STATUS == 0) continue;
+                    
                 double value = get_value(model.WELL.COMPLS[iw]);
 
                 if (!Double.IsNaN(value))
@@ -287,8 +286,8 @@ else
                     switch (boxDepthMode.SelectedIndex)
                     {
                         case 0: // Depth 
-                            top = model.WELL.COMPLS[iw].Depth - model.WELL.COMPLS[iw].H / 2;
-                            bottom = model.WELL.COMPLS[iw].Depth + model.WELL.COMPLS[iw].H / 2;
+                            top = model.WELL.COMPLS[iw].TopAverage;
+                            bottom = model.WELL.COMPLS[iw].BottomAverage;
                             break;
                         case 1: // K-value
                             top = (model.WELL.COMPLS[iw].K + 1) - 0.5;
@@ -300,8 +299,9 @@ else
                     ((RectangleBarSeries)plotModel.Series[1]).Items.Add(new RectangleBarItem(0, top, modi[iw], bottom));
 
                     if (checkShowModiValue.Checked)
+                    {
                         ((RectangleBarSeries)plotModel.Series[1]).Items.Last().Title = modi[iw].ToString("N2");
-
+                    }
                     /*
                     if (iw == SelectedCell)
                         ((RectangleBarSeries)plotModel.Series[2]).Items.Add(new RectangleBarItem(0, top, modi[iw], bottom));
@@ -349,6 +349,13 @@ else
             if (suspendEvents) return;
 
             model.ReadWellData();
+
+            UpdateChart();
+        }
+
+        private void checkShowModiValue_CheckedChanged(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
 
             UpdateChart();
         }

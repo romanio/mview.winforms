@@ -29,8 +29,8 @@ namespace mview
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -48,14 +48,19 @@ namespace mview
             this.boxChartMode = new System.Windows.Forms.ComboBox();
             this.gridData = new System.Windows.Forms.DataGridView();
             this.plotView = new OxyPlot.WindowsForms.PlotView();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridData)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Column1
             // 
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle13;
             this.Column1.HeaderText = "Wellname";
             this.Column1.Name = "Column1";
             this.Column1.Width = 80;
@@ -74,8 +79,8 @@ namespace mview
             // 
             // Column4
             // 
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Column4.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.Column4.DefaultCellStyle = dataGridViewCellStyle14;
             this.Column4.HeaderText = "Difference";
             this.Column4.Name = "Column4";
             this.Column4.Width = 80;
@@ -138,6 +143,7 @@ namespace mview
             this.checkShowModiValue.TabIndex = 40;
             this.checkShowModiValue.Text = "Show value";
             this.checkShowModiValue.UseVisualStyleBackColor = true;
+            this.checkShowModiValue.CheckedChanged += new System.EventHandler(this.checkShowModiValue_CheckedChanged);
             // 
             // label4
             // 
@@ -204,7 +210,6 @@ namespace mview
             this.boxChartMode.FormattingEnabled = true;
             this.boxChartMode.IntegralHeight = false;
             this.boxChartMode.Items.AddRange(new object[] {
-            "Pressure drop",
             "Liquid Production",
             "Oil Production",
             "Water Production",
@@ -221,9 +226,6 @@ namespace mview
             this.gridData.AllowUserToAddRows = false;
             this.gridData.AllowUserToDeleteRows = false;
             this.gridData.AllowUserToResizeRows = false;
-            this.gridData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.gridData.BackgroundColor = System.Drawing.SystemColors.Window;
             this.gridData.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.gridData.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
@@ -235,38 +237,57 @@ namespace mview
             this.Column3,
             this.Column4,
             this.Column5});
-            this.gridData.Location = new System.Drawing.Point(415, 98);
+            this.gridData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridData.Location = new System.Drawing.Point(0, 0);
             this.gridData.Name = "gridData";
             this.gridData.RowHeadersVisible = false;
             this.gridData.RowTemplate.Height = 18;
             this.gridData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.gridData.Size = new System.Drawing.Size(379, 251);
+            this.gridData.Size = new System.Drawing.Size(400, 537);
             this.gridData.TabIndex = 5;
             // 
             // plotView
             // 
-            this.plotView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.plotView.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.plotView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.plotView.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.plotView.Location = new System.Drawing.Point(3, 95);
+            this.plotView.Location = new System.Drawing.Point(0, 0);
             this.plotView.Margin = new System.Windows.Forms.Padding(0);
             this.plotView.Name = "plotView";
             this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotView.Size = new System.Drawing.Size(409, 530);
+            this.plotView.Size = new System.Drawing.Size(385, 537);
             this.plotView.TabIndex = 4;
             this.plotView.Text = "plotView";
             this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(3, 98);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.plotView);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.gridData);
+            this.splitContainer1.Size = new System.Drawing.Size(791, 537);
+            this.splitContainer1.SplitterDistance = 385;
+            this.splitContainer1.SplitterWidth = 6;
+            this.splitContainer1.TabIndex = 8;
+            // 
             // TabWellModel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.Controls.Add(this.plotView);
-            this.Controls.Add(this.gridData);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Name = "TabWellModel";
@@ -274,6 +295,10 @@ namespace mview
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridData)).EndInit();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -297,5 +322,6 @@ namespace mview
         private OxyPlot.WindowsForms.PlotView plotView;
         private System.Windows.Forms.ComboBox boxRestartDates;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }

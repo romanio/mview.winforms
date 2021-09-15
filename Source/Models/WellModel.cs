@@ -66,6 +66,9 @@ namespace mview
         public void UpdateECL(EclipseProject ecl)
         {
             this.ecl = ecl;
+
+            ecl.ReadEGRID();
+            ecl.ReadINIT();
         }
 
         public void ReadRestart(int step)
@@ -88,10 +91,31 @@ namespace mview
         public void GetWellData(string wellname)
         {
             well = ecl.RESTART.WELLS.FirstOrDefault(c => c.WELLNAME == wellname);
-            
+
+            GenerateTopAndBottomCoordinate();    
             UpdateWPIMULT();
         }
 
+        public void GenerateTopAndBottomCoordinate()
+        {
+            if (well.LGR == 0)
+            {
+                foreach (ECL.COMPLDATA comp in well.COMPLS)
+                {
+                    var index = ecl.INIT.GetActive(comp.I, comp.J, comp.K);
+
+                    if (index > 0)
+                    {
+                        var cell = ecl.EGRID.GetCell(comp.I, comp.J, comp.K);
+
+                        comp.TopAverage = (cell.TSE.Z + cell.TSW.Z + cell.TNE.Z + cell.TNW.Z) / 4;
+                        comp.BottomAverage = (cell.BSE.Z + cell.BSW.Z + cell.BNE.Z + cell.BNW.Z) / 4;
+
+                    }
+                }
+            }
+        }
+        
         public void UpdateWPIMULT()
         {
             modi.CPI_LIST = new double[well.COMPLNUM];

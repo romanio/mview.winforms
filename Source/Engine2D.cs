@@ -334,8 +334,6 @@ namespace mview
 
             if (grid.element_count > 0)
             {
-                //render.Clear(Color.Transparent);
-
                 DrawWells();
 
                 DrawVectorField();

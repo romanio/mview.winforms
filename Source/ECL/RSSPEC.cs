@@ -30,7 +30,8 @@ namespace mview.ECL
 
         public float Xw;
         public float Yw;
-
+        public float TopAverage;
+        public float BottomAverage;
         public float XC;
         public float YC;
         public float ZC;
