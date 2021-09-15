@@ -31,7 +31,6 @@ namespace mview.ECL
         public float Xw;
         public float Yw;
 
-        //public Cell Cell;
         public float XC;
         public float YC;
         public float ZC;
@@ -58,7 +57,6 @@ namespace mview.ECL
         public double SOIL;
 
     }
-
 
     public class WELLDATA
     {
@@ -113,7 +111,7 @@ namespace mview.ECL
         public List<float[]> ARRAYMIN = new List<float[]>(); // Minimum values
         public List<string[]> UNITS = new List<string[]>(); // Единица измерения
         public string FILENAME = null;
-        public string GridUnit = null;
+        public string GRIDUNIT = null;
 
 
         public RSSPEC(string filename)
@@ -265,7 +263,7 @@ namespace mview.ECL
 
         public void ReadRestart(string filename, int step)
        
-            // для чтения показателей по перфорациям, я все таки вынес в отдельную процедуру
+        // для чтения показателей по перфорациям, я все таки вынес в отдельную процедуру
         // требуется редко, а читается постоянно 
         {
             FILENAME = filename;
@@ -419,19 +417,17 @@ namespace mview.ECL
             br.CloseBinaryFile();
         }
 
-        public void ReadWellData()
+        public void ReadFullWellData()
         {
              FileReader br = new FileReader();
 
-            Action<string> SetPosition = (name) =>
+            void SetPosition(string name)
             {
                 int index = Array.IndexOf(NAME[RESTART_STEP], name);
                 long pointer = POINTER[RESTART_STEP][index];
                 long pointerb = POINTERB[RESTART_STEP][index];
                 br.SetPosition(pointerb * 2147483648 + pointer);
-            };
-
-            //WELLS = new List<WELLDATA>();
+            }
 
             br.OpenBinaryFile(FILENAME);
             SetPosition("INTEHEAD");
@@ -522,7 +518,7 @@ namespace mview.ECL
 
             if (UNITS.Count != 0)
             {
-                GridUnit = UNITS[RESTART_STEP][index].ToString();
+                GRIDUNIT = UNITS[RESTART_STEP][index].ToString();
             }
 
             long pointer = POINTER[RESTART_STEP][index];
@@ -563,7 +559,7 @@ namespace mview.ECL
 
                 if (UNITS.Count != 0)
                 {
-                    GridUnit = UNITS[RESTART_STEP][index].ToString();
+                    GRIDUNIT = UNITS[RESTART_STEP][index].ToString();
                 }
 
                 long pointer = POINTER[RESTART_STEP][index];

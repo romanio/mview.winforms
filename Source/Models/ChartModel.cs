@@ -10,7 +10,6 @@ namespace mview
     {
         private EclipseProject ecl = null;
 
-
         public ChartModel(EclipseProject ecl)
         {
             UpdateECL(ecl);
