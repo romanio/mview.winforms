@@ -48,6 +48,7 @@ namespace mview
             {
                 boxRestartDates.SelectedIndex = boxRestartDates.Items.Count - 1;
                 model.ReadRestart(boxRestartDates.SelectedIndex);
+                model.ReadWellData();
             }
 
             boxChartMode.SelectedIndex = 0;
@@ -58,6 +59,7 @@ namespace mview
             {
                 DefaultFont = "Segoe UI",
                 DefaultFontSize = 10,
+                TitleFontSize = 10,
             };
 
             plotModel.Legends.Add(new OxyPlot.Legends.Legend
@@ -109,13 +111,17 @@ namespace mview
             suspendEvents = false;
         }
 
+        string wellname = null;
+
         public void UpdateSelectedWells(TabSelectedWellsData data)
         {
             suspendEvents = true;
 
             if (data.selectedNames.Count > 0)
             {
-                model.GetWellData(data.selectedNames[0]);
+                wellname = data.selectedNames[0];
+
+                model.GetWellData(wellname);
 
                 UpdateChart();
             }
@@ -126,7 +132,14 @@ namespace mview
 
         void UpdateChart()
         {
-            if (model.WELL == null) return;
+            if (model.WELL == null)
+            {
+                plotModel.Title = "not found";
+                plotModel.InvalidatePlot(true);
+                return;
+            }
+
+            plotModel.Title = model.WELL.WELLNAME;
 
             plotModel.Series.Clear();
 
@@ -182,6 +195,13 @@ namespace mview
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.BlueViolet;
 
                         DrawGraph((x) => x.WPR, model.MODI.WATER_LIST);
+                        break;
+
+                    case 3: // Gas production
+                        plotModel.Axes[0].Title = "Gas, m3/day";
+                        ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.BlueViolet;
+
+                        DrawGraph((x) => x.GPR, model.MODI.GAS_LIST);
                         break;
 
                     case 3: // Water Cut
@@ -296,11 +316,11 @@ else
                     }
 
                     ((RectangleBarSeries)plotModel.Series[0]).Items.Add(new RectangleBarItem(0, top, value, bottom));
-                    ((RectangleBarSeries)plotModel.Series[1]).Items.Add(new RectangleBarItem(0, top, modi[iw], bottom));
+                    //((RectangleBarSeries)plotModel.Series[1]).Items.Add(new RectangleBarItem(0, top, modi[iw], bottom));
 
                     if (checkShowModiValue.Checked)
                     {
-                        ((RectangleBarSeries)plotModel.Series[1]).Items.Last().Title = modi[iw].ToString("N2");
+                        ((RectangleBarSeries)plotModel.Series[0]).Items.Last().Title = modi[iw].ToString("N2");
                     }
                     /*
                     if (iw == SelectedCell)
@@ -314,13 +334,6 @@ else
                
 
         private void BoxKeywordsOnSelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (suspendEvents) return;
-
-            UpdateChart();
-        }
-
-        private void BoxRestartDatesOnSelectedIndexChanged(object sender, EventArgs e)
         {
             if (suspendEvents) return;
 
@@ -348,7 +361,9 @@ else
         {
             if (suspendEvents) return;
 
+            model.ReadRestart(boxRestartDates.SelectedIndex);
             model.ReadWellData();
+            model.GetWellData(wellname);
 
             UpdateChart();
         }

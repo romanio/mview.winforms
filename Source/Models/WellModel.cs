@@ -13,6 +13,7 @@ namespace mview
         public double[] LIQ_LIST = null;
         public double[] WATER_LIST = null;
         public double[] OIL_LIST = null;
+        public double[] GAS_LIST = null;
         public double[] WCUT_LIST = null;
         public double[] PDD_LIST = null;
         public double[] Q_POT_LIST = null;
@@ -92,6 +93,12 @@ namespace mview
         {
             well = ecl.RESTART.WELLS.FirstOrDefault(c => c.WELLNAME == wellname);
 
+            if (well == null)
+            {
+                return;
+            };
+
+            
             GenerateTopAndBottomCoordinate();    
             UpdateWPIMULT();
         }
@@ -122,6 +129,7 @@ namespace mview
             modi.LIQ_LIST = new double[well.COMPLNUM];
             modi.WATER_LIST = new double[well.COMPLNUM];
             modi.OIL_LIST = new double[well.COMPLNUM];
+            modi.GAS_LIST = new double[well.COMPLNUM];
             modi.WCUT_LIST = new double[well.COMPLNUM];
             modi.PDD_LIST = new double[well.COMPLNUM];
             modi.CPI_INIT_LIST = new double[well.COMPLNUM];
@@ -159,6 +167,7 @@ namespace mview
                     modi.LIQ_LIST[iw] = modi.CPI_LIST[iw] * (well.COMPLS[iw].PRESS - well.COMPLS[iw].Hw - modi.BHP);
                     modi.WCUT_LIST[iw] = well.COMPLS[iw].WPR / (well.COMPLS[iw].WPR + well.COMPLS[iw].OPR);
                     modi.WATER_LIST[iw] = modi.LIQ_LIST[iw] * modi.WCUT_LIST[iw];
+                    
                     modi.OIL_LIST[iw] = modi.LIQ_LIST[iw] - modi.WATER_LIST[iw];
 
                     modi.PDD_LIST[iw] = well.COMPLS[iw].PRESS - well.COMPLS[iw].Hw - modi.BHP;

@@ -29,8 +29,8 @@ namespace mview
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -59,8 +59,8 @@ namespace mview
             // 
             // Column1
             // 
-            dataGridViewCellStyle13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle3;
             this.Column1.HeaderText = "Wellname";
             this.Column1.Name = "Column1";
             this.Column1.Width = 80;
@@ -79,8 +79,8 @@ namespace mview
             // 
             // Column4
             // 
-            dataGridViewCellStyle14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Column4.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.Column4.DefaultCellStyle = dataGridViewCellStyle4;
             this.Column4.HeaderText = "Difference";
             this.Column4.Name = "Column4";
             this.Column4.Width = 80;
@@ -114,7 +114,7 @@ namespace mview
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(301, 54);
+            this.label2.Location = new System.Drawing.Point(57, 51);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(31, 13);
             this.label2.TabIndex = 42;
@@ -128,9 +128,9 @@ namespace mview
             this.boxRestartDates.Items.AddRange(new object[] {
             "1 Chart",
             "4 Charts"});
-            this.boxRestartDates.Location = new System.Drawing.Point(350, 48);
+            this.boxRestartDates.Location = new System.Drawing.Point(112, 48);
             this.boxRestartDates.Name = "boxRestartDates";
-            this.boxRestartDates.Size = new System.Drawing.Size(142, 21);
+            this.boxRestartDates.Size = new System.Drawing.Size(123, 21);
             this.boxRestartDates.TabIndex = 41;
             this.boxRestartDates.SelectedIndexChanged += new System.EventHandler(this.boxRestartDates_SelectedIndexChanged);
             // 
@@ -148,7 +148,7 @@ namespace mview
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(21, 54);
+            this.label4.Location = new System.Drawing.Point(265, 51);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(67, 13);
             this.label4.TabIndex = 6;
@@ -189,11 +189,10 @@ namespace mview
             this.boxDepthMode.Items.AddRange(new object[] {
             "Depth",
             "K-layer"});
-            this.boxDepthMode.Location = new System.Drawing.Point(112, 48);
+            this.boxDepthMode.Location = new System.Drawing.Point(350, 48);
             this.boxDepthMode.Name = "boxDepthMode";
-            this.boxDepthMode.Size = new System.Drawing.Size(123, 21);
+            this.boxDepthMode.Size = new System.Drawing.Size(142, 21);
             this.boxDepthMode.TabIndex = 3;
-            this.boxDepthMode.SelectedIndexChanged += new System.EventHandler(this.BoxRestartDatesOnSelectedIndexChanged);
             // 
             // label1
             // 
@@ -213,6 +212,7 @@ namespace mview
             "Liquid Production",
             "Oil Production",
             "Water Production",
+            "Gas Production",
             "Water Cut",
             "Productivity Index"});
             this.boxChartMode.Location = new System.Drawing.Point(112, 13);
