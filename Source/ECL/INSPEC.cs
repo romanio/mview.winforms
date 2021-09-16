@@ -175,6 +175,7 @@ namespace mview.ECL
         {
             return ACTNUM[X + NX * Y + Z * NX * NY];
         }
+        
         public string GetUnit(string property)
         {
             string unit = null;
@@ -202,7 +203,7 @@ namespace mview.ECL
         {
             FileReader br = new FileReader();
 
-            Action<string> SetPosition = (name) =>
+            void SetPosition(string name)
             {
                 int INIT_STEP = 0;
                 int index = -1;
@@ -225,7 +226,7 @@ namespace mview.ECL
                 long pointer = POINTER[INIT_STEP][index];
                 long pointerb = POINTERB[INIT_STEP][index];
                 br.SetPosition(pointerb * 2147483648 + pointer);
-            };
+            }
 
             br.OpenBinaryFile(FILENAME);
             SetPosition(property);
@@ -248,8 +249,4 @@ namespace mview.ECL
             return DATA[index];
         }
     }
-
-
-
-
 }

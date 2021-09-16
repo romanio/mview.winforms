@@ -32,6 +32,7 @@ namespace mview
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPageControl = new System.Windows.Forms.TabPage();
+            this.button7 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.button9 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
@@ -52,7 +53,6 @@ namespace mview
             this.button1 = new System.Windows.Forms.Button();
             this.buttonWellFilter = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
             this.tabControl2.SuspendLayout();
             this.tabPageControl.SuspendLayout();
             this.SuspendLayout();
@@ -97,12 +97,26 @@ namespace mview
             this.tabPageControl.Controls.Add(this.label1);
             this.tabPageControl.Controls.Add(this.button3);
             this.tabPageControl.Controls.Add(this.buttonNewCharts);
+            this.tabPageControl.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.tabPageControl.Location = new System.Drawing.Point(4, 22);
             this.tabPageControl.Name = "tabPageControl";
             this.tabPageControl.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageControl.Size = new System.Drawing.Size(736, 632);
             this.tabPageControl.TabIndex = 1;
             this.tabPageControl.Text = "Main";
+            // 
+            // button7
+            // 
+            this.button7.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
+            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button7.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
+            this.button7.Location = new System.Drawing.Point(432, 95);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(104, 29);
+            this.button7.TabIndex = 28;
+            this.button7.Text = "Well Model";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // label6
             // 
@@ -361,19 +375,6 @@ namespace mview
             this.button6.Text = "Update";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // button7
-            // 
-            this.button7.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
-            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button7.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
-            this.button7.Location = new System.Drawing.Point(432, 95);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(104, 29);
-            this.button7.TabIndex = 28;
-            this.button7.Text = "Well Model";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // MainForm
             // 

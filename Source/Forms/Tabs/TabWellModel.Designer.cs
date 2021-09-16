@@ -29,13 +29,7 @@ namespace mview
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.boxRestartDates = new System.Windows.Forms.ComboBox();
@@ -49,6 +43,11 @@ namespace mview
             this.gridData = new System.Windows.Forms.DataGridView();
             this.plotView = new OxyPlot.WindowsForms.PlotView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.J = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -56,40 +55,6 @@ namespace mview
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // Column1
-            // 
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle3;
-            this.Column1.HeaderText = "Wellname";
-            this.Column1.Name = "Column1";
-            this.Column1.Width = 80;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Simulated";
-            this.Column2.Name = "Column2";
-            this.Column2.Width = 80;
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "History";
-            this.Column3.Name = "Column3";
-            this.Column3.Width = 80;
-            // 
-            // Column4
-            // 
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Column4.DefaultCellStyle = dataGridViewCellStyle4;
-            this.Column4.HeaderText = "Difference";
-            this.Column4.Name = "Column4";
-            this.Column4.Width = 80;
-            // 
-            // Column5
-            // 
-            this.Column5.HeaderText = "%";
-            this.Column5.Name = "Column5";
-            this.Column5.Width = 80;
             // 
             // panel1
             // 
@@ -179,7 +144,7 @@ namespace mview
             this.boxLumping.Name = "boxLumping";
             this.boxLumping.Size = new System.Drawing.Size(142, 21);
             this.boxLumping.TabIndex = 5;
-            this.boxLumping.SelectedIndexChanged += new System.EventHandler(this.BoxCriteriaTypeOnSelectedIndexChanged);
+            this.boxLumping.SelectedIndexChanged += new System.EventHandler(this.boxLumping_SelectedIndexChanged);
             // 
             // boxDepthMode
             // 
@@ -193,6 +158,7 @@ namespace mview
             this.boxDepthMode.Name = "boxDepthMode";
             this.boxDepthMode.Size = new System.Drawing.Size(142, 21);
             this.boxDepthMode.TabIndex = 3;
+            this.boxDepthMode.SelectedIndexChanged += new System.EventHandler(this.boxDepthMode_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -233,10 +199,10 @@ namespace mview
             this.gridData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
+            this.J,
             this.Column2,
             this.Column3,
-            this.Column4,
-            this.Column5});
+            this.Column4});
             this.gridData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridData.Location = new System.Drawing.Point(0, 0);
             this.gridData.Name = "gridData";
@@ -282,6 +248,38 @@ namespace mview
             this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 8;
             // 
+            // Column1
+            // 
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle2;
+            this.Column1.HeaderText = "I";
+            this.Column1.Name = "Column1";
+            this.Column1.Width = 40;
+            // 
+            // J
+            // 
+            this.J.HeaderText = "J";
+            this.J.Name = "J";
+            this.J.Width = 40;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "K";
+            this.Column2.Name = "Column2";
+            this.Column2.Width = 40;
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "Value";
+            this.Column3.Name = "Column3";
+            this.Column3.Width = 60;
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "Lumping";
+            this.Column4.Name = "Column4";
+            this.Column4.Width = 60;
+            // 
             // TabWellModel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -309,11 +307,6 @@ namespace mview
         private System.Windows.Forms.ComboBox boxDepthMode;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox boxChartMode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridView gridData;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox boxLumping;
@@ -323,5 +316,10 @@ namespace mview
         private System.Windows.Forms.ComboBox boxRestartDates;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn J;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
     }
 }

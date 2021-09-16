@@ -8,30 +8,18 @@ namespace mview
 {
     public class ModiWell
     {
-        public double[] CPI_LIST = null;
-        public double[] CPI_INIT_LIST = null;
-        public double[] LIQ_LIST = null;
-        public double[] WATER_LIST = null;
-        public double[] OIL_LIST = null;
-        public double[] GAS_LIST = null;
-        public double[] WCUT_LIST = null;
-        public double[] PDD_LIST = null;
-        public double[] Q_POT_LIST = null;
-
-        public int LUMPNUM = 0;
-        public int[] LUMPED_ZONE = null;
-        public double[] LUMP_M_LIQ_LIST = null;
-        public double[] LUMP_M_WATER_LIST = null;
-        public double[] LUMP_M_OIL_LIST = null;
-        public double[] LUMP_M_WCUT_LIST = null;
-
-        public double[] LUMP_LIQ_LIST = null;
-        public double[] LUMP_WATER_LIST = null;
-        public double[] LUMP_OIL_LIST = null;
-        public double[] LUMP_WCUT_LIST = null;
+        public double[] CPI = null;
+        public double[] CPI_INIT = null;
+        public double[] LIQ = null;
+        public double[] WATER = null;
+        public double[] OIL = null;
+        public double[] GAS = null;
+        public double[] WCUT = null;
+        public double[] PDD = null;
+        public double[] Q_POT = null;
 
         public double PI = 0;
-        public double Q_POT = 0;
+        public double QW_POT = 0;
         public double BHP;
         public double LPR;
         public double WPR;
@@ -123,20 +111,37 @@ namespace mview
             }
         }
         
+        public void UpdateLumping(string lumpname)
+        {
+            ecl.INIT.ReadGrid(lumpname);
+
+
+            for (int IW = 0; IW < ecl.RESTART.WELLS.Count; ++IW) // Для всех скважин и для всех перфораций
+                for (int IC = 0; IC < ecl.RESTART.WELLS[IW].COMPLS.Count; ++IC)
+                {
+                    long index = ecl.INIT.GetActive(
+                        ecl.RESTART.WELLS[IW].COMPLS[IC].I,
+                        ecl.RESTART.WELLS[IW].COMPLS[IC].J,
+                        ecl.RESTART.WELLS[IW].COMPLS[IC].K) - 1;
+
+                    ecl.RESTART.WELLS[IW].COMPLS[IC].LUMPNUM = (int)ecl.INIT.GetValue(index);
+                }
+        }
+
         public void UpdateWPIMULT()
         {
-            modi.CPI_LIST = new double[well.COMPLNUM];
-            modi.LIQ_LIST = new double[well.COMPLNUM];
-            modi.WATER_LIST = new double[well.COMPLNUM];
-            modi.OIL_LIST = new double[well.COMPLNUM];
-            modi.GAS_LIST = new double[well.COMPLNUM];
-            modi.WCUT_LIST = new double[well.COMPLNUM];
-            modi.PDD_LIST = new double[well.COMPLNUM];
-            modi.CPI_INIT_LIST = new double[well.COMPLNUM];
-            modi.Q_POT_LIST = new double[well.COMPLNUM];
+            modi.CPI = new double[well.COMPLNUM];
+            modi.LIQ = new double[well.COMPLNUM];
+            modi.WATER = new double[well.COMPLNUM];
+            modi.OIL = new double[well.COMPLNUM];
+            modi.GAS = new double[well.COMPLNUM];
+            modi.WCUT = new double[well.COMPLNUM];
+            modi.PDD = new double[well.COMPLNUM];
+            modi.CPI_INIT = new double[well.COMPLNUM];
+            modi.Q_POT = new double[well.COMPLNUM];
 
             modi.PI = 0;
-            modi.Q_POT = 0;
+            modi.QW_POT = 0;
 
             for (int iw = 0; iw < well.COMPLNUM; ++iw)
             {
@@ -146,17 +151,17 @@ namespace mview
                         (well.COMPLS[iw].WPR + well.COMPLS[iw].OPR) /
                         (well.COMPLS[iw].PRESS - well.WBHP - well.COMPLS[iw].Hw);
 
-                    modi.CPI_INIT_LIST[iw] = CPI;
+                    modi.CPI_INIT[iw] = CPI;
 
-                    modi.CPI_LIST[iw] = CPI * well.COMPLS[iw].WPIMULT;
+                    modi.CPI[iw] = CPI * well.COMPLS[iw].WPIMULT;
 
-                    modi.PI = modi.PI + modi.CPI_LIST[iw];
-                    modi.Q_POT_LIST[iw] = modi.CPI_LIST[iw] * (well.COMPLS[iw].PRESS - well.COMPLS[iw].Hw);
-                    modi.Q_POT = modi.Q_POT + modi.Q_POT_LIST[iw];
+                    modi.PI = modi.PI + modi.CPI[iw];
+                    modi.Q_POT[iw] = modi.CPI[iw] * (well.COMPLS[iw].PRESS - well.COMPLS[iw].Hw);
+                    modi.QW_POT = modi.QW_POT + modi.Q_POT[iw];
                 }
             }
 
-            modi.BHP = (modi.Q_POT - well.WLPR) / modi.PI;
+            modi.BHP = (modi.QW_POT - well.WLPR) / modi.PI;
             modi.LPR = 0;
             modi.WPR = 0;
 
@@ -164,16 +169,16 @@ namespace mview
             {
                 if (well.COMPLS[iw].STATUS == 1)
                 {
-                    modi.LIQ_LIST[iw] = modi.CPI_LIST[iw] * (well.COMPLS[iw].PRESS - well.COMPLS[iw].Hw - modi.BHP);
-                    modi.WCUT_LIST[iw] = well.COMPLS[iw].WPR / (well.COMPLS[iw].WPR + well.COMPLS[iw].OPR);
-                    modi.WATER_LIST[iw] = modi.LIQ_LIST[iw] * modi.WCUT_LIST[iw];
+                    modi.LIQ[iw] = modi.CPI[iw] * (well.COMPLS[iw].PRESS - well.COMPLS[iw].Hw - modi.BHP);
+                    modi.WCUT[iw] = well.COMPLS[iw].WPR / (well.COMPLS[iw].WPR + well.COMPLS[iw].OPR);
+                    modi.WATER[iw] = modi.LIQ[iw] * modi.WCUT[iw];
                     
-                    modi.OIL_LIST[iw] = modi.LIQ_LIST[iw] - modi.WATER_LIST[iw];
+                    modi.OIL[iw] = modi.LIQ[iw] - modi.WATER[iw];
 
-                    modi.PDD_LIST[iw] = well.COMPLS[iw].PRESS - well.COMPLS[iw].Hw - modi.BHP;
+                    modi.PDD[iw] = well.COMPLS[iw].PRESS - well.COMPLS[iw].Hw - modi.BHP;
 
-                    modi.LPR = modi.LPR + modi.LIQ_LIST[iw];
-                    modi.WPR = modi.WPR + modi.WATER_LIST[iw];
+                    modi.LPR = modi.LPR + modi.LIQ[iw];
+                    modi.WPR = modi.WPR + modi.WATER[iw];
                 }
             }
         }
