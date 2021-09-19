@@ -20,6 +20,7 @@ namespace mview
     {
         bool suspendEvents = false;
         bool IsLumped = false;
+        int selectedRow = -1;
 
         PlotModel plotModel = null;
         WellModel model;
@@ -177,6 +178,8 @@ namespace mview
 
                         plotModel.Axes[0].Title = "Liquid, m3/day";
                         plotModel.Axes[1].Title = "Depth, m";
+                        gridData.Columns[3].HeaderText = "Liquid, m3/day";
+
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Aqua;
 
                         DrawGraph((x) => x.WPR + x.OPR, model.MODI.LIQ);
@@ -185,6 +188,8 @@ namespace mview
                     case 1: // Oil production
                         plotModel.Axes[0].Title = "Oil, m3/day";
                         plotModel.Axes[1].Title = "Depth, m";
+                        gridData.Columns[3].HeaderText = "Oil, m3/day";
+
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Orange;
 
                         DrawGraph((x) => x.OPR, model.MODI.OIL);
@@ -192,6 +197,9 @@ namespace mview
 
                     case 2: // Water production
                         plotModel.Axes[0].Title = "Water, m3/day";
+                        plotModel.Axes[1].Title = "Depth, m";
+                        gridData.Columns[3].HeaderText = "Water, m3/day";
+
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.BlueViolet;
 
                         DrawGraph((x) => x.WPR, model.MODI.WATER);
@@ -199,6 +207,9 @@ namespace mview
 
                     case 3: // Gas production
                         plotModel.Axes[0].Title = "Gas, m3/day";
+                        plotModel.Axes[1].Title = "Depth, m";
+                        gridData.Columns[3].HeaderText = "Gas, m3/day";
+
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.BlueViolet;
 
                         DrawGraph((x) => x.GPR, model.MODI.GAS);
@@ -207,6 +218,7 @@ namespace mview
                     case 4: // Water Cut
                         plotModel.Axes[0].Title = "Water Cut";
                         plotModel.Axes[1].Title = "Depth, m";
+                        gridData.Columns[3].HeaderText = "Water Cut";
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.CadetBlue;
 
                         DrawGraph((x) => x.WPR / (x.WPR + x.OPR), model.MODI.WCUT);
@@ -215,6 +227,8 @@ namespace mview
                     case 5: // Connection Factor
                         plotModel.Axes[0].Title = "PI, m3/day/bar";
                         plotModel.Axes[1].Title = "Depth, m";
+                        gridData.Columns[3].HeaderText = "PI, m3/day/bar";
+
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Orange;
 
                         DrawGraph((x) => (x.OPR + x.WPR) / (x.PRESS - x.Hw - model.WELL.WBHP), model.MODI.CPI);
@@ -222,114 +236,10 @@ namespace mview
                 }
                 
             }
-            /*
-else
-{
-    switch (boxChartMode.SelectedIndex)
-    {
-        case 0: // Pressure drop 
-
-            plotModel.Axes[0].Title = "(P - Pw), bar";
-            plotModel.Axes[1].Title = "Depth, m";
-
-            ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.OrangeRed;
-            //DrawLumpGraph((x) => x.PRESS - x.Hw - m_welldata.WBHP, PDD_LIST);
-
-            break;
-
-        case 1: // Liquid production
-
-            plotModel.Axes[0].Title = "Liquid, m3/day";
-            plotModel.Axes[1].Title = "Depth, m";
-            ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Aqua;
-
-            DrawLumpGraph(LUMP_LIQ_LIST, LUMP_M_LIQ_LIST);
-            break;
-
-        case 2: // Oil production
-            plotModel.Axes[0].Title = "Oil, m3/day";
-            plotModel.Axes[1].Title = "Depth, m";
-            ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Orange;
-
-            DrawLumpGraph(LUMP_OIL_LIST, LUMP_M_OIL_LIST);
-            break;
-
-        case 3: // Water production
-            plotModel.Axes[0].Title = "Water, m3/day";
-            ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.BlueViolet;
-
-            DrawLumpGraph(LUMP_WATER_LIST, LUMP_M_WATER_LIST);
-            break;
-
-        case 4: // Water Cut
-            plotModel.Axes[0].Title = "Water Cut";
-            plotModel.Axes[1].Title = "Depth, m";
-            ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.CadetBlue;
-
-            DrawLumpGraph(LUMP_WCUT_LIST, LUMP_M_WCUT_LIST);
-            break;
-
-        case 5: // Connection Factor
-            plotModel.Axes[0].Title = "PI, m3/day/bar";
-            plotModel.Axes[1].Title = "Depth, m";
-            ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Orange;
-
-            //DrawGraph((x) => (x.OPR + x.WPR) / (x.PRESS - x.Hw - m_welldata.WBHP), CPI_LIST);
-            break;
-    }
-}
-*/
-        }
-
-        void UpdateTable()
-        {
+         }
 
 
-            if (IsLumped == false)
-            {
-                for (int iw = 0; iw < model.WELL.COMPLNUM; ++iw)
-                {
-
-
-                    /*
-                    gridData[4, row].Value = model.WELL.COMPLS[iw].LUMPNUM;
-
-                    gridData[5, row].Value = model.WELL.COMPLS[iw].WPR + model.WELL.COMPLS[iw].OPR;
-                    gridData[6, row].Value = model.WELL.COMPLS[iw].WPR / (model.WELL.COMPLS[iw].WPR + model.WELL.COMPLS[iw].OPR);
-                    gridData[7, row].Value = model.WELL.COMPLS[iw].GPR / model.WELL.COMPLS[iw].OPR;
-
-                    gridData[8, row].Value = model.WELL.COMPLS[iw].WPIMULT;
-                    gridData[9, row].Value = iw;
-                    */
-                }
-            }
-            /*
-            else
-            {
-                var lumped_zones = m_welldata.COMPLS.Select(c => c.LUMPNUM).Distinct().ToArray();
-
-                for (int iw = 0; iw < lumped_zones.Length; ++iw)
-                {
-                    int row = gridData.Rows.Add();
-
-                    gridData[3, row].Value = m_welldata.COMPLS.Where(c => c.LUMPNUM == lumped_zones[iw]).Average(c => c.Depth);
-                    gridData[4, row].Value = lumped_zones[iw];
-
-                    var wpr = m_welldata.COMPLS.Where(c => c.LUMPNUM == lumped_zones[iw]).Sum(c => c.WPR);
-                    var opr = m_welldata.COMPLS.Where(c => c.LUMPNUM == lumped_zones[iw]).Sum(c => c.OPR);
-                    var gpr = m_welldata.COMPLS.Where(c => c.LUMPNUM == lumped_zones[iw]).Sum(c => c.GPR);
-
-                    gridData[5, row].Value = wpr + opr;
-                    gridData[6, row].Value = wpr / (wpr + opr);
-                    gridData[7, row].Value = gpr / opr;
-
-                    gridData[9, row].Value = iw;
-                }
-            }
-            */
-        }
-
-    void DrawGraph(Func<ECL.COMPLDATA, double> get_value, double[] modi)
+        void DrawGraph(Func<ECL.COMPLDATA, double> get_value, double[] modi)
         {
             gridData.Rows.Clear();
 
@@ -348,11 +258,9 @@ else
 
             for (int iw = 0; iw < model.WELL.COMPLNUM; ++iw)
             {
-                if (model.WELL.COMPLS[iw].STATUS == 0) continue;
+                if (model.WELL.COMPLS[iw].STATUS != 1) continue;
 
                 int row = gridData.Rows.Add();
-
-
 
                 double value = get_value(model.WELL.COMPLS[iw]);
 
@@ -366,7 +274,7 @@ else
                             break;
                         case 1: // K-value
                             top = (model.WELL.COMPLS[iw].K + 1) - 0.5;
-                            bottom = (model.WELL.COMPLS[iw].K + 1) + 0.5;
+                            bottom = (model.WELL.COMPLS[iw].K + 1) + 0.5;   
                             break;
                     }
 
@@ -375,6 +283,8 @@ else
                     gridData[2, row].Value = model.WELL.COMPLS[iw].K + 1;
                     gridData[3, row].Value = value;
                     gridData[4, row].Value = model.WELL.COMPLS[iw].LUMPNUM;
+                    gridData[5, row].Value = iw;
+                    gridData[6, row].Value = model.WELL.COMPLS[iw].WPIMULT;
 
                     ((RectangleBarSeries)plotModel.Series[0]).Items.Add(new RectangleBarItem(0, top, value, bottom));
                     ((RectangleBarSeries)plotModel.Series[1]).Items.Add(new RectangleBarItem(0, top, modi[iw], bottom));
@@ -383,16 +293,27 @@ else
                     {
                         ((RectangleBarSeries)plotModel.Series[0]).Items.Last().Title = modi[iw].ToString("N2");
                     }
-                    /*
-                    if (iw == SelectedCell)
-                        ((RectangleBarSeries)plotModel.Series[2]).Items.Add(new RectangleBarItem(0, top, modi[iw], bottom));
-                    */
+
                 }
             }
 
             plotModel.InvalidatePlot(true);
         }
-               
+
+        void DrawGraphSelection(int selectedRow)
+        {
+            if (((RectangleBarSeries)plotModel.Series[1]).Items.Count == 0) return;
+
+            ((RectangleBarSeries)plotModel.Series[2]).Items.Clear();
+
+            var top = ((RectangleBarSeries)plotModel.Series[1]).Items[selectedRow].Y0;
+            var bottom = ((RectangleBarSeries)plotModel.Series[1]).Items[selectedRow].Y1;
+            var value = ((RectangleBarSeries)plotModel.Series[1]).Items[selectedRow].X1;
+
+           ((RectangleBarSeries)plotModel.Series[2]).Items.Add(new RectangleBarItem(0, top, value, bottom));
+
+            plotModel.InvalidatePlot(true);
+        }
 
         private void BoxKeywordsOnSelectedIndexChanged(object sender, EventArgs e)
         {
@@ -440,6 +361,8 @@ else
         {
             if (suspendEvents) return;
 
+            gridData.Columns[4].HeaderText = boxLumping.Text;
+
             if (boxLumping.SelectedIndex == 1) // BY K-VALUE
             {
                 for (int iw = 0; iw < model.WELL.COMPLNUM; ++iw)
@@ -448,15 +371,37 @@ else
                 }
     
             }
-            else
+
+            if (boxLumping.SelectedIndex == 0)
+            {
+                for (int iw = 0; iw < model.WELL.COMPLNUM; ++iw)
+                {
+                    model.WELL.COMPLS[iw].LUMPNUM = 0;
+                }
+            }
+
+            if (boxLumping.SelectedIndex > 1)
             {
                 model.UpdateLumping(boxLumping.Text);
             }
-            
-
-
 
             UpdateChart();
+        }
+
+        private void gridData_CellStateChanged(object sender, DataGridViewCellStateChangedEventArgs e)
+        {
+            if (suspendEvents) return;
+
+            if (e.StateChanged == DataGridViewElementStates.Selected)
+            {
+                if (gridData.SelectedCells.Count > 0)
+                {
+                    int selectedRow = gridData.SelectedCells[0].RowIndex;
+                    int index = Convert.ToInt32(gridData.Rows[selectedRow].Cells[5].Value);
+
+                    DrawGraphSelection(index);
+                }
+            }
         }
     }
 }

@@ -29,7 +29,7 @@ namespace mview
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.boxRestartDates = new System.Windows.Forms.ComboBox();
@@ -48,6 +48,8 @@ namespace mview
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -202,7 +204,9 @@ namespace mview
             this.J,
             this.Column2,
             this.Column3,
-            this.Column4});
+            this.Column4,
+            this.Column5,
+            this.Column6});
             this.gridData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridData.Location = new System.Drawing.Point(0, 0);
             this.gridData.Name = "gridData";
@@ -211,6 +215,7 @@ namespace mview
             this.gridData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.gridData.Size = new System.Drawing.Size(400, 537);
             this.gridData.TabIndex = 5;
+            this.gridData.CellStateChanged += new System.Windows.Forms.DataGridViewCellStateChangedEventHandler(this.gridData_CellStateChanged);
             // 
             // plotView
             // 
@@ -250,8 +255,8 @@ namespace mview
             // 
             // Column1
             // 
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle1;
             this.Column1.HeaderText = "I";
             this.Column1.Name = "Column1";
             this.Column1.Width = 40;
@@ -279,6 +284,18 @@ namespace mview
             this.Column4.HeaderText = "Lumping";
             this.Column4.Name = "Column4";
             this.Column4.Width = 60;
+            // 
+            // Column5
+            // 
+            this.Column5.HeaderText = "index";
+            this.Column5.Name = "Column5";
+            this.Column5.Visible = false;
+            // 
+            // Column6
+            // 
+            this.Column6.HeaderText = "Mult";
+            this.Column6.Name = "Column6";
+            this.Column6.Width = 40;
             // 
             // TabWellModel
             // 
@@ -321,5 +338,7 @@ namespace mview
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
     }
 }
