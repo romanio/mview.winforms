@@ -31,6 +31,7 @@ namespace mview
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.checkRoll = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.boxRestartDates = new System.Windows.Forms.ComboBox();
             this.checkShowModiValue = new System.Windows.Forms.CheckBox();
@@ -43,11 +44,13 @@ namespace mview
             this.gridData = new System.Windows.Forms.DataGridView();
             this.plotView = new OxyPlot.WindowsForms.PlotView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.checkRoll = new System.Windows.Forms.CheckBox();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.J = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,9 +59,6 @@ namespace mview
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -87,6 +87,17 @@ namespace mview
             this.panel1.Size = new System.Drawing.Size(791, 89);
             this.panel1.TabIndex = 7;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.Panel1OnPaint);
+            // 
+            // checkRoll
+            // 
+            this.checkRoll.AutoSize = true;
+            this.checkRoll.Location = new System.Drawing.Point(524, 17);
+            this.checkRoll.Name = "checkRoll";
+            this.checkRoll.Size = new System.Drawing.Size(88, 17);
+            this.checkRoll.TabIndex = 43;
+            this.checkRoll.Text = "Roll lumped";
+            this.checkRoll.UseVisualStyleBackColor = true;
+            this.checkRoll.CheckedChanged += new System.EventHandler(this.checkRoll_CheckedChanged);
             // 
             // label2
             // 
@@ -221,14 +232,18 @@ namespace mview
             this.Column5,
             this.Column6,
             this.Column7});
+            this.gridData.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.gridData.Location = new System.Drawing.Point(3, 112);
             this.gridData.Name = "gridData";
             this.gridData.RowHeadersVisible = false;
             this.gridData.RowTemplate.Height = 18;
             this.gridData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.gridData.Size = new System.Drawing.Size(392, 422);
+            this.gridData.Size = new System.Drawing.Size(380, 422);
             this.gridData.TabIndex = 5;
+            this.gridData.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridData_CellEndEdit);
             this.gridData.CellStateChanged += new System.Windows.Forms.DataGridViewCellStateChangedEventHandler(this.gridData_CellStateChanged);
+            this.gridData.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridData_CellValidated);
+            this.gridData.CurrentCellChanged += new System.EventHandler(this.gridData_CurrentCellChanged);
             // 
             // plotView
             // 
@@ -273,6 +288,36 @@ namespace mview
             this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 8;
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label11.Location = new System.Drawing.Point(130, 82);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(66, 13);
+            this.label11.TabIndex = 12;
+            this.label11.Text = "2322 / 3342";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label10.Location = new System.Drawing.Point(130, 59);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(60, 13);
+            this.label10.TabIndex = 11;
+            this.label10.Text = "23.2 / 24.2";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label9.Location = new System.Drawing.Point(130, 37);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(66, 13);
+            this.label9.TabIndex = 10;
+            this.label9.Text = "23.2 / 24.54";
+            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -309,17 +354,6 @@ namespace mview
             this.label5.Size = new System.Drawing.Size(40, 13);
             this.label5.TabIndex = 6;
             this.label5.Text = "Flows ";
-            // 
-            // checkRoll
-            // 
-            this.checkRoll.AutoSize = true;
-            this.checkRoll.Location = new System.Drawing.Point(524, 17);
-            this.checkRoll.Name = "checkRoll";
-            this.checkRoll.Size = new System.Drawing.Size(88, 17);
-            this.checkRoll.TabIndex = 43;
-            this.checkRoll.Text = "Roll lumped";
-            this.checkRoll.UseVisualStyleBackColor = true;
-            this.checkRoll.CheckedChanged += new System.EventHandler(this.checkRoll_CheckedChanged);
             // 
             // Column1
             // 
@@ -374,37 +408,8 @@ namespace mview
             // 
             this.Column7.HeaderText = "Value";
             this.Column7.Name = "Column7";
+            this.Column7.ReadOnly = true;
             this.Column7.Width = 60;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label9.Location = new System.Drawing.Point(130, 37);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(66, 13);
-            this.label9.TabIndex = 10;
-            this.label9.Text = "23.2 / 24.54";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.Location = new System.Drawing.Point(130, 59);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(60, 13);
-            this.label10.TabIndex = 11;
-            this.label10.Text = "23.2 / 24.2";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label11.Location = new System.Drawing.Point(130, 82);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(66, 13);
-            this.label11.TabIndex = 12;
-            this.label11.Text = "2322 / 3342";
             // 
             // TabWellModel
             // 
@@ -448,6 +453,9 @@ namespace mview
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.CheckBox checkRoll;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn J;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
@@ -456,8 +464,5 @@ namespace mview
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
     }
 }

@@ -20,7 +20,8 @@ namespace mview
     {
         bool suspendEvents = false;
         bool IsLumped = false;
-        int selectedRow = -1;
+        int lastSelectedCellRow = -1;
+        int lastSelectedCellCol = -1;
 
         PlotModel plotModel = null;
         WellModel model;
@@ -65,7 +66,7 @@ namespace mview
 
             plotModel.Legends.Add(new OxyPlot.Legends.Legend
             {
-                LegendPosition =  LegendPosition.RightTop,
+                LegendPosition = LegendPosition.RightTop,
                 LegendPlacement = LegendPlacement.Outside,
                 LegendFontSize = 8,
                 LegendBackground = OxyColors.White
@@ -133,6 +134,8 @@ namespace mview
 
         void UpdateChart()
         {
+            suspendEvents = true;
+
             if (model.WELL == null)
             {
                 plotModel.Title = "not found";
@@ -234,9 +237,11 @@ namespace mview
                         DrawGraph((x) => (x.OPR + x.WPR) / (x.PRESS - x.Hw - model.WELL.WBHP), model.MODI.CPI);
                         break;
                 }
-                
+
             }
-         }
+
+            suspendEvents = false;
+        }
 
 
         void DrawGraph(Func<ECL.COMPLDATA, double> get_value, double[] modi)
@@ -258,10 +263,6 @@ namespace mview
 
             for (int iw = 0; iw < model.WELL.COMPLNUM; ++iw)
             {
-                if (model.WELL.COMPLS[iw].STATUS != 1) continue;
-
-                int row = gridData.Rows.Add();
-
                 double value = get_value(model.WELL.COMPLS[iw]);
 
                 if (!Double.IsNaN(value))
@@ -274,28 +275,41 @@ namespace mview
                             break;
                         case 1: // K-value
                             top = (model.WELL.COMPLS[iw].K + 1) - 0.5;
-                            bottom = (model.WELL.COMPLS[iw].K + 1) + 0.5;   
+                            bottom = (model.WELL.COMPLS[iw].K + 1) + 0.5;
                             break;
                     }
 
-                    gridData[0, row].Value = model.WELL.COMPLS[iw].I + 1;
-                    gridData[1, row].Value = model.WELL.COMPLS[iw].J + 1;
-                    gridData[2, row].Value = model.WELL.COMPLS[iw].K + 1;
-                    gridData[3, row].Value = model.WELL.COMPLS[iw].LUMPNUM;
-                    gridData[4, row].Value = value;
-                    gridData[5, row].Value = iw;
-                    gridData[6, row].Value = model.WELL.COMPLS[iw].WPIMULT;
-                    gridData[7, row].Value = modi[iw];
+                    if (model.WELL.COMPLS[iw].STATUS == 1)
+                    {
+                        int row = gridData.Rows.Add();
+
+                        gridData[0, row].Value = model.WELL.COMPLS[iw].I + 1;
+                        gridData[1, row].Value = model.WELL.COMPLS[iw].J + 1;
+                        gridData[2, row].Value = model.WELL.COMPLS[iw].K + 1;
+                        gridData[3, row].Value = model.WELL.COMPLS[iw].LUMPNUM;
+                        gridData[4, row].Value = value;
+                        gridData[5, row].Value = iw;
+                        gridData[6, row].Value = model.WELL.COMPLS[iw].WPIMULT;
+                        gridData[7, row].Value = modi[iw];
+                    }
 
                     ((RectangleBarSeries)plotModel.Series[0]).Items.Add(new RectangleBarItem(0, top, value, bottom));
                     ((RectangleBarSeries)plotModel.Series[1]).Items.Add(new RectangleBarItem(0, top, modi[iw], bottom));
 
                     if (checkShowModiValue.Checked)
                     {
-                        ((RectangleBarSeries)plotModel.Series[0]).Items.Last().Title = modi[iw].ToString("N2");
+                        if (model.WELL.COMPLS[iw].STATUS == 1)
+                        {
+                            ((RectangleBarSeries)plotModel.Series[0]).Items.Last().Title = modi[iw].ToString("N2");
+                        }
                     }
 
                 }
+            }
+
+            if (lastSelectedCellRow > -1)
+            {
+                gridData[lastSelectedCellCol, lastSelectedCellRow].Selected = true;
             }
 
             plotModel.InvalidatePlot(true);
@@ -311,7 +325,7 @@ namespace mview
             var bottom = ((RectangleBarSeries)plotModel.Series[1]).Items[selectedRow].Y1;
             var value = ((RectangleBarSeries)plotModel.Series[1]).Items[selectedRow].X1;
 
-           ((RectangleBarSeries)plotModel.Series[2]).Items.Add(new RectangleBarItem(0, top, value, bottom));
+            ((RectangleBarSeries)plotModel.Series[2]).Items.Add(new RectangleBarItem(0, top, value, bottom));
 
             plotModel.InvalidatePlot(true);
         }
@@ -377,7 +391,7 @@ namespace mview
                 {
                     model.WELL.COMPLS[iw].LUMPNUM = model.WELL.COMPLS[iw].K;
                 }
-    
+
             }
 
             if (boxLumping.SelectedIndex == 0)
@@ -412,5 +426,51 @@ namespace mview
             }
         }
 
+        private void gridData_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            int index = Convert.ToInt32(gridData.Rows[e.RowIndex].Cells[5].Value);
+            string value = gridData.Rows[e.RowIndex].Cells[6].Value.ToString();
+
+            if (Single.TryParse(value, out float modi))
+            {
+                model.WELL.COMPLS[index].WPIMULT = modi;
+
+                if (gridData.SelectedCells.Count > 0)
+                {
+                    for (int iw = 0; iw < gridData.SelectedCells.Count; ++iw)
+                    {
+                        if (gridData.SelectedCells[iw].ColumnIndex == 6)
+                        {
+                            gridData.SelectedCells[iw].Value = modi;
+
+                            var row = gridData.SelectedCells[iw].RowIndex;
+
+                            model.WELL.COMPLS[Convert.ToInt32(gridData[5, row].Value)].WPIMULT = modi;
+
+                        }
+                    }
+                }
+            }
+            else
+            {
+                gridData.Rows[e.RowIndex].Cells[6].Value = model.WELL.COMPLS[index].WPIMULT;
+            }
+
+            model.UpdateWPIMULT();
+
+            UpdateChart();
+        }
+
+        private void gridData_CurrentCellChanged(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
+
+
+        }
+
+        private void gridData_CellValidated(object sender, DataGridViewCellEventArgs e)
+        {
+   
+        }
     }
 }
