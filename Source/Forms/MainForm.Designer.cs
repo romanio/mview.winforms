@@ -59,9 +59,9 @@ namespace mview
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 673);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 670);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(888, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(917, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -76,7 +76,7 @@ namespace mview
             this.tabControl2.Location = new System.Drawing.Point(132, 12);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(744, 658);
+            this.tabControl2.Size = new System.Drawing.Size(773, 655);
             this.tabControl2.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl2.TabIndex = 5;
             // 
@@ -101,7 +101,7 @@ namespace mview
             this.tabPageControl.Location = new System.Drawing.Point(4, 22);
             this.tabPageControl.Name = "tabPageControl";
             this.tabPageControl.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageControl.Size = new System.Drawing.Size(736, 632);
+            this.tabPageControl.Size = new System.Drawing.Size(765, 629);
             this.tabPageControl.TabIndex = 1;
             this.tabPageControl.Text = "Main";
             // 
@@ -284,7 +284,7 @@ namespace mview
             this.checkSorted.FlatAppearance.BorderColor = System.Drawing.Color.LightSteelBlue;
             this.checkSorted.FlatAppearance.BorderSize = 2;
             this.checkSorted.FlatAppearance.CheckedBackColor = System.Drawing.Color.LightSteelBlue;
-            this.checkSorted.Location = new System.Drawing.Point(14, 457);
+            this.checkSorted.Location = new System.Drawing.Point(14, 454);
             this.checkSorted.Name = "checkSorted";
             this.checkSorted.Size = new System.Drawing.Size(96, 17);
             this.checkSorted.TabIndex = 9;
@@ -296,7 +296,7 @@ namespace mview
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 489);
+            this.label4.Location = new System.Drawing.Point(13, 486);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(30, 13);
             this.label4.TabIndex = 8;
@@ -311,7 +311,7 @@ namespace mview
             this.listNames.Location = new System.Drawing.Point(14, 60);
             this.listNames.Name = "listNames";
             this.listNames.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listNames.Size = new System.Drawing.Size(102, 383);
+            this.listNames.Size = new System.Drawing.Size(102, 380);
             this.listNames.TabIndex = 7;
             this.listNames.SelectedIndexChanged += new System.EventHandler(this.ListNamesOnSelectedIndexChanged);
             // 
@@ -329,7 +329,7 @@ namespace mview
             "Aquifer",
             "Region",
             "Other"});
-            this.boxNameType.Location = new System.Drawing.Point(14, 505);
+            this.boxNameType.Location = new System.Drawing.Point(14, 502);
             this.boxNameType.Name = "boxNameType";
             this.boxNameType.Size = new System.Drawing.Size(104, 21);
             this.boxNameType.TabIndex = 6;
@@ -354,7 +354,7 @@ namespace mview
             this.buttonWellFilter.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
             this.buttonWellFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonWellFilter.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonWellFilter.Location = new System.Drawing.Point(14, 559);
+            this.buttonWellFilter.Location = new System.Drawing.Point(14, 556);
             this.buttonWellFilter.Name = "buttonWellFilter";
             this.buttonWellFilter.Size = new System.Drawing.Size(104, 29);
             this.buttonWellFilter.TabIndex = 14;
@@ -368,7 +368,7 @@ namespace mview
             this.button6.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
             this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button6.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button6.Location = new System.Drawing.Point(14, 625);
+            this.button6.Location = new System.Drawing.Point(14, 622);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(104, 29);
             this.button6.TabIndex = 15;
@@ -381,7 +381,7 @@ namespace mview
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(888, 695);
+            this.ClientSize = new System.Drawing.Size(917, 692);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.buttonWellFilter);
             this.Controls.Add(this.button1);

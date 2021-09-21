@@ -178,7 +178,7 @@ namespace mview
 
                         plotModel.Axes[0].Title = "Liquid, m3/day";
                         plotModel.Axes[1].Title = "Depth, m";
-                        gridData.Columns[3].HeaderText = "Liquid, m3/day";
+                        gridData.Columns[4].HeaderText = "Liquid, m3/day";
 
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Aqua;
 
@@ -188,7 +188,7 @@ namespace mview
                     case 1: // Oil production
                         plotModel.Axes[0].Title = "Oil, m3/day";
                         plotModel.Axes[1].Title = "Depth, m";
-                        gridData.Columns[3].HeaderText = "Oil, m3/day";
+                        gridData.Columns[4].HeaderText = "Oil, m3/day";
 
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Orange;
 
@@ -198,7 +198,7 @@ namespace mview
                     case 2: // Water production
                         plotModel.Axes[0].Title = "Water, m3/day";
                         plotModel.Axes[1].Title = "Depth, m";
-                        gridData.Columns[3].HeaderText = "Water, m3/day";
+                        gridData.Columns[4].HeaderText = "Water, m3/day";
 
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.BlueViolet;
 
@@ -208,7 +208,7 @@ namespace mview
                     case 3: // Gas production
                         plotModel.Axes[0].Title = "Gas, m3/day";
                         plotModel.Axes[1].Title = "Depth, m";
-                        gridData.Columns[3].HeaderText = "Gas, m3/day";
+                        gridData.Columns[4].HeaderText = "Gas, m3/day";
 
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.BlueViolet;
 
@@ -218,7 +218,7 @@ namespace mview
                     case 4: // Water Cut
                         plotModel.Axes[0].Title = "Water Cut";
                         plotModel.Axes[1].Title = "Depth, m";
-                        gridData.Columns[3].HeaderText = "Water Cut";
+                        gridData.Columns[4].HeaderText = "Water Cut";
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.CadetBlue;
 
                         DrawGraph((x) => x.WPR / (x.WPR + x.OPR), model.MODI.WCUT);
@@ -227,7 +227,7 @@ namespace mview
                     case 5: // Connection Factor
                         plotModel.Axes[0].Title = "PI, m3/day/bar";
                         plotModel.Axes[1].Title = "Depth, m";
-                        gridData.Columns[3].HeaderText = "PI, m3/day/bar";
+                        gridData.Columns[4].HeaderText = "PI, m3/day/bar";
 
                         ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Orange;
 
@@ -281,10 +281,11 @@ namespace mview
                     gridData[0, row].Value = model.WELL.COMPLS[iw].I + 1;
                     gridData[1, row].Value = model.WELL.COMPLS[iw].J + 1;
                     gridData[2, row].Value = model.WELL.COMPLS[iw].K + 1;
-                    gridData[3, row].Value = value;
-                    gridData[4, row].Value = model.WELL.COMPLS[iw].LUMPNUM;
+                    gridData[3, row].Value = model.WELL.COMPLS[iw].LUMPNUM;
+                    gridData[4, row].Value = value;
                     gridData[5, row].Value = iw;
                     gridData[6, row].Value = model.WELL.COMPLS[iw].WPIMULT;
+                    gridData[7, row].Value = modi[iw];
 
                     ((RectangleBarSeries)plotModel.Series[0]).Items.Add(new RectangleBarItem(0, top, value, bottom));
                     ((RectangleBarSeries)plotModel.Series[1]).Items.Add(new RectangleBarItem(0, top, modi[iw], bottom));
@@ -357,11 +358,18 @@ namespace mview
             UpdateChart();
         }
 
+        private void checkRoll_CheckedChanged(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
+
+            UpdateChart();
+        }
+
         private void boxLumping_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (suspendEvents) return;
 
-            gridData.Columns[4].HeaderText = boxLumping.Text;
+            gridData.Columns[3].HeaderText = boxLumping.Text;
 
             if (boxLumping.SelectedIndex == 1) // BY K-VALUE
             {
@@ -403,5 +411,6 @@ namespace mview
                 }
             }
         }
+
     }
 }
