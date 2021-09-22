@@ -20,8 +20,6 @@ namespace mview
     {
         bool suspendEvents = false;
         bool IsLumped = false;
-        int lastSelectedCellRow = -1;
-        int lastSelectedCellCol = -1;
 
         PlotModel plotModel = null;
         WellModel model;
@@ -172,6 +170,7 @@ namespace mview
                 FillColor = OxyColors.Transparent
             });
 
+            model.UpdateWPIMULT();
 
             if (IsLumped == false)
             {
@@ -246,10 +245,9 @@ namespace mview
 
         void DrawGraph(Func<ECL.COMPLDATA, double> get_value, double[] modi)
         {
-            gridData.Rows.Clear();
-
             double top = 0;
             double bottom = 0;
+            int rowCount = 0;
 
             switch (boxDepthMode.SelectedIndex)
             {
@@ -261,6 +259,8 @@ namespace mview
                     break;
             }
 
+            gridData.RowCount = model.WELL.COMPLNUM;
+            
             for (int iw = 0; iw < model.WELL.COMPLNUM; ++iw)
             {
                 double value = get_value(model.WELL.COMPLS[iw]);
@@ -279,18 +279,19 @@ namespace mview
                             break;
                     }
 
+                    
                     if (model.WELL.COMPLS[iw].STATUS == 1)
                     {
-                        int row = gridData.Rows.Add();
+                        gridData[0, rowCount].Value = model.WELL.COMPLS[iw].I + 1;
+                        gridData[1, rowCount].Value = model.WELL.COMPLS[iw].J + 1;
+                        gridData[2, rowCount].Value = model.WELL.COMPLS[iw].K + 1;
+                        gridData[3, rowCount].Value = model.WELL.COMPLS[iw].LUMPNUM;
+                        gridData[4, rowCount].Value = value;
+                        gridData[5, rowCount].Value = iw;
+                        gridData[6, rowCount].Value = model.WELL.COMPLS[iw].WPIMULT;
+                        gridData[7, rowCount].Value = modi[iw];
 
-                        gridData[0, row].Value = model.WELL.COMPLS[iw].I + 1;
-                        gridData[1, row].Value = model.WELL.COMPLS[iw].J + 1;
-                        gridData[2, row].Value = model.WELL.COMPLS[iw].K + 1;
-                        gridData[3, row].Value = model.WELL.COMPLS[iw].LUMPNUM;
-                        gridData[4, row].Value = value;
-                        gridData[5, row].Value = iw;
-                        gridData[6, row].Value = model.WELL.COMPLS[iw].WPIMULT;
-                        gridData[7, row].Value = modi[iw];
+                        rowCount++;
                     }
 
                     ((RectangleBarSeries)plotModel.Series[0]).Items.Add(new RectangleBarItem(0, top, value, bottom));
@@ -303,17 +304,21 @@ namespace mview
                             ((RectangleBarSeries)plotModel.Series[0]).Items.Last().Title = modi[iw].ToString("N2");
                         }
                     }
-
                 }
             }
 
-            if (lastSelectedCellRow > -1)
-            {
-                gridData[lastSelectedCellCol, lastSelectedCellRow].Selected = true;
-            }
+            gridData.RowCount = rowCount;
 
             plotModel.InvalidatePlot(true);
+
+            labelLPR.Text = model.WELL.WLPRH.ToString("N1") + " / " + model.MODI.LPR.ToString("N1");
+            labelOPR.Text = model.WELL.WOPRH.ToString("N1") + " / " + model.MODI.OPR.ToString("N1");
+            labelWPR.Text = model.WELL.WWPRH.ToString("N1") + " / " + model.MODI.WPR.ToString("N1");
+            labelBHP.Text = model.WELL.WBHPH.ToString("N1") + " / " + model.MODI.BHP.ToString("N1");
+            labelWCUT.Text = (model.WELL.WWPRH / model.WELL.WLPRH).ToString("N3") + " / " + (model.MODI.WPR / model.MODI.LPR).ToString("N3");
         }
+
+
 
         void DrawGraphSelection(int selectedRow)
         {
@@ -389,7 +394,7 @@ namespace mview
             {
                 for (int iw = 0; iw < model.WELL.COMPLNUM; ++iw)
                 {
-                    model.WELL.COMPLS[iw].LUMPNUM = model.WELL.COMPLS[iw].K;
+                    model.WELL.COMPLS[iw].LUMPNUM = model.WELL.COMPLS[iw].K + 1;
                 }
 
             }
@@ -428,49 +433,24 @@ namespace mview
 
         private void gridData_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            int index = Convert.ToInt32(gridData.Rows[e.RowIndex].Cells[5].Value);
-            string value = gridData.Rows[e.RowIndex].Cells[6].Value.ToString();
-
-            if (Single.TryParse(value, out float modi))
+            if (e.ColumnIndex == 6)
             {
-                model.WELL.COMPLS[index].WPIMULT = modi;
-
-                if (gridData.SelectedCells.Count > 0)
+                int index = Convert.ToInt32(gridData[5, e.RowIndex].Value);
+                
+                if (Single.TryParse(gridData[6, e.RowIndex].Value.ToString(), out float modi))
                 {
-                    for (int iw = 0; iw < gridData.SelectedCells.Count; ++iw)
-                    {
-                        if (gridData.SelectedCells[iw].ColumnIndex == 6)
-                        {
-                            gridData.SelectedCells[iw].Value = modi;
-
-                            var row = gridData.SelectedCells[iw].RowIndex;
-
-                            model.WELL.COMPLS[Convert.ToInt32(gridData[5, row].Value)].WPIMULT = modi;
-
-                        }
-                    }
+                    model.WELL.COMPLS[index].WPIMULT = modi;
                 }
             }
-            else
-            {
-                gridData.Rows[e.RowIndex].Cells[6].Value = model.WELL.COMPLS[index].WPIMULT;
-            }
-
-            model.UpdateWPIMULT();
 
             UpdateChart();
         }
 
-        private void gridData_CurrentCellChanged(object sender, EventArgs e)
+        private void button8_Click(object sender, EventArgs e)
         {
-            if (suspendEvents) return;
+            model.AdjustBHP();
 
-
-        }
-
-        private void gridData_CellValidated(object sender, DataGridViewCellEventArgs e)
-        {
-   
+            UpdateChart();
         }
     }
 }

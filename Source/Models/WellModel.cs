@@ -23,6 +23,7 @@ namespace mview
         public double BHP;
         public double LPR;
         public double WPR;
+        public double OPR;
     }
 
     public class WellModel
@@ -128,6 +129,77 @@ namespace mview
                 }
         }
 
+        public void AdjustBHP()
+        {
+            /*
+            Расчетное забойное давление это разница между потенциальным и расчетным дебитом
+            деленное на продуктивность
+            
+            BHP = (QW_POT - WLPR) / PI;
+             
+            Потенциальный дебит, это сумма по перфорациям продуктивность измененная, умноженная на максимальную депрессию (bhp = 0)
+            
+            Q_POT[iw] = CPI[iw] * (COMPLS[iw].PRESS - COMPLS[iw].Hw);
+            
+            Так как множитель ищем постоянным для всех интервалов
+            
+            QW_POT = WPIMULT * SUMM(CPI[iw] * (COMPLS[iw].PRESS - COMPLS[iw].Hw))
+            
+            Продуктивность это тоже простая сумма продуктивностей
+            
+            PI = WPIMULT * SUMM(CPI[iw])
+            
+             Следовательно, формула для расчета забойного давления
+
+            BHP = (WPIMULT * QW_POT - WLPR) / WPIMULT * PI
+             
+            BHP * WPIMULT * PI = WPIMULT * QW_POT - WLPR
+
+            WPIMULT (QW_POT - BHP * PI) = WLPR
+
+            WPIMULT = WLPR / (QW_POT - BHP * PI)
+            
+             */
+
+            double QW_POT = 0;
+            double PI = 0;
+
+            for (int iw = 0; iw < well.COMPLNUM; ++iw)
+            {
+                if (well.COMPLS[iw].STATUS == 1)
+                {
+                    double CPI =
+                        (well.COMPLS[iw].WPR + well.COMPLS[iw].OPR) /
+                        (well.COMPLS[iw].PRESS - well.WBHP - well.COMPLS[iw].Hw);
+
+                    if ((well.COMPLS[iw].WPR + well.COMPLS[iw].OPR) == 0)
+                        CPI = 0;
+
+                    PI = PI + CPI;
+
+                    double Q_POT = CPI * (well.COMPLS[iw].PRESS - well.COMPLS[iw].Hw);
+
+                    QW_POT = QW_POT + Q_POT;
+                }
+            }
+
+            double WPIMULT = well.WLPRH / (QW_POT - well.WBHPH * PI);
+
+            for (int iw = 0; iw < well.COMPLNUM; ++iw)
+            {
+                if (well.COMPLS[iw].STATUS == 1)
+                {
+                    well.COMPLS[iw].WPIMULT = Convert.ToSingle(WPIMULT);
+                }
+            }
+
+            UpdateWPIMULT();
+
+        }
+
+
+
+
         public void UpdateWPIMULT()
         {
             modi.CPI = new double[well.COMPLNUM];
@@ -147,9 +219,13 @@ namespace mview
             {
                 if (well.COMPLS[iw].STATUS == 1)
                 {
+
                     double CPI =
                         (well.COMPLS[iw].WPR + well.COMPLS[iw].OPR) /
                         (well.COMPLS[iw].PRESS - well.WBHP - well.COMPLS[iw].Hw);
+
+                    if ((well.COMPLS[iw].WPR + well.COMPLS[iw].OPR) == 0)
+                        CPI = 0;
 
                     modi.CPI_INIT[iw] = CPI;
 
@@ -181,6 +257,8 @@ namespace mview
                     modi.WPR = modi.WPR + modi.WATER[iw];
                 }
             }
+            modi.OPR = modi.LPR - modi.WPR;
         }
+    
     }
 }

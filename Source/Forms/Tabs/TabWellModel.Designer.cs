@@ -29,7 +29,7 @@ namespace mview
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.checkRoll = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -42,15 +42,6 @@ namespace mview
             this.label1 = new System.Windows.Forms.Label();
             this.boxChartMode = new System.Windows.Forms.ComboBox();
             this.gridData = new System.Windows.Forms.DataGridView();
-            this.plotView = new OxyPlot.WindowsForms.PlotView();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.J = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -59,6 +50,26 @@ namespace mview
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.plotView = new OxyPlot.WindowsForms.PlotView();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.labelWPR = new System.Windows.Forms.Label();
+            this.labelOPR = new System.Windows.Forms.Label();
+            this.labelLPR = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.labelGPR = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.labelBHP = new System.Windows.Forms.Label();
+            this.labelWCUT = new System.Windows.Forms.Label();
+            this.labelGOR = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.button8 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -72,6 +83,7 @@ namespace mview
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Controls.Add(this.button8);
             this.panel1.Controls.Add(this.checkRoll);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.boxRestartDates);
@@ -233,127 +245,15 @@ namespace mview
             this.Column6,
             this.Column7});
             this.gridData.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.gridData.Location = new System.Drawing.Point(3, 112);
+            this.gridData.Location = new System.Drawing.Point(3, 140);
             this.gridData.Name = "gridData";
             this.gridData.RowHeadersVisible = false;
             this.gridData.RowTemplate.Height = 18;
             this.gridData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.gridData.Size = new System.Drawing.Size(380, 422);
+            this.gridData.Size = new System.Drawing.Size(390, 394);
             this.gridData.TabIndex = 5;
             this.gridData.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridData_CellEndEdit);
             this.gridData.CellStateChanged += new System.Windows.Forms.DataGridViewCellStateChangedEventHandler(this.gridData_CellStateChanged);
-            this.gridData.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridData_CellValidated);
-            this.gridData.CurrentCellChanged += new System.EventHandler(this.gridData_CurrentCellChanged);
-            // 
-            // plotView
-            // 
-            this.plotView.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.plotView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotView.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.plotView.Location = new System.Drawing.Point(0, 0);
-            this.plotView.Margin = new System.Windows.Forms.Padding(0);
-            this.plotView.Name = "plotView";
-            this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotView.Size = new System.Drawing.Size(385, 537);
-            this.plotView.TabIndex = 4;
-            this.plotView.Text = "plotView";
-            this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(3, 98);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.plotView);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.label11);
-            this.splitContainer1.Panel2.Controls.Add(this.label10);
-            this.splitContainer1.Panel2.Controls.Add(this.label9);
-            this.splitContainer1.Panel2.Controls.Add(this.label8);
-            this.splitContainer1.Panel2.Controls.Add(this.label7);
-            this.splitContainer1.Panel2.Controls.Add(this.label6);
-            this.splitContainer1.Panel2.Controls.Add(this.label5);
-            this.splitContainer1.Panel2.Controls.Add(this.gridData);
-            this.splitContainer1.Size = new System.Drawing.Size(791, 537);
-            this.splitContainer1.SplitterDistance = 385;
-            this.splitContainer1.SplitterWidth = 6;
-            this.splitContainer1.TabIndex = 8;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label11.Location = new System.Drawing.Point(130, 82);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(66, 13);
-            this.label11.TabIndex = 12;
-            this.label11.Text = "2322 / 3342";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.Location = new System.Drawing.Point(130, 59);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(60, 13);
-            this.label10.TabIndex = 11;
-            this.label10.Text = "23.2 / 24.2";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label9.Location = new System.Drawing.Point(130, 37);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(66, 13);
-            this.label9.TabIndex = 10;
-            this.label9.Text = "23.2 / 24.54";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(17, 82);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(92, 13);
-            this.label8.TabIndex = 9;
-            this.label8.Text = "Gas rate, m3/day";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(17, 59);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(104, 13);
-            this.label7.TabIndex = 8;
-            this.label7.Text = "Water rate, m3/day";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(17, 37);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(88, 13);
-            this.label6.TabIndex = 7;
-            this.label6.Text = "Oil rate, m3/day";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(17, 10);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(40, 13);
-            this.label5.TabIndex = 6;
-            this.label5.Text = "Flows ";
             // 
             // Column1
             // 
@@ -398,8 +298,8 @@ namespace mview
             // 
             // Column6
             // 
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Column6.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.Column6.DefaultCellStyle = dataGridViewCellStyle7;
             this.Column6.HeaderText = "Mult";
             this.Column6.Name = "Column6";
             this.Column6.Width = 60;
@@ -410,6 +310,235 @@ namespace mview
             this.Column7.Name = "Column7";
             this.Column7.ReadOnly = true;
             this.Column7.Width = 60;
+            // 
+            // plotView
+            // 
+            this.plotView.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.plotView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotView.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.plotView.Location = new System.Drawing.Point(0, 0);
+            this.plotView.Margin = new System.Windows.Forms.Padding(0);
+            this.plotView.Name = "plotView";
+            this.plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotView.Size = new System.Drawing.Size(385, 537);
+            this.plotView.TabIndex = 4;
+            this.plotView.Text = "plotView";
+            this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(3, 98);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.plotView);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.label10);
+            this.splitContainer1.Panel2.Controls.Add(this.label9);
+            this.splitContainer1.Panel2.Controls.Add(this.labelGOR);
+            this.splitContainer1.Panel2.Controls.Add(this.labelWCUT);
+            this.splitContainer1.Panel2.Controls.Add(this.labelBHP);
+            this.splitContainer1.Panel2.Controls.Add(this.label16);
+            this.splitContainer1.Panel2.Controls.Add(this.label15);
+            this.splitContainer1.Panel2.Controls.Add(this.label14);
+            this.splitContainer1.Panel2.Controls.Add(this.labelGPR);
+            this.splitContainer1.Panel2.Controls.Add(this.label12);
+            this.splitContainer1.Panel2.Controls.Add(this.labelWPR);
+            this.splitContainer1.Panel2.Controls.Add(this.labelOPR);
+            this.splitContainer1.Panel2.Controls.Add(this.labelLPR);
+            this.splitContainer1.Panel2.Controls.Add(this.label8);
+            this.splitContainer1.Panel2.Controls.Add(this.label7);
+            this.splitContainer1.Panel2.Controls.Add(this.label6);
+            this.splitContainer1.Panel2.Controls.Add(this.label5);
+            this.splitContainer1.Panel2.Controls.Add(this.gridData);
+            this.splitContainer1.Size = new System.Drawing.Size(791, 537);
+            this.splitContainer1.SplitterDistance = 385;
+            this.splitContainer1.SplitterWidth = 6;
+            this.splitContainer1.TabIndex = 8;
+            // 
+            // labelWPR
+            // 
+            this.labelWPR.AutoSize = true;
+            this.labelWPR.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelWPR.Location = new System.Drawing.Point(141, 86);
+            this.labelWPR.Name = "labelWPR";
+            this.labelWPR.Size = new System.Drawing.Size(66, 13);
+            this.labelWPR.TabIndex = 12;
+            this.labelWPR.Text = "2322 / 3342";
+            // 
+            // labelOPR
+            // 
+            this.labelOPR.AutoSize = true;
+            this.labelOPR.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelOPR.Location = new System.Drawing.Point(141, 63);
+            this.labelOPR.Name = "labelOPR";
+            this.labelOPR.Size = new System.Drawing.Size(60, 13);
+            this.labelOPR.TabIndex = 11;
+            this.labelOPR.Text = "23.2 / 24.2";
+            // 
+            // labelLPR
+            // 
+            this.labelLPR.AutoSize = true;
+            this.labelLPR.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelLPR.Location = new System.Drawing.Point(141, 41);
+            this.labelLPR.Name = "labelLPR";
+            this.labelLPR.Size = new System.Drawing.Size(66, 13);
+            this.labelLPR.TabIndex = 10;
+            this.labelLPR.Text = "23.2 / 24.54";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(17, 108);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(92, 13);
+            this.label8.TabIndex = 9;
+            this.label8.Text = "Gas rate, m3/day";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(17, 86);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(104, 13);
+            this.label7.TabIndex = 8;
+            this.label7.Text = "Water rate, m3/day";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(17, 63);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(88, 13);
+            this.label6.TabIndex = 7;
+            this.label6.Text = "Oil rate, m3/day";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(17, 10);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(37, 13);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "Flows";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(17, 41);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(105, 13);
+            this.label12.TabIndex = 13;
+            this.label12.Text = "Liquid rate, m3/day";
+            // 
+            // labelGPR
+            // 
+            this.labelGPR.AutoSize = true;
+            this.labelGPR.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelGPR.Location = new System.Drawing.Point(141, 108);
+            this.labelGPR.Name = "labelGPR";
+            this.labelGPR.Size = new System.Drawing.Size(66, 13);
+            this.labelGPR.TabIndex = 14;
+            this.labelGPR.Text = "2322 / 3342";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(237, 41);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(50, 13);
+            this.label14.TabIndex = 15;
+            this.label14.Text = "BHP, bar";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(237, 63);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(39, 13);
+            this.label15.TabIndex = 16;
+            this.label15.Text = "WCUT";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(237, 86);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(31, 13);
+            this.label16.TabIndex = 17;
+            this.label16.Text = "GOR";
+            // 
+            // labelBHP
+            // 
+            this.labelBHP.AutoSize = true;
+            this.labelBHP.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelBHP.Location = new System.Drawing.Point(303, 41);
+            this.labelBHP.Name = "labelBHP";
+            this.labelBHP.Size = new System.Drawing.Size(66, 13);
+            this.labelBHP.TabIndex = 18;
+            this.labelBHP.Text = "23.2 / 24.54";
+            // 
+            // labelWCUT
+            // 
+            this.labelWCUT.AutoSize = true;
+            this.labelWCUT.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelWCUT.Location = new System.Drawing.Point(303, 63);
+            this.labelWCUT.Name = "labelWCUT";
+            this.labelWCUT.Size = new System.Drawing.Size(66, 13);
+            this.labelWCUT.TabIndex = 19;
+            this.labelWCUT.Text = "23.2 / 24.54";
+            // 
+            // labelGOR
+            // 
+            this.labelGOR.AutoSize = true;
+            this.labelGOR.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelGOR.Location = new System.Drawing.Point(303, 86);
+            this.labelGOR.Name = "labelGOR";
+            this.labelGOR.Size = new System.Drawing.Size(66, 13);
+            this.labelGOR.TabIndex = 20;
+            this.labelGOR.Text = "23.2 / 24.54";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label9.Location = new System.Drawing.Point(141, 10);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(71, 13);
+            this.label9.TabIndex = 21;
+            this.label9.Text = "History / Sim";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label10.Location = new System.Drawing.Point(303, 10);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(71, 13);
+            this.label10.TabIndex = 22;
+            this.label10.Text = "History / Sim";
+            // 
+            // button8
+            // 
+            this.button8.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
+            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button8.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
+            this.button8.Location = new System.Drawing.Point(643, 8);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(104, 29);
+            this.button8.TabIndex = 44;
+            this.button8.Text = "Adjust BHP";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // TabWellModel
             // 
@@ -453,9 +582,9 @@ namespace mview
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.CheckBox checkRoll;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label labelWPR;
+        private System.Windows.Forms.Label labelOPR;
+        private System.Windows.Forms.Label labelLPR;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn J;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
@@ -464,5 +593,16 @@ namespace mview
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
+        private System.Windows.Forms.Label labelGOR;
+        private System.Windows.Forms.Label labelWCUT;
+        private System.Windows.Forms.Label labelBHP;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label labelGPR;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button button8;
     }
 }
