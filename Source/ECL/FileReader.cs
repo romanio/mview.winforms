@@ -78,7 +78,7 @@ namespace mview
             });
 
 
-            System.Windows.Forms.Application.DoEvents();
+           // System.Windows.Forms.Application.DoEvents();
         }
 
         public void SkipEclipseData()

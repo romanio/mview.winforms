@@ -29,8 +29,9 @@ namespace mview
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button8 = new System.Windows.Forms.Button();
             this.checkRoll = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.boxRestartDates = new System.Windows.Forms.ComboBox();
@@ -52,24 +53,23 @@ namespace mview
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.plotView = new OxyPlot.WindowsForms.PlotView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.labelGOR = new System.Windows.Forms.Label();
+            this.labelWCUT = new System.Windows.Forms.Label();
+            this.labelBHP = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.labelGPR = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.labelWPR = new System.Windows.Forms.Label();
             this.labelOPR = new System.Windows.Forms.Label();
             this.labelLPR = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
+            this.labelGPRtext = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.labelGPR = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.labelBHP = new System.Windows.Forms.Label();
-            this.labelWCUT = new System.Windows.Forms.Label();
-            this.labelGOR = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.button8 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -99,6 +99,19 @@ namespace mview
             this.panel1.Size = new System.Drawing.Size(791, 89);
             this.panel1.TabIndex = 7;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.Panel1OnPaint);
+            // 
+            // button8
+            // 
+            this.button8.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
+            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button8.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
+            this.button8.Location = new System.Drawing.Point(640, 10);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(104, 29);
+            this.button8.TabIndex = 44;
+            this.button8.Text = "Adjust BHP";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // checkRoll
             // 
@@ -244,13 +257,12 @@ namespace mview
             this.Column5,
             this.Column6,
             this.Column7});
-            this.gridData.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.gridData.Location = new System.Drawing.Point(3, 140);
             this.gridData.Name = "gridData";
             this.gridData.RowHeadersVisible = false;
             this.gridData.RowTemplate.Height = 18;
             this.gridData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.gridData.Size = new System.Drawing.Size(390, 394);
+            this.gridData.Size = new System.Drawing.Size(386, 394);
             this.gridData.TabIndex = 5;
             this.gridData.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridData_CellEndEdit);
             this.gridData.CellStateChanged += new System.Windows.Forms.DataGridViewCellStateChangedEventHandler(this.gridData_CellStateChanged);
@@ -298,8 +310,8 @@ namespace mview
             // 
             // Column6
             // 
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.Column6.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.Column6.DefaultCellStyle = dataGridViewCellStyle1;
             this.Column6.HeaderText = "Mult";
             this.Column6.Name = "Column6";
             this.Column6.Width = 60;
@@ -354,7 +366,7 @@ namespace mview
             this.splitContainer1.Panel2.Controls.Add(this.labelWPR);
             this.splitContainer1.Panel2.Controls.Add(this.labelOPR);
             this.splitContainer1.Panel2.Controls.Add(this.labelLPR);
-            this.splitContainer1.Panel2.Controls.Add(this.label8);
+            this.splitContainer1.Panel2.Controls.Add(this.labelGPRtext);
             this.splitContainer1.Panel2.Controls.Add(this.label7);
             this.splitContainer1.Panel2.Controls.Add(this.label6);
             this.splitContainer1.Panel2.Controls.Add(this.label5);
@@ -363,6 +375,102 @@ namespace mview
             this.splitContainer1.SplitterDistance = 385;
             this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 8;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label10.Location = new System.Drawing.Point(303, 10);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(71, 13);
+            this.label10.TabIndex = 22;
+            this.label10.Text = "History / Sim";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label9.Location = new System.Drawing.Point(141, 10);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(71, 13);
+            this.label9.TabIndex = 21;
+            this.label9.Text = "History / Sim";
+            // 
+            // labelGOR
+            // 
+            this.labelGOR.AutoSize = true;
+            this.labelGOR.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelGOR.Location = new System.Drawing.Point(303, 86);
+            this.labelGOR.Name = "labelGOR";
+            this.labelGOR.Size = new System.Drawing.Size(66, 13);
+            this.labelGOR.TabIndex = 20;
+            this.labelGOR.Text = "23.2 / 24.54";
+            // 
+            // labelWCUT
+            // 
+            this.labelWCUT.AutoSize = true;
+            this.labelWCUT.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelWCUT.Location = new System.Drawing.Point(303, 63);
+            this.labelWCUT.Name = "labelWCUT";
+            this.labelWCUT.Size = new System.Drawing.Size(66, 13);
+            this.labelWCUT.TabIndex = 19;
+            this.labelWCUT.Text = "23.2 / 24.54";
+            // 
+            // labelBHP
+            // 
+            this.labelBHP.AutoSize = true;
+            this.labelBHP.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelBHP.Location = new System.Drawing.Point(303, 41);
+            this.labelBHP.Name = "labelBHP";
+            this.labelBHP.Size = new System.Drawing.Size(66, 13);
+            this.labelBHP.TabIndex = 18;
+            this.labelBHP.Text = "23.2 / 24.54";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(237, 86);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(31, 13);
+            this.label16.TabIndex = 17;
+            this.label16.Text = "GOR";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(237, 63);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(39, 13);
+            this.label15.TabIndex = 16;
+            this.label15.Text = "WCUT";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(237, 41);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(50, 13);
+            this.label14.TabIndex = 15;
+            this.label14.Text = "BHP, bar";
+            // 
+            // labelGPR
+            // 
+            this.labelGPR.AutoSize = true;
+            this.labelGPR.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelGPR.Location = new System.Drawing.Point(141, 108);
+            this.labelGPR.Name = "labelGPR";
+            this.labelGPR.Size = new System.Drawing.Size(66, 13);
+            this.labelGPR.TabIndex = 14;
+            this.labelGPR.Text = "2322 / 3342";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(17, 41);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(105, 13);
+            this.label12.TabIndex = 13;
+            this.label12.Text = "Liquid rate, m3/day";
             // 
             // labelWPR
             // 
@@ -394,14 +502,14 @@ namespace mview
             this.labelLPR.TabIndex = 10;
             this.labelLPR.Text = "23.2 / 24.54";
             // 
-            // label8
+            // labelGPRtext
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(17, 108);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(92, 13);
-            this.label8.TabIndex = 9;
-            this.label8.Text = "Gas rate, m3/day";
+            this.labelGPRtext.AutoSize = true;
+            this.labelGPRtext.Location = new System.Drawing.Point(17, 108);
+            this.labelGPRtext.Name = "labelGPRtext";
+            this.labelGPRtext.Size = new System.Drawing.Size(92, 13);
+            this.labelGPRtext.TabIndex = 9;
+            this.labelGPRtext.Text = "Gas rate, m3/day";
             // 
             // label7
             // 
@@ -430,115 +538,6 @@ namespace mview
             this.label5.Size = new System.Drawing.Size(37, 13);
             this.label5.TabIndex = 6;
             this.label5.Text = "Flows";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(17, 41);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(105, 13);
-            this.label12.TabIndex = 13;
-            this.label12.Text = "Liquid rate, m3/day";
-            // 
-            // labelGPR
-            // 
-            this.labelGPR.AutoSize = true;
-            this.labelGPR.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelGPR.Location = new System.Drawing.Point(141, 108);
-            this.labelGPR.Name = "labelGPR";
-            this.labelGPR.Size = new System.Drawing.Size(66, 13);
-            this.labelGPR.TabIndex = 14;
-            this.labelGPR.Text = "2322 / 3342";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(237, 41);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(50, 13);
-            this.label14.TabIndex = 15;
-            this.label14.Text = "BHP, bar";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(237, 63);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(39, 13);
-            this.label15.TabIndex = 16;
-            this.label15.Text = "WCUT";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(237, 86);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(31, 13);
-            this.label16.TabIndex = 17;
-            this.label16.Text = "GOR";
-            // 
-            // labelBHP
-            // 
-            this.labelBHP.AutoSize = true;
-            this.labelBHP.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelBHP.Location = new System.Drawing.Point(303, 41);
-            this.labelBHP.Name = "labelBHP";
-            this.labelBHP.Size = new System.Drawing.Size(66, 13);
-            this.labelBHP.TabIndex = 18;
-            this.labelBHP.Text = "23.2 / 24.54";
-            // 
-            // labelWCUT
-            // 
-            this.labelWCUT.AutoSize = true;
-            this.labelWCUT.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelWCUT.Location = new System.Drawing.Point(303, 63);
-            this.labelWCUT.Name = "labelWCUT";
-            this.labelWCUT.Size = new System.Drawing.Size(66, 13);
-            this.labelWCUT.TabIndex = 19;
-            this.labelWCUT.Text = "23.2 / 24.54";
-            // 
-            // labelGOR
-            // 
-            this.labelGOR.AutoSize = true;
-            this.labelGOR.Font = new System.Drawing.Font("Segoe UI Semibold", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelGOR.Location = new System.Drawing.Point(303, 86);
-            this.labelGOR.Name = "labelGOR";
-            this.labelGOR.Size = new System.Drawing.Size(66, 13);
-            this.labelGOR.TabIndex = 20;
-            this.labelGOR.Text = "23.2 / 24.54";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label9.Location = new System.Drawing.Point(141, 10);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(71, 13);
-            this.label9.TabIndex = 21;
-            this.label9.Text = "History / Sim";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.Location = new System.Drawing.Point(303, 10);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(71, 13);
-            this.label10.TabIndex = 22;
-            this.label10.Text = "History / Sim";
-            // 
-            // button8
-            // 
-            this.button8.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
-            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button8.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
-            this.button8.Location = new System.Drawing.Point(643, 8);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(104, 29);
-            this.button8.TabIndex = 44;
-            this.button8.Text = "Adjust BHP";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // TabWellModel
             // 
@@ -577,7 +576,7 @@ namespace mview
         private System.Windows.Forms.ComboBox boxRestartDates;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label labelGPRtext;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;

@@ -19,7 +19,7 @@ namespace mview
     public partial class TabWellModel : UserControl, ITabObserver
     {
         bool suspendEvents = false;
-        bool IsLumped = false;
+        bool isLumped = false;
 
         PlotModel plotModel = null;
         WellModel model;
@@ -138,6 +138,8 @@ namespace mview
             {
                 plotModel.Title = "not found";
                 plotModel.InvalidatePlot(true);
+
+                suspendEvents = false;
                 return;
             }
 
@@ -172,72 +174,126 @@ namespace mview
 
             model.UpdateWPIMULT();
 
-            if (IsLumped == false)
+            if (isLumped) model.CalculateLump();
+
+            switch (boxChartMode.SelectedIndex)
             {
-                switch (boxChartMode.SelectedIndex)
-                {
-                    case 0: // Liquid production
+                case 0: // Liquid production
 
-                        plotModel.Axes[0].Title = "Liquid, m3/day";
-                        plotModel.Axes[1].Title = "Depth, m";
-                        gridData.Columns[4].HeaderText = "Liquid, m3/day";
+                    plotModel.Axes[0].Title = "Liquid, m3/day";
+                    plotModel.Axes[1].Title = "Depth, m";
+                    gridData.Columns[4].HeaderText = "Liquid, m3/day";
 
-                        ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Aqua;
+                    ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Aqua;
 
+                    if (isLumped)
+                    {
+                        DrawLumpGraph(model.LUMP.LIQ, model.LUMP.M_LIQ);
+                    }
+                    else
+                    {
                         DrawGraph((x) => x.WPR + x.OPR, model.MODI.LIQ);
-                        break;
+                    }
 
-                    case 1: // Oil production
-                        plotModel.Axes[0].Title = "Oil, m3/day";
-                        plotModel.Axes[1].Title = "Depth, m";
-                        gridData.Columns[4].HeaderText = "Oil, m3/day";
+                    break;
 
-                        ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Orange;
+                case 1: // Oil production
+                    plotModel.Axes[0].Title = "Oil, m3/day";
+                    plotModel.Axes[1].Title = "Depth, m";
+                    gridData.Columns[4].HeaderText = "Oil, m3/day";
 
+                    ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Orange;
+
+                    if (isLumped)
+                    {
+                        DrawLumpGraph(model.LUMP.OIL, model.LUMP.M_OIL);
+                    }
+                    else
+                    {
                         DrawGraph((x) => x.OPR, model.MODI.OIL);
-                        break;
+                    }
 
-                    case 2: // Water production
-                        plotModel.Axes[0].Title = "Water, m3/day";
-                        plotModel.Axes[1].Title = "Depth, m";
-                        gridData.Columns[4].HeaderText = "Water, m3/day";
 
-                        ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.BlueViolet;
+                    break;
 
+                case 2: // Water production
+                    plotModel.Axes[0].Title = "Water, m3/day";
+                    plotModel.Axes[1].Title = "Depth, m";
+                    gridData.Columns[4].HeaderText = "Water, m3/day";
+
+                    ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.BlueViolet;
+
+                    if (isLumped)
+                    {
+                        DrawLumpGraph(model.LUMP.WATER, model.LUMP.M_WATER);
+                    }
+                    else
+                    {
                         DrawGraph((x) => x.WPR, model.MODI.WATER);
-                        break;
+                    }
 
-                    case 3: // Gas production
-                        plotModel.Axes[0].Title = "Gas, m3/day";
-                        plotModel.Axes[1].Title = "Depth, m";
-                        gridData.Columns[4].HeaderText = "Gas, m3/day";
 
-                        ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.BlueViolet;
+                    break;
 
+                case 3: // Gas production
+                    plotModel.Axes[0].Title = "Gas, m3/day";
+                    plotModel.Axes[1].Title = "Depth, m";
+                    gridData.Columns[4].HeaderText = "Gas, m3/day";
+
+                    ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.BlueViolet;
+
+                    if (isLumped)
+                    {
+                        DrawLumpGraph(model.LUMP.GAS, model.LUMP.M_GAS);
+                    }
+                    else
+                    {
                         DrawGraph((x) => x.GPR, model.MODI.GAS);
-                        break;
+                    }
 
-                    case 4: // Water Cut
-                        plotModel.Axes[0].Title = "Water Cut";
-                        plotModel.Axes[1].Title = "Depth, m";
-                        gridData.Columns[4].HeaderText = "Water Cut";
-                        ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.CadetBlue;
 
+                    break;
+
+                case 4: // Water Cut
+                    plotModel.Axes[0].Title = "Water Cut";
+                    plotModel.Axes[1].Title = "Depth, m";
+                    gridData.Columns[4].HeaderText = "Water Cut";
+                    ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.CadetBlue;
+
+                    if (isLumped)
+                    {
+                        DrawLumpGraph(model.LUMP.WCUT, model.LUMP.M_WCUT);
+                    }
+                    else
+                    {
                         DrawGraph((x) => x.WPR / (x.WPR + x.OPR), model.MODI.WCUT);
-                        break;
+                    }
 
-                    case 5: // Connection Factor
-                        plotModel.Axes[0].Title = "PI, m3/day/bar";
-                        plotModel.Axes[1].Title = "Depth, m";
-                        gridData.Columns[4].HeaderText = "PI, m3/day/bar";
 
-                        ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Orange;
+                    break;
 
+                case 5: // Connection Factor
+                    plotModel.Axes[0].Title = "PI, m3/day/bar";
+                    plotModel.Axes[1].Title = "Depth, m";
+                    gridData.Columns[4].HeaderText = "PI, m3/day/bar";
+
+                    ((RectangleBarSeries)plotModel.Series[0]).FillColor = OxyColors.Orange;
+
+                    if (isLumped)
+                    {
+                        DrawLumpGraph(model.LUMP.CPI, model.LUMP.M_CPI);
+                    }
+                    else
+                    {
                         DrawGraph((x) => (x.OPR + x.WPR) / (x.PRESS - x.Hw - model.WELL.WBHP), model.MODI.CPI);
-                        break;
-                }
+                    }
 
+
+                    break;
             }
+
+            gridData.Columns[7].HeaderText = gridData.Columns[4].HeaderText;
+        
 
             suspendEvents = false;
         }
@@ -245,9 +301,9 @@ namespace mview
 
         void DrawGraph(Func<ECL.COMPLDATA, double> get_value, double[] modi)
         {
+            int rowCount = 0;
             double top = 0;
             double bottom = 0;
-            int rowCount = 0;
 
             switch (boxDepthMode.SelectedIndex)
             {
@@ -260,7 +316,7 @@ namespace mview
             }
 
             gridData.RowCount = model.WELL.COMPLNUM;
-            
+
             for (int iw = 0; iw < model.WELL.COMPLNUM; ++iw)
             {
                 double value = get_value(model.WELL.COMPLS[iw]);
@@ -279,7 +335,7 @@ namespace mview
                             break;
                     }
 
-                    
+
                     if (model.WELL.COMPLS[iw].STATUS == 1)
                     {
                         gridData[0, rowCount].Value = model.WELL.COMPLS[iw].I + 1;
@@ -308,20 +364,78 @@ namespace mview
             }
 
             gridData.RowCount = rowCount;
+            plotModel.InvalidatePlot(true);
+
+            DrawTextStatistic();
+        }
+
+        void DrawLumpGraph(double[] sim, double[] modi)
+        {
+            double top = 0;
+            double bottom = 0;
+
+            plotModel.Axes[1].Title = boxLumping.Text;
+
+            gridData.RowCount = model.LUMP.LUMPNUM;
+
+            for (int iw = 0; iw < model.LUMP.LUMPNUM; ++iw)
+            {
+                top = model.LUMP.ZONE[iw] - 0.5;
+                bottom = model.LUMP.ZONE[iw] + 0.5;
+
+
+                gridData[0, iw].Value = "";
+                gridData[1, iw].Value = "";
+                gridData[2, iw].Value = "";
+                gridData[3, iw].Value = model.LUMP.ZONE[iw];
+                gridData[4, iw].Value = sim[iw];
+                gridData[5, iw].Value = iw;
+                gridData[6, iw].Value = "";
+                gridData[7, iw].Value = modi[iw];
+            
+                ((RectangleBarSeries)plotModel.Series[0]).Items.Add(new RectangleBarItem(0, top, sim[iw], bottom));
+                ((RectangleBarSeries)plotModel.Series[1]).Items.Add(new RectangleBarItem(0, top, modi[iw], bottom));
+
+                if (checkShowModiValue.Checked)
+                {
+                    ((RectangleBarSeries)plotModel.Series[0]).Items.Last().Title = modi[iw].ToString("N2");
+                }
+            }
 
             plotModel.InvalidatePlot(true);
 
+            DrawTextStatistic();
+        }
+
+
+        void DrawTextStatistic()
+        {
             labelLPR.Text = model.WELL.WLPRH.ToString("N1") + " / " + model.MODI.LPR.ToString("N1");
+            labelOPR.Text = model.WELL.WOPRH.ToString("N1") + " / " + model.MODI.OPR.ToString("N1");
+
+            if (model.MODI.GPR > 1e6)
+            {
+                labelGPR.Text = (model.WELL.WGPRH / 1e6).ToString("N3") + " / " + (model.MODI.GPR / 1e6).ToString("N3");
+                labelGPRtext.Text = "Gas rate, mln.m3/day";
+            }
+            else
+            {
+                labelGPR.Text = model.WELL.WGPRH.ToString("N0") + " / " + model.MODI.GPR.ToString("N0");
+                labelGPRtext.Text = "Gas rate, m3/day";
+            }
+
+            labelGOR.Text = (model.WELL.WGPRH / model.WELL.WOPRH).ToString("N1") + " / " + (model.MODI.GPR / model.MODI.OPR).ToString("N1");
             labelOPR.Text = model.WELL.WOPRH.ToString("N1") + " / " + model.MODI.OPR.ToString("N1");
             labelWPR.Text = model.WELL.WWPRH.ToString("N1") + " / " + model.MODI.WPR.ToString("N1");
             labelBHP.Text = model.WELL.WBHPH.ToString("N1") + " / " + model.MODI.BHP.ToString("N1");
             labelWCUT.Text = (model.WELL.WWPRH / model.WELL.WLPRH).ToString("N3") + " / " + (model.MODI.WPR / model.MODI.LPR).ToString("N3");
+
         }
-
-
 
         void DrawGraphSelection(int selectedRow)
         {
+            if (isLumped) return;
+
             if (((RectangleBarSeries)plotModel.Series[1]).Items.Count == 0) return;
 
             ((RectangleBarSeries)plotModel.Series[2]).Items.Clear();
@@ -349,7 +463,7 @@ namespace mview
 
         public void UpdateSelectedProjects(EclipseProject ecl)
         {
-            //model.UpdateECL(ecl);
+            model.UpdateECL(ecl);
         }
 
         private void boxRestartDates_SelectedIndexChanged(object sender, EventArgs e)
@@ -381,6 +495,8 @@ namespace mview
         {
             if (suspendEvents) return;
 
+            isLumped = checkRoll.Checked;
+
             UpdateChart();
         }
 
@@ -396,7 +512,6 @@ namespace mview
                 {
                     model.WELL.COMPLS[iw].LUMPNUM = model.WELL.COMPLS[iw].K + 1;
                 }
-
             }
 
             if (boxLumping.SelectedIndex == 0)
@@ -439,7 +554,14 @@ namespace mview
                 
                 if (Single.TryParse(gridData[6, e.RowIndex].Value.ToString(), out float modi))
                 {
-                    model.WELL.COMPLS[index].WPIMULT = modi;
+                    for (int iw = 0; iw < gridData.SelectedCells.Count; ++iw)
+                    {
+                        if (gridData.SelectedCells[iw].ColumnIndex == 6)
+                        {
+                            int selectIndex = Convert.ToInt32(gridData[5, gridData.SelectedCells[iw].RowIndex].Value);
+                            model.WELL.COMPLS[selectIndex].WPIMULT = modi;
+                        }
+                    }
                 }
             }
 

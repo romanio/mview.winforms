@@ -287,6 +287,7 @@ namespace mview.ECL
             WELLS = new List<WELLDATA>();
 
             br.OpenBinaryFile(filename);
+
             SetPosition("INTEHEAD");
             br.ReadHeader();
             int[] INTH = br.ReadIntList();
@@ -414,7 +415,8 @@ namespace mview.ECL
                         }
                     }
             }
-     
+
+ 
             br.CloseBinaryFile();
         }
 
@@ -431,6 +433,7 @@ namespace mview.ECL
             }
 
             br.OpenBinaryFile(FILENAME);
+
             SetPosition("INTEHEAD");
             br.ReadHeader();
             int[] INTH = br.ReadIntList();
