@@ -31,6 +31,7 @@ namespace mview
     {
         public int LUMPNUM = 0;
         public int[] ZONE = null;
+        public double[] WPIMULT = null;
         public double[] CPI = null;
         public double[] LIQ = null;
         public double[] WATER = null;
@@ -282,17 +283,23 @@ namespace mview
             modi.OPR = modi.LPR - modi.WPR;
         }
     
+        public void InitLump()
+        {
+         
+
+        }
+
         public void CalculateLump()
         {
             LUMP.ZONE = WELL.COMPLS.Select(c => c.LUMPNUM).Distinct().ToArray();
 
             LUMP.LUMPNUM = LUMP.ZONE.Length;
-            
+            LUMP.WPIMULT = new double[LUMP.LUMPNUM];
             LUMP.CPI = new double[LUMP.LUMPNUM];
-            LUMP.LIQ = new double[LUMP.LUMPNUM]; 
+            LUMP.LIQ = new double[LUMP.LUMPNUM];
             LUMP.WATER = new double[LUMP.LUMPNUM];
-            LUMP.OIL = new double[LUMP.LUMPNUM]; 
-            LUMP.GAS = new double[LUMP.LUMPNUM]; 
+            LUMP.OIL = new double[LUMP.LUMPNUM];
+            LUMP.GAS = new double[LUMP.LUMPNUM];
             LUMP.WCUT = new double[LUMP.LUMPNUM];
             LUMP.GOR = new double[LUMP.LUMPNUM];
 
@@ -333,6 +340,8 @@ namespace mview
 
                 LUMP.GOR[iw] = LUMP.GAS[iw] / LUMP.OIL[iw];
                 LUMP.M_GOR[iw] = LUMP.M_GAS[iw] / LUMP.M_OIL[iw];
+
+                LUMP.WPIMULT[iw] = LUMP.M_CPI[iw] / LUMP.CPI[iw];
             }
         }
     }

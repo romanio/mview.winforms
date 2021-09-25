@@ -390,8 +390,12 @@ namespace mview
                 gridData[3, iw].Value = model.LUMP.ZONE[iw];
                 gridData[4, iw].Value = sim[iw];
                 gridData[5, iw].Value = iw;
-                gridData[6, iw].Value = "";
-                gridData[7, iw].Value = modi[iw];
+
+        
+           
+                    gridData[6, iw].Value = model.LUMP.WPIMULT[iw];
+               
+                    gridData[7, iw].Value = modi[iw];
             
                 ((RectangleBarSeries)plotModel.Series[0]).Items.Add(new RectangleBarItem(0, top, sim[iw], bottom));
                 ((RectangleBarSeries)plotModel.Series[1]).Items.Add(new RectangleBarItem(0, top, modi[iw], bottom));
@@ -434,7 +438,7 @@ namespace mview
 
         void DrawGraphSelection(int selectedRow)
         {
-            if (isLumped) return;
+           // if (isLumped) return;
 
             if (((RectangleBarSeries)plotModel.Series[1]).Items.Count == 0) return;
 
@@ -504,6 +508,8 @@ namespace mview
         {
             if (suspendEvents) return;
 
+
+
             gridData.Columns[3].HeaderText = boxLumping.Text;
 
             if (boxLumping.SelectedIndex == 1) // BY K-VALUE
@@ -559,7 +565,24 @@ namespace mview
                         if (gridData.SelectedCells[iw].ColumnIndex == 6)
                         {
                             int selectIndex = Convert.ToInt32(gridData[5, gridData.SelectedCells[iw].RowIndex].Value);
-                            model.WELL.COMPLS[selectIndex].WPIMULT = modi;
+
+                            if (isLumped)
+                            {
+                                model.LUMP.WPIMULT[selectIndex] = modi;
+
+                                foreach (ECL.COMPLDATA item in model.WELL.COMPLS)
+                                {
+                                    if (item.LUMPNUM == model.LUMP.ZONE[selectIndex])
+                                    {
+                                        item.WPIMULT = modi;
+                                    }
+
+                                }
+                            }
+                            else
+                            {
+                                model.WELL.COMPLS[selectIndex].WPIMULT = modi;
+                            }
                         }
                     }
                 }
