@@ -265,7 +265,7 @@ namespace mview.ECL
         public void ReadRestart(string filename, int step)
        
         // для чтения показателей по перфорациям, я все таки вынес в отдельную процедуру
-        // требуется редко, а читается постоянно 
+        // требуется не всегда, а чтение занимает приличное время 
         {
             FILENAME = filename;
 
@@ -337,7 +337,7 @@ namespace mview.ECL
                     });
                 }
 
-                if (SIMTYPE != SIM_TYPE.IX) // Интерсект не выгружает данные по скважинам  и перфорациям
+                if (SIMTYPE == SIM_TYPE.ECL100) // Интерсект не выгружает данные по скважинам  и перфорациям
                 {
                     SetPosition("SWEL");
                     br.ReadHeader();
@@ -352,7 +352,7 @@ namespace mview.ECL
                         WELLS[iw].WLPRH = SWEL[iw * NSWELZ + 3];
                         WELLS[iw].REF_DEPTH = SWEL[iw * NSWELZ + 9];
 
-                        if (NSWELZ > 10) // Навигатор NSWELS = 10
+                        if (NSWELZ > 10) // tNavigator почему то NSWELS = 10
                         {
                             WELLS[iw].WEFA = SWEL[iw * NSWELZ + 24];
                             WELLS[iw].WBHPH = SWEL[iw * NSWELZ + 68];

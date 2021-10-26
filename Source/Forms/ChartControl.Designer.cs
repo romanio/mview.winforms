@@ -48,10 +48,10 @@ namespace mview
             this.listKeywords.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.listKeywords.FormattingEnabled = true;
             this.listKeywords.IntegralHeight = false;
-            this.listKeywords.Location = new System.Drawing.Point(425, 3);
+            this.listKeywords.Location = new System.Drawing.Point(425, 25);
             this.listKeywords.Name = "listKeywords";
             this.listKeywords.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listKeywords.Size = new System.Drawing.Size(76, 466);
+            this.listKeywords.Size = new System.Drawing.Size(76, 416);
             this.listKeywords.Sorted = true;
             this.listKeywords.TabIndex = 1;
             this.listKeywords.SelectedIndexChanged += new System.EventHandler(this.ListKeywordsOnSelectedIndexChanged);

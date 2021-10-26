@@ -164,7 +164,6 @@ namespace mview
             // 
             // button8
             // 
-            this.button8.Enabled = false;
             this.button8.FlatAppearance.BorderColor = System.Drawing.Color.LightSlateGray;
             this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button8.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
@@ -174,7 +173,7 @@ namespace mview
             this.button8.TabIndex = 23;
             this.button8.Text = "3D View";
             this.button8.UseVisualStyleBackColor = true;
-            this.button8.Visible = false;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // button5
             // 
