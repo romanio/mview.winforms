@@ -47,31 +47,48 @@ namespace mview
     class DDDModel
     {
         private readonly EclipseProject ecl = null;
-        private Engine3D engine = null;
+        private Engine3D engine = new Engine3D();
 
         public DDDModel(EclipseProject ecl)
         {
             this.ecl = ecl;
-            engine = new Engine3D();
 
-            if (ecl != null)
-            {
-                ecl.ReadEGRID();
-            }
-
-            if (ecl != null && ecl.EGRID.FILEHEAD != null)
-            {
-                ecl.ReadINIT();
-
-                engine.grid = new Grid3D(ecl);
-
-            }
         }
 
         //  GUI Logic
 
         private string uiStaticProperyName = null;
         private string uiDynamicPropertyName = "PORO";
+
+        public void ReadGrid()
+        {
+            engine = new Engine3D();
+
+            ecl.ReadEGRID();
+            ecl.ReadINIT();
+
+            engine.grid = new Grid3D(ecl);
+
+            SetStaticProperty("PERMX");
+            SetMinMaxAndScaleFactor();
+
+            engine.grid.GenerateVertexAndColors(ecl, ecl.INIT.GetValue);
+            engine.grid.GenerateGraphics(ecl, new GraphicFilterData { UseIndexFilter = false });
+
+            engine.Camera.Scale = 0.004f;
+            engine.IsLoaded = true;
+
+
+
+
+        }
+
+
+        public void ReadRestart(int step)
+        {
+            ecl.ReadRestart(step);
+        }
+
 
         public void OnRestartSelected(int step)
         {
@@ -109,16 +126,7 @@ namespace mview
         {
             engine.OnLoad();
 
-            if (ecl != null && ecl.INIT.FILENAME != null)
-            {
-                ecl.INIT.ReadGrid("PORO");
-                SetMinMaxAndScaleFactor();
-                engine.grid.GenerateVertexAndColors(ecl, ecl.INIT.GetValue);
-                engine.grid.GenerateGraphics(ecl, new GraphicFilterData { UseIndexFilter = false });
-
-                engine.Camera.Scale = 0.004f;
-                engine.IsLoaded = true;
-            }
+            
         }
 
         public void OnResize(int width, int height)

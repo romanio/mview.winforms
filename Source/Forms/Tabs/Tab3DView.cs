@@ -10,13 +10,11 @@ namespace mview
     {
         bool suspendEvents = false;
 
-        DDDModel model = null;
-
+        readonly DDDModel model = null;
         readonly ChartModel chartModel = null;
-        
         readonly GLControl glControl = null;
         readonly MapStyle style = new MapStyle();
-        EclipseProject ecl;
+
 
         public Tab3DView(EclipseProject ecl)
         {
@@ -221,7 +219,7 @@ namespace mview
             if (boxRestartDates.Items.Count > 0)
             {
                 boxRestartDates.SelectedIndex = boxRestartDates.Items.Count - 1;
-                //model.ReadRestart(boxRestartDates.SelectedIndex);
+                model.ReadRestart(boxRestartDates.SelectedIndex);
             }
 
             boxRestartDates.EndUpdate();
@@ -353,9 +351,7 @@ namespace mview
         {
             if (suspendEvents) return;
 
-            model.OnRestartSelected(boxRestartDates.SelectedIndex);
-
-            //model.ReadRestart(boxRestartDates.SelectedIndex);
+            model.ReadRestart(boxRestartDates.SelectedIndex);
             TreePropertiesOnAfterSelect(null, null);
         }
 
@@ -456,6 +452,7 @@ namespace mview
 
         public void AfterInitCall()
         {
+            model.ReadGrid();
             UpdateFormData();
             SetMapStyle();
         }

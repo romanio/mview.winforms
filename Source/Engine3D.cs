@@ -28,8 +28,8 @@ namespace mview
         Matrix4 projection;
         Matrix4 modelview = new Matrix4();
 
-        float _width;
-        float _height;
+        int _width;
+        int _height;
 
         public bool IsLoaded = false;
         public void OnLoad()
@@ -45,16 +45,17 @@ namespace mview
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.ClearColor(Color.White);
 
-            grid.welsID = GL.GenLists(2);
+         //   grid.welsID = GL.GenLists(2);
 
 
             GL.PolygonMode(MaterialFace.Front, PolygonMode.Fill);
+            txt_render = new TextRender(_width, _height);
         }
 
         public void OnUnload()
         {
             grid.Unload();
-            GL.DeleteLists(grid.welsID, 2);
+           // GL.DeleteLists(grid.welsID, 2);
         }
 
         public void OnMouseMove(MouseEventArgs e)
@@ -178,6 +179,7 @@ namespace mview
             //
             txt_render.Clear(Color.Transparent);
 
+            /*
 
             if (grid.ACTIVE_WELLS != null)
             {
@@ -190,6 +192,7 @@ namespace mview
                     }
                 }
             }
+            */
 
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
@@ -232,7 +235,7 @@ namespace mview
 
         public void DrawWells()
         {
-            GL.CallList(grid.welsID);
+            //GL.CallList(grid.welsID);
 
 
         }
