@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using Krypton.Toolkit;
 
 namespace mview
 {
-    public partial class ControlPanel : Form
+    public partial class ControlPanel : KryptonForm
     {
         private readonly ProjectManager pm = null;
         public event EventHandler UpdateData;
@@ -28,27 +29,19 @@ namespace mview
             suspendEvents = false;
         }
 
-        private void ListBoxProjectNamesOnSelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (suspendEvents) return;
-
-            pm.SelectedIndex = listBoxProjectNames.SelectedIndex;
-
-            UpdateData(null, null);
-        }
-
         private void ControlPanelOnFormClosing(object sender, FormClosingEventArgs e)
         {
             Hide();
             e.Cancel = true;
         }
 
-        private void ECLOnUpdateLoadingProgress(object sender, BinaryReaderArg e)
+        private void ModelOnUpdateLoadingProgress(object sender, BinaryReaderArg e)
         {
-            //UpdateLoadingProgress?.Invoke(sender, e);
+            listBoxLog.Items.Add(System.IO.Path.GetFileName(e.filename));
+            listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
         }
 
-        private void ButtonOpenOnClick(object sender, EventArgs e)
+        private void buttonOpen_Click(object sender, EventArgs e)
         {
             listBoxLog.Items.Clear();
 
@@ -59,17 +52,20 @@ namespace mview
             UpdateData(null, null);
         }
 
-        private void ModelOnUpdateLoadingProgress(object sender, BinaryReaderArg e)
-        {
-            listBoxLog.Items.Add(System.IO.Path.GetFileName(e.filename));
-            listBoxLog.SelectedIndex = listBoxLog.Items.Count - 1;
-        }
-
-        private void ButtonDeleteOnClick(object sender, EventArgs e)
+        private void buttonDelete_Click(object sender, EventArgs e)
         {
             pm.DeleteSelectedProject();
 
             UpdateFormData();
+        }
+
+        private void listBoxProjectNames_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (suspendEvents) return;
+
+            pm.SelectedIndex = listBoxProjectNames.SelectedIndex;
+
+            UpdateData(null, null);
         }
     }
 }

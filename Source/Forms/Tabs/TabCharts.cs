@@ -33,7 +33,6 @@ namespace mview
             stylesPanel = new StylesPanel();
             stylesPanel.UpdateData += StylesPanelOnUpdateData;
 
-
             suspendEvents = true;
 
             boxGroupMode.SelectedIndex = 0;
@@ -41,6 +40,8 @@ namespace mview
 
             UpdateChartPositions();
 
+            kryptonWorkspace1.ApplyGridPages(false, Orientation.Horizontal, 2);
+            
             suspendEvents = false;
         }
 
@@ -48,10 +49,21 @@ namespace mview
         {
             // Update Tabs
 
-            foreach (ChartControl item in tableLayoutPanel1.Controls)
+            /*
+            foreach (Krypton.Navigator.KryptonPage item in kryptonWorkspace1.AllPages())
             {
-                item.UpdateNames(data.selectedNames, data.type);
+                if (item.Controls[0] is ChartControl)
+                {
+                    (item.Controls[0] as ChartControl).UpdateNames(data.selectedNames, data.type);
+
+                }
             }
+            */
+
+            //foreach (ChartControl item in tableLayoutPanel1.Controls)
+            //{
+            //    item.UpdateNames(data.selectedNames, data.type);
+           // }
         }
 
         private void StylesPanelOnUpdateData(object sender, StyleSettings e)
@@ -61,36 +73,24 @@ namespace mview
 
         void UpdateChartPositions()
         {
-            tableLayoutPanel1.Controls.Clear();
-            tableLayoutPanel1.RowStyles.Clear();
-            tableLayoutPanel1.ColumnStyles.Clear();
 
 
-            switch (boxChartsPositions.SelectedIndex)
+
+            /*
+            kryptonWorkspaceCell1.Pages.Clear();
+
+            for (int iw = 0; iw < 4; ++iw)
             {
-                case 0:
-                    tableLayoutPanel1.RowCount = 1;
-                    tableLayoutPanel1.ColumnCount = 1;
-                    tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-                    tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
-                    break;
-                case 1:
-                    tableLayoutPanel1.RowCount = 2;
-                    tableLayoutPanel1.ColumnCount = 2;
-                    tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-                    tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-                    tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-                    tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+                var page = new Krypton.Navigator.KryptonPage();
+                page.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
 
-                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
-                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
-                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
-                    tableLayoutPanel1.Controls.Add(new ChartControl(model) { Dock = DockStyle.Fill });
-                    break;
+                kryptonWorkspaceCell1.Pages.Add(page);
             }
 
             UpdateChartSettings(stylesPanel.GetStyleSettings());
+
+         
+            */
         }
 
         void UpdateChartSettings(StyleSettings style)
@@ -117,10 +117,13 @@ namespace mview
 
             data.StyleSettings = style;
 
-            foreach (ChartControl item in tableLayoutPanel1.Controls)
-            {
-                item.UpdateSettings(data);
-            }
+
+            
+
+            // foreach (ChartControl item in tableLayoutPanel1.Controls)
+            // {
+            //     item
+            // }
         }
 
         private void BoxGroupModeOnSelectedIndexChanged(object sender, EventArgs e)
@@ -144,11 +147,6 @@ namespace mview
             stylesPanel.Focus();
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            ControlPaint.DrawBorder(e.Graphics, this.panel1.ClientRectangle, Color.LightSteelBlue, ButtonBorderStyle.Solid);
-        }
-
         private void CheckShowAnnoOnCheckedChanged(object sender, EventArgs e)
         {
             UpdateChartSettings(null);
@@ -157,6 +155,12 @@ namespace mview
         public void UpdateSelectedProjects(EclipseProject ecl)
         {
             model.UpdateECL(ecl);
+        }
+
+        private void kryptonWorkspace1_WorkspaceCellAdding(object sender, Krypton.Workspace.WorkspaceCellEventArgs e)
+        {
+            e.Cell.Button.ContextButtonDisplay = Krypton.Navigator.ButtonDisplay.Hide;
+            e.Cell.NavigatorMode = Krypton.Navigator.NavigatorMode.BarRibbonTabGroup;
         }
     }
 }
