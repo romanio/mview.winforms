@@ -97,12 +97,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\Camera3D.cs" />
     <Compile Include="Source\ECL\EclipseProject.cs" />
     <Compile Include="Source\ECL\EGRID.cs" />
     <Compile Include="Source\ECL\FileReader.cs" />
     <Compile Include="Source\ECL\INSPEC.cs" />
     <Compile Include="Source\ECL\RSSPEC.cs" />
     <Compile Include="Source\ECL\SMSPEC.cs" />
+    <Compile Include="Source\Engine3D.cs" />
     <Compile Include="Source\ExcelWork.cs" />
     <Compile Include="Source\Forms\ChartControl.cs">
       <SubType>UserControl</SubType>
@@ -129,11 +131,23 @@
     <Compile Include="Source\Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Forms\Tabs\Tab3DView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\Forms\Tabs\Tab3DView.Designer.cs">
+      <DependentUpon>Tab3DView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Forms\Tabs\Tab2DView.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Source\Forms\Tabs\Tab2DView.Designer.cs">
       <DependentUpon>Tab2DView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Forms\Tabs\TabWellModel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Source\Forms\Tabs\TabWellModel.Designer.cs">
+      <DependentUpon>TabWellModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Forms\Tabs\TabReservedForModernOpenGL.cs">
       <SubType>UserControl</SubType>
@@ -160,6 +174,7 @@
       <DependentUpon>TabCharts.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Forms\WellFilterSettings.cs" />
+    <Compile Include="Source\Grid3D.cs" />
     <Compile Include="Source\ICellStrategy.cs" />
     <Compile Include="Source\ITabObserver.cs" />
     <Compile Include="Source\BitmapRender.cs" />
@@ -177,8 +192,11 @@
     <Compile Include="Source\Colorizer.cs" />
     <Compile Include="Source\Engine2D.cs" />
     <Compile Include="Source\Grid2D.cs" />
+    <Compile Include="Source\Models\DDDModel.cs" />
     <Compile Include="Source\Models\MapModel.cs" />
+    <Compile Include="Source\Models\WellModel.cs" />
     <Compile Include="Source\ProjectManager.cs" />
+    <Compile Include="Source\TextRender.cs" />
     <Compile Include="Source\UserAnnotations.cs" />
     <EmbeddedResource Include="Source\Forms\ChartControl.resx">
       <DependentUpon>ChartControl.cs</DependentUpon>
@@ -205,8 +223,14 @@
     <EmbeddedResource Include="Source\Forms\ControlPanel.resx">
       <DependentUpon>ControlPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Source\Forms\Tabs\Tab3DView.resx">
+      <DependentUpon>Tab3DView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Source\Forms\Tabs\Tab2DView.resx">
       <DependentUpon>Tab2DView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Forms\Tabs\TabWellModel.resx">
+      <DependentUpon>TabWellModel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Forms\Tabs\TabReservedForModernOpenGL.resx">
       <DependentUpon>TabReservedForModernOpenGL.cs</DependentUpon>

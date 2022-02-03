@@ -209,7 +209,7 @@ public class MapModel
         {
             ecl.RESTART.ReadGrid(name);
 
-            gridUnit = ecl.RESTART.GridUnit;
+            gridUnit = ecl.RESTART.GRIDUNIT;
             minValue = ecl.RESTART.DATA.Min();
             maxValue = ecl.RESTART.DATA.Max();
 

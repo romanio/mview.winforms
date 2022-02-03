@@ -42,6 +42,7 @@ namespace mview
             {
                 return new Vector2((shiftX + endX - startX), (-shiftY + endY - startY));
             }
+ 
         }
 
         public bool isMouseShift = false;

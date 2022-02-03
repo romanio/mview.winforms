@@ -29,12 +29,6 @@ namespace mview
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.buttonOpen = new Krypton.Toolkit.KryptonButton();
-            this.buttonDelete = new Krypton.Toolkit.KryptonButton();
-            this.listBoxProjectNames = new Krypton.Toolkit.KryptonListBox();
-            this.listBoxLog = new Krypton.Toolkit.KryptonListBox();
-
             this.SuspendLayout();
             // 
             // buttonOpen

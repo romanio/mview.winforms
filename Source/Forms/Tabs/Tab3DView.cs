@@ -6,20 +6,22 @@ using System.Windows.Forms;
 
 namespace mview
 {
-    public partial class Tab2DView : UserControl, ITabObserver
+    public partial class Tab3DView : UserControl, ITabObserver
     {
         bool suspendEvents = false;
 
-        readonly MapModel model = null;
+        readonly DDDModel model = null;
         readonly ChartModel chartModel = null;
         readonly GLControl glControl = null;
         readonly MapStyle style = new MapStyle();
 
-        public Tab2DView(EclipseProject ecl)
+
+        public Tab3DView(EclipseProject ecl)
         {
             InitializeComponent();
 
-            model = new MapModel(ecl);
+            model = new DDDModel(ecl);
+
             chartModel = new ChartModel(ecl);
 
             GraphicsMode grx = new GraphicsMode(new ColorFormat(8, 8, 8, 8), 24, 8, 4);
@@ -39,16 +41,22 @@ namespace mview
             panelOpenGL.Controls.Add(glControl);
 
             DefaultSetting();
-     
         }
-        
+
+        private void GLControlOnLoad(object sender, EventArgs e)
+        {
+            model.OnLoad();
+        }
+
         void DefaultSetting()
         {
             suspendEvents = true;
 
+            /*
             numericZScale.Value = (decimal)style.zscale;
             checkShowGridlines.Checked = style.showGridLines;
             checkNoFillColor.Checked = style.showNoFillColor;
+            */
 
             boxBubbleMode.SelectedIndex = (int)style.bubbleMode;
 
@@ -70,20 +78,20 @@ namespace mview
         }
 
 
-        ~Tab2DView()
+        ~Tab3DView()
         {
             model.OnUnload();
         }
 
         private void GlControlOnMouseWheel(object sender, MouseEventArgs e)
         {
-            model.MouseWheel(e);
+            model.OnMouseWheel(e);
             GLControlOnPaint(null, null);
         }
 
         private void GLControlOnMouseMove(object sender, MouseEventArgs e)
         {
-            model.MouseMove(e);
+            model.OnMouseMove(e);
 
             if (e.Button != MouseButtons.None)
             {
@@ -94,15 +102,19 @@ namespace mview
         private void GlControlOnMouseClick(object sender, MouseEventArgs e)
         {
             model.MouseClick(e);
+            
+            /*
             var value = model.GetSelectedCellValue();
 
             labelCellValue.Text = String.Format("Cell[{0}, {1}, {2}] = {3} {4}", (value.X) + 1, (value.Y) + 1, (value.Z) + 1, value.W, model.GetGridUnit());
+            */
 
             GLControlOnPaint(null, null);
         }
 
         public void UpdateSelectedWells(TabSelectedWellsData data)
         {
+            /*
             foreach (ChartControl item in panelSnap.Controls)
             {
                 item.UpdateNames(data.selectedNames, data.type);
@@ -136,7 +148,7 @@ namespace mview
                     glControl.SwapBuffers();
                 }
             }
-
+            */
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -144,10 +156,7 @@ namespace mview
             ControlPaint.DrawBorder(e.Graphics, this.panel1.ClientRectangle, Color.LightSteelBlue, ButtonBorderStyle.Solid);
         }
 
-        private void GLControlOnLoad(object sender, EventArgs e)
-        {
-            model.OnLoad();
-        }
+
 
         private void GLControlOnPaint(object sender, PaintEventArgs e)
         {
@@ -254,6 +263,7 @@ namespace mview
 
         private void TabSideControlOnSelectedIndexChanged(object sender, EventArgs e)
         {
+            /*
             if (tabSideControl.SelectedIndex == 0)
             {
                 model.SetPosition(ViewMode.X);
@@ -271,32 +281,38 @@ namespace mview
                 model.SetPosition(ViewMode.Z);
                 GLControlOnPaint(null, null);
             }
-
+            */
         }
 
         private void boxSlideX_SelectedIndexChanged(object sender, EventArgs e)
         {
+            /*
             if (suspendEvents) return;
 
             model.SetXA(boxSlideX.SelectedIndex);
             GLControlOnPaint(null, null);
+            */
 
         }
 
         private void boxSlideY_SelectedIndexChanged(object sender, EventArgs e)
         {
+            /*
             if (suspendEvents) return;
 
             model.SetYA(boxSlideY.SelectedIndex);
             GLControlOnPaint(null, null);
+            */
         }
 
         private void boxSlideZ_SelectedIndexChanged(object sender, EventArgs e)
         {
+            /*
             if (suspendEvents) return;
 
             model.SetZA(boxSlideZ.SelectedIndex);
             GLControlOnPaint(null, null);
+            */
         }
 
         private void TreePropertiesOnAfterSelect(object sender, TreeViewEventArgs e)
@@ -305,26 +321,27 @@ namespace mview
             {
                 string name = treeProperties.SelectedNode.Text;
 
-                model.SetStaticProperty(name);
+                //model.SetStaticProperty(name);
+                model.OnStaticPropertySelected(treeProperties.SelectedNode.Text);
 
-                textMaximum.Text = model.GetMaxValue().ToString();
-                textMinimum.Text = model.GetMinValue().ToString();
+                //textMaximum.Text = model.GetMaxValue().ToString();
+                //textMinimum.Text = model.GetMinValue().ToString();
 
-                style.minValue = model.GetMinValue();
-                style.maxValue = model.GetMaxValue();
+                //style.minValue = model.GetMinValue();
+                //style.maxValue = model.GetMaxValue();
 
                 GLControlOnPaint(null, null);
             }
             if (treeProperties.SelectedNode?.Parent?.Index == 1) // Dynamic property
             {
                 string name = treeProperties.SelectedNode.Text;
-                model.SetDynamicProperty(name);
+                //model.SetDynamicProperty(name);
+                model.OnDynamicPropertySelected(treeProperties.SelectedNode.Text);
+                //textMaximum.Text = model.GetMaxValue().ToString();
+                //textMinimum.Text = model.GetMinValue().ToString();
 
-                textMaximum.Text = model.GetMaxValue().ToString();
-                textMinimum.Text = model.GetMinValue().ToString();
-
-                style.minValue = model.GetMinValue();
-                style.maxValue = model.GetMaxValue();
+                //style.minValue = model.GetMinValue();
+                //style.maxValue = model.GetMaxValue();
 
                 GLControlOnPaint(null, null);
             }
@@ -340,16 +357,18 @@ namespace mview
 
         private void SetMapStyle()
         {
-            model.SetMapStyle(style);
-            GLControlOnPaint(null, null);
+            //odel.SetMapStyle(style);
+            //GLControlOnPaint(null, null);
         }
 
         private void numericZScale_ValueChanged(object sender, EventArgs e)
         {
+            /*
             if (suspendEvents) return;
 
             style.zscale = (float)numericZScale.Value;
             SetMapStyle();
+            */
         }
 
         private void trackStratch_Scroll(object sender, EventArgs e)
@@ -378,15 +397,15 @@ namespace mview
 
         private void buttonMinDefault_Click(object sender, EventArgs e)
         {
-            textMinimum.Text = model.GetMinValue().ToString();
-            style.minValue = model.GetMinValue();
+            //textMinimum.Text = model.GetMinValue().ToString();
+            //style.minValue = model.GetMinValue();
             SetMapStyle();
         }
 
         private void buttonMaxDefault_Click(object sender, EventArgs e)
         {
-            textMaximum.Text = model.GetMaxValue().ToString();
-            style.maxValue = model.GetMaxValue();
+            //textMaximum.Text = model.GetMaxValue().ToString();
+            //style.maxValue = model.GetMaxValue();
             SetMapStyle();
         }
 

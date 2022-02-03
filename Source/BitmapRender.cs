@@ -58,8 +58,8 @@ namespace mview
 
         // Settings
 
-        readonly Font infoFont = new Font("Segoe Pro Cond", 09, FontStyle.Regular);
-        readonly Font wellsFont = new Font("Segoe Pro Cond", 11, FontStyle.Bold);
+        readonly Font infoFont = new Font("Segoe UI", 09, FontStyle.Regular);
+        readonly Font wellsFont = new Font("Segoe UI", 11, FontStyle.Bold);
       
         // Text label format
 

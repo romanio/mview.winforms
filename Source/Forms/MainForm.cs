@@ -381,5 +381,50 @@ namespace mview
         {
             CreatePage(new TabCharts(pm.ECL) { Dock = DockStyle.Fill }, "Charts");
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            var tabWellModel = new TabWellModel(pm.ECL)
+            {
+                Dock = DockStyle.Fill
+            };
+
+
+            var tabPage = new TabPage
+            {
+                Text = "Well Model"
+            };
+
+            tabObservers.Add(tabWellModel);
+            tabPage.Controls.Add(tabWellModel);
+
+            tabWellModel.UpdateSelectedProjects(); // NTR
+            EventUpdateSelectedWells();
+
+            tabControl2.TabPages.Add(tabPage);
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            var tab3DView = new Tab3DView(pm.ECL)
+            {
+                Dock = DockStyle.Fill
+            };
+
+
+            var tabPage = new TabPage
+            {
+                Text = "3D View"
+            };
+
+            tabObservers.Add(tab3DView);
+            tabPage.Controls.Add(tab3DView);
+
+            EventUpdateSelectedWells();
+
+            tabControl2.TabPages.Add(tabPage);
+
+            tab3DView.AfterInitCall();
+        }
     }
 }

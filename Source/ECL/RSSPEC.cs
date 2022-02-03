@@ -30,8 +30,8 @@ namespace mview.ECL
 
         public float Xw;
         public float Yw;
-
-        //public Cell Cell;
+        public float TopAverage;
+        public float BottomAverage;
         public float XC;
         public float YC;
         public float ZC;
@@ -58,7 +58,6 @@ namespace mview.ECL
         public double SOIL;
 
     }
-
 
     public class WELLDATA
     {
@@ -113,7 +112,7 @@ namespace mview.ECL
         public List<float[]> ARRAYMIN = new List<float[]>(); // Minimum values
         public List<string[]> UNITS = new List<string[]>(); // Единица измерения
         public string FILENAME = null;
-        public string GridUnit = null;
+        public string GRIDUNIT = null;
 
 
         public RSSPEC(string filename)
@@ -265,8 +264,8 @@ namespace mview.ECL
 
         public void ReadRestart(string filename, int step)
        
-            // для чтения показателей по перфорациям, я все таки вынес в отдельную процедуру
-        // требуется редко, а читается постоянно 
+        // для чтения показателей по перфорациям, я все таки вынес в отдельную процедуру
+        // требуется не всегда, а чтение занимает приличное время 
         {
             FILENAME = filename;
 
@@ -288,6 +287,7 @@ namespace mview.ECL
             WELLS = new List<WELLDATA>();
 
             br.OpenBinaryFile(filename);
+
             SetPosition("INTEHEAD");
             br.ReadHeader();
             int[] INTH = br.ReadIntList();
@@ -337,7 +337,7 @@ namespace mview.ECL
                     });
                 }
 
-                if (SIMTYPE != SIM_TYPE.IX) // Интерсект не выгружает данные по скважинам  и перфорациям
+                if (SIMTYPE == SIM_TYPE.ECL100) // Интерсект не выгружает данные по скважинам  и перфорациям
                 {
                     SetPosition("SWEL");
                     br.ReadHeader();
@@ -352,7 +352,7 @@ namespace mview.ECL
                         WELLS[iw].WLPRH = SWEL[iw * NSWELZ + 3];
                         WELLS[iw].REF_DEPTH = SWEL[iw * NSWELZ + 9];
 
-                        if (NSWELZ > 10) // Навигатор NSWELS = 10
+                        if (NSWELZ > 10) // tNavigator почему то NSWELS = 10
                         {
                             WELLS[iw].WEFA = SWEL[iw * NSWELZ + 24];
                             WELLS[iw].WBHPH = SWEL[iw * NSWELZ + 68];
@@ -415,25 +415,25 @@ namespace mview.ECL
                         }
                     }
             }
-     
+
+ 
             br.CloseBinaryFile();
         }
 
-        public void ReadWellData()
+        public void ReadFullWellData()
         {
              FileReader br = new FileReader();
 
-            Action<string> SetPosition = (name) =>
+            void SetPosition(string name)
             {
                 int index = Array.IndexOf(NAME[RESTART_STEP], name);
                 long pointer = POINTER[RESTART_STEP][index];
                 long pointerb = POINTERB[RESTART_STEP][index];
                 br.SetPosition(pointerb * 2147483648 + pointer);
-            };
-
-            //WELLS = new List<WELLDATA>();
+            }
 
             br.OpenBinaryFile(FILENAME);
+
             SetPosition("INTEHEAD");
             br.ReadHeader();
             int[] INTH = br.ReadIntList();
@@ -522,7 +522,7 @@ namespace mview.ECL
 
             if (UNITS.Count != 0)
             {
-                GridUnit = UNITS[RESTART_STEP][index].ToString();
+                GRIDUNIT = UNITS[RESTART_STEP][index].ToString();
             }
 
             long pointer = POINTER[RESTART_STEP][index];
@@ -563,7 +563,7 @@ namespace mview.ECL
 
                 if (UNITS.Count != 0)
                 {
-                    GridUnit = UNITS[RESTART_STEP][index].ToString();
+                    GRIDUNIT = UNITS[RESTART_STEP][index].ToString();
                 }
 
                 long pointer = POINTER[RESTART_STEP][index];

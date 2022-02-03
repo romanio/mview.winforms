@@ -51,10 +51,12 @@ namespace mview
             this.listKeywords.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listKeywords.FormattingEnabled = true;
-            this.listKeywords.Location = new System.Drawing.Point(410, 3);
+
+            this.listKeywords.IntegralHeight = false;
+            this.listKeywords.Location = new System.Drawing.Point(425, 25);
             this.listKeywords.Name = "listKeywords";
             this.listKeywords.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listKeywords.Size = new System.Drawing.Size(91, 466);
+            this.listKeywords.Size = new System.Drawing.Size(76, 416);
             this.listKeywords.Sorted = true;
             this.listKeywords.TabIndex = 1;
             this.listKeywords.SelectedIndexChanged += new System.EventHandler(this.ListKeywordsOnSelectedIndexChanged);
